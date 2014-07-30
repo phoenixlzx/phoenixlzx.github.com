@@ -1,0 +1,394 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>DNS | Phoenix&#39;s island</title>
+    <meta name="author" content="Phoenix Nemo">
+    
+    <meta name="description" content="Phoenix&#39;s Blog">
+    
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    
+    <meta property="og:site_name" content="Phoenix&#39;s island"/>
+
+    
+    <meta property="og:image" content="undefined"/>
+    
+
+    <link href="/favicon.png" rel="icon">
+    <link rel="alternate" href="/atom.xml" title="Phoenix&#39;s island" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.css"/>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Phoenix&#39;s island</a></h1>
+  <h2><a href="/">Sun will shine on the horizon.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+      <li><a href="/links">Links</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<h2 class="archive-title tag">DNS</h2>
+
+
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-05-23T20:52:59.000Z"><a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">2014-05-24</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>昨晚开始我们的 DNS 日志中出现大量的针对 <code>wradish.com</code> 的<code>ANY</code>记录请求，导致大量正常解析请求超时。今天上午到中午时分再次出现流量更大、针对 <code>ping.zong.co.ua</code> 的<code>ANY</code>记录请求，导致整个 DNS 服务瘫痪，完全无法响应正常解析请求。</p>
+<p>检查后发现 <code>wradish.com</code> 早已因多次 DNS 放大攻击而被列入开放 DNS 服务器黑名单，网络上也有大量的针对该域名攻击请求包的过滤方法。<code>ping.zong.co.ua</code> 却完全没有任何搜索记录。</p>
+<p>DNS 放大攻击 (DNS Amplification Attack) 即通过向多台 DNS 开放服务器发送无意义的 recursive 解析请求，从而使得根域名服务器遭到超大流量的解析请求包，无暇顾及正常的解析请求，由此实现分布式拒绝服务攻击 (Distributed Denial of Service)。我们的 DNS 服务器在这里既是攻击者，也是受害者。</p>
+<p>DNSMasq 默认允许 recursive 请求，且似乎本身就没有设计为开放 DNS 服务，所以貌似也没有办法禁用掉 recursive 请求。因此我们使用 <a href="http://blog.dataforce.org.uk/2013/08/limiting-the-effectiveness-of-dns-amplification/" target="_blank" rel="external">iptables 规则 </a> 来过滤掉这些请求。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Create a chain to store block rules in</span></div><div class="line">iptables -N BADDNS </div><div class="line"></div><div class="line"><span class="comment"># Match all "IN ANY" DNS Queries, and run them past the BADDNS chain.</span></div><div class="line">iptables -A INPUT -p udp --dport <span class="number">53</span> -m string --hex-string <span class="string">"|00 00 ff 00 01|"</span> --to <span class="number">255</span> --algo bm -m comment --comment <span class="string">"IN ANY?"</span> -j BADDNS</div><div class="line">iptables -A FORWARD -p udp --dport <span class="number">53</span> -m string --hex-string <span class="string">"|00 00 ff 00 01|"</span> --to <span class="number">255</span> --algo bm -m comment --comment <span class="string">"IN ANY?"</span> -j BADDNS</div><div class="line"></div><div class="line"><span class="comment"># Block domains that are being used for DNS Amplification...</span></div><div class="line">iptables -A BADDNS -m string --hex-string <span class="string">"|04 72 69 70 65 03 6e 65 74 00|"</span> --algo bm -j DROP --to <span class="number">255</span> -m comment --comment <span class="string">"ripe.net"</span></div><div class="line">iptables -A BADDNS -m string --hex-string <span class="string">"|03 69 73 63 03 6f 72 67 00|"</span> --algo bm -j DROP --to <span class="number">255</span> -m comment --comment <span class="string">"isc.org"</span></div><div class="line">iptables -A BADDNS -m string --hex-string <span class="string">"|04 73 65 6d 61 02 63 7a 00|"</span> --algo bm -j DROP --to <span class="number">255</span> -m comment --comment <span class="string">"sema.cz"</span></div><div class="line">iptables -A BADDNS -m string --hex-string <span class="string">"|09 68 69 7a 62 75 6c 6c 61 68 02 6d 65 00|"</span> --algo bm -j DROP --to <span class="number">255</span> -m comment --comment <span class="string">"hizbullah.me"</span></div><div class="line"></div><div class="line"><span class="comment"># Rate limit the rest.</span></div><div class="line">iptables -A BADDNS -m recent --set --name DNSQF --rsource</div><div class="line">iptables -A BADDNS -m recent --update --seconds <span class="number">10</span> --hitcount <span class="number">1</span> --name DNSQF --rsource -j DROP</div></pre></td></tr></table></figure>
+
+<p>添加以上规则后执行 <code>iptables-save</code> 来使更改生效。</p>
+<p>目前为止似乎没有报告出现了明显规模的 DNS 放大攻击征兆，攻击者针对我们防火墙封锁的反应速度、攻击所用的记录以及从日志中发现的大量不同请求源也暗示着我们的服务器可能是最终攻击目标，用攻击流量消耗尽服务器带宽而导致服务瘫痪。至于原因，我也没有想明白为何会有攻击者对一个小型私用服务器感兴趣。</p>
+<p>PS. 到本文发表时，攻击依旧在继续，且流量越来越大。目前阿里云的云盾设置可以说无力，只能依靠 iptables 暂时缓解。后续的应对计划仍在制定中。</p>
+<p>=== 2014-05-24 更新 ===</p>
+<p>Aveline 菊苣给出了一个<a href="https://github.com/smurfmonitor/dns-iptables-rules" target="_blank" rel="external">DNS Amplification IPTABLES block lists</a> 给点 128 个赞！</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-03-11T19:24:56.000Z"><a href="/2014/03/12/setup-custom-dns-with-dnsmasq/">2014-03-12</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/03/12/setup-custom-dns-with-dnsmasq/">DNSMasq 建立自定义 DNS</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>一直想写的 <a href="https://github.com/phoenixlzx/micromoedns" target="_blank" rel="external"> 微萌 DNS</a> 在今天上午准备好基本架构后却在下午遇到各种各样的坑而弃掉了… 心情有够不爽。所以把自己维护的缓存 DNS 解决方案写出来，想要折腾类似的东西的童鞋可以试试看。</p>
+<p>所谓自定义 DNS，这里有这么几个功能：</p>
+<ul>
+<li>反 DNS 污染</li>
+<li>可以直接访问部分网站</li>
+<li>一些特定的服务加速</li>
+<li>解决一些国外 DNS 被 X 的问题</li>
+</ul>
+<p>接下来是搭建步骤。</p>
+<h3 id="安装基本包">安装基本包</h3>
+<p>需要：<code>dnsmasq</code> 和 <code>dnscrypt-proxy</code></p>
+<p>前者在几乎所有的发行版里都有，直接装就行了。后者需要添加第三方源。如果是 Ubuntu 的话可以添加 <code>ppa:shnatsel/dnscrypt</code> 仓库然后安装这个包。</p>
+<h3 id="DNSCrypt_配置">DNSCrypt 配置</h3>
+<p>默认的话安装的 dnscrypt-proxy 是侦听于 <code>127.0.0.2</code> 的 <code>53</code> 端口，这里需要让 DNSMasq 来作为上游服务器所以需要修改配置。文件：<code>/etc/default/dnscrypt-proxy</code></p>
+<p>修改 </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">local</span><span class="attribute">-address</span><span class="subst">=</span><span class="number">127.0</span><span class="number">.0</span><span class="number">.2</span>:<span class="number">53</span></div></pre></td></tr></table></figure>
+
+<p>为</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">local</span><span class="attribute">-address</span><span class="subst">=</span><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5301</span></div></pre></td></tr></table></figure>
+
+<p>以及默认的 DNS 服务器是 OpenDNS —— 和其他欧美服务一样，节点遍布欧美亚洲就那么可怜的一两个节点，甚至一个节点都没就敢叫遍布全球了呢。所以这里最好能改一下，比如选择日本的 OpenNIC 节点。配置文件里添加(原本是有 OpenDNS 注释的，无视即可)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">resolver-address=<span class="number">106.186</span>.<span class="number">17.181</span><span class="symbol">:</span><span class="number">2053</span></div><div class="line">provider-name=<span class="number">2</span>.dnscrypt-cert.ns2.jp.dns.opennic.glue</div><div class="line">provider-key=<span class="number">8768</span><span class="symbol">:C3DB</span><span class="symbol">:F70A</span><span class="symbol">:FBC6</span><span class="symbol">:</span><span class="number">3</span><span class="constant">B64:</span><span class="number">8630</span><span class="symbol">:</span><span class="number">8167</span><span class="symbol">:</span><span class="number">2</span><span class="constant">FD4:</span><span class="constant">EE6F</span><span class="symbol">:E175</span><span class="symbol">:ECFD</span><span class="symbol">:</span><span class="number">46</span><span class="constant">C9:</span><span class="number">22</span><span class="constant">FC:</span><span class="number">7674</span><span class="symbol">:A1AC</span><span class="symbol">:</span><span class="number">2</span>E2A</div></pre></td></tr></table></figure>
+
+<p>更多可用的 DNSCrypt 服务器在 <a href="http://dnscrypt.org/" target="_blank" rel="external">DNSCrypt 主页</a> 可以找到。</p>
+<p>修改好配置文件后保存，重启 dnscrypt 服务。</p>
+<h3 id="两个好用的配置文件">两个好用的配置文件</h3>
+<p>要感谢喵菊苣的功劳，我们有两个很方便好用的配置文件来阻止一些国内 ISP 的 DNS 污染，以及部分国内站点的加速。</p>
+<p>配置文件地址在 <a href="https://github.com/felixonmars/dnsmasq-china-list" target="_blank" rel="external"> 这里</a></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor"># 为了方便日后更新，把这个仓库 clone 到本地而不是直接下载。</span></div><div class="line">git clone https://github<span class="preprocessor">.com</span>/felixonmars/dnsmasq-china-list<span class="preprocessor">.git</span></div><div class="line">cd dnsmasq-china-list</div><div class="line"><span class="preprocessor"># 创建到 DNSMasq 配置目录的软链接，当前该目录在 /root/dnsmasq-china-list 下。</span></div><div class="line">ln -s /root/dnsmasq-china-list/accelerated-domains<span class="preprocessor">.china</span><span class="preprocessor">.conf</span> /etc/dnsmasq<span class="preprocessor">.d</span>/</div><div class="line">ln -s /root/dnsmasq-china-list/bogus-nxdomain<span class="preprocessor">.china</span><span class="preprocessor">.conf</span> /etc/dnsmasq<span class="preprocessor">.d</span>/</div></pre></td></tr></table></figure>
+
+<h3 id="一份你懂的 hosts 和拿来主义">一份你懂的 hosts 和拿来主义</h3>
+<p>hosts 神马的最喜欢了。自从有了它，妈妈再也不用担心我上不了 Google+ ~~</p>
+<p>于是这玩意到处都有，找一份你觉得靠谱的，然后保存在一个方便找的目录下。~~ 注意：不要放在 <code>/etc/dnsmasq.d</code> 下，这里文件位置在 <code>/etc/dns/hosts</code></p>
+<p>实在受不了渣渣 Android 的坑爹于是换了 iPhone 之后，Apple 软件的下载速度其实不比 Android 浪费我的时间少多少。一直以来我自己写 Apple 服务加速配置，通过各种查询 Apple 在 Chinacache 的 CDN IP，然后写个简单的脚本保证 2000 个地址能平均分配到各种线路的 IP。不过后来发现这种办法开始行不通了… 于是直接拿别人的来用好了。新建文件： <code>/etc/dnsmasq.d/apple.conf</code> 内容只有一行：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">server=/<span class="preprocessor">.apple</span><span class="preprocessor">.com</span>/<span class="number">199.91</span><span class="number">.73</span><span class="number">.222</span></div></pre></td></tr></table></figure>
+
+<p>在这里要感谢 V2EX 的 DNS 啦～</p>
+<h3 id="调教_DNSMasq">调教 DNSMasq</h3>
+<p>一切准备就绪，现在来看 DNSMasq 的配置文件—— <code>/etc/dnsmasq.conf</code></p>
+<p>这里只写修改了的配置，其他的保持默认即可。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 不读取 /etc/resolv.conf ，取消注释即可</span></div><div class="line"><span class="keyword">no</span>-resolv</div><div class="line"><span class="keyword">no</span>-poll</div><div class="line"><span class="comment"># 添加上游服务器为 DNSCrypt，如果还有其他的 server= 记得取消注释。</span></div><div class="line">server=<span class="number">127.0</span>.<span class="number">0</span>.<span class="number">1</span><span class="comment">#5301</span></div><div class="line"><span class="comment"># 在所有网卡上关闭 DHCP，用不着这个功能。如果有多个网卡那么一行一个。</span></div><div class="line"><span class="keyword">no</span>-dhcp-interface=eth<span class="number">0</span></div><div class="line"><span class="comment"># 添加自定义 hosts 文件</span></div><div class="line">addn-hosts=<span class="regexp">/etc/dns</span><span class="regexp">/hosts</span></div></pre></td></tr></table></figure>
+
+<p>一共就是这些。保存配置文件并重启 dnsmasq，这样就有了一台可以给所有设备使用的、具备防污染 / 服务加速以及自定义地址等功能的 DNS 服务器啦～</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-02-02T11:55:02.000Z"><a href="/2014/02/02/respond-for-aaaa-queries-when-ipv4-exists-rather-than-ipv6/">2014-02-02</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/02/02/respond-for-aaaa-queries-when-ipv4-exists-rather-than-ipv6/">IPv4 存在而 IPv6 不存在时对于 AAAA 记录查询的响应</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>昨天收到了仙子酱 forward 给我的来自 prosody 开发者的回复，关于 Google 无法连接到 <code>talk.archlinuxcn.org</code> 的问题。开发者指出是 DNS 响应不规范，在 IPv4 存在而 IPv6 不存在时，如果首先查询 <code>AAAA</code> 记录而得到了 <code>NXDOMAIN</code>，则会停止继续查询记录。</p>
+<p>根据 <a href="http://www.ietf.org/rfc/rfc4074.txt" target="_blank" rel="external">RFC 4074</a>，在 IPv4 存在而 IPv6 不存在时，对于 <code>AAAA</code> 记录的响应 RCODE 应为<code>0</code>，即 <code>NOERROR</code> 而不是 <code>NXDOMAIN</code>。</p>
+<p>根据 RFC 的说明对略萌 DNS 的程序做了部分修改，commit #<a href="https://github.com/phoenixlzx/minimoedns/commit/a5a81172d5b4ab0fee375a70b7065883ff0fbc97" target="_blank" rel="external"><code>a5a81172d5</code></a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">connection.query(<span class="string">'SELECT * from `records` WHERE `paused` IS NOT TRUE AND `name` = ? AND (`type` ="A"OR `type` ="AAAA"OR `type` ="CNAME")'</span>,</div><div class="line">    name,</div><div class="line">    <span class="function"><span class="keyword">function</span><span class="params">(err, result)</span> {</span></div><div class="line">      <span class="keyword">if</span> (err) {</div><div class="line">	  ...</div></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">result.forEach(<span class="function"><span class="keyword">function</span><span class="params">(record)</span> {</span></div><div class="line">    <span class="keyword">switch</span> (record.type) {</div><div class="line">	<span class="keyword">case</span> <span class="string">"A"</span>: </div><div class="line">	<span class="keyword">break</span>;</div><div class="line">	<span class="keyword">case</span> <span class="string">"AAAA"</span>:</div><div class="line">	...</div></pre></td></tr></table></figure>
+
+<p>一个简单的改动，没做什么测试就提交了。然后发现 Google DNS 等缓存 DNS 给 <code>AAAA</code> 查询返回了<code>SERVFAIL</code>…</p>
+<p><code>dig +trace</code> 查了下发现死循环了… 再去看 RFC 同时用猫的 NS 服务器做了测试，发现对于这种情况，返回的记录是 Authority 部分 SOA，其他全部是空，格式和 <code>NXDOMAIN</code> 一样，只不过 RCODE 是 <code>NOERROR</code> 而已。</p>
+<p>嘛。commit #<a href="https://github.com/phoenixlzx/minimoedns/commit/5f50bbaa89ac7b51259aeaaa54b08d65476300da" target="_blank" rel="external"><code>5f50bbaa89</code></a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="string">"A"</span>:</div><div class="line">    <span class="keyword">var</span> content = SOAresult[<span class="number">0</span>].content.split(<span class="string">""</span>);</div><div class="line">    response.authority.push(dns.SOA({</div><div class="line">	name: SOAresult[<span class="number">0</span>].name,</div><div class="line">	primary: content[<span class="number">0</span>],</div><div class="line">	admin: content[<span class="number">1</span>].replace(<span class="string">"@"</span>, <span class="string">"."</span>),</div><div class="line">	serial: content[<span class="number">2</span>],</div><div class="line">	refresh: content[<span class="number">3</span>],</div><div class="line">	retry: content[<span class="number">4</span>],</div><div class="line">	expiration: content[<span class="number">5</span>],</div><div class="line">	minimum: content[<span class="number">6</span>],</div><div class="line">	ttl: SOAresult[<span class="number">0</span>].ttl||config.defaultTTL</div><div class="line">    }));</div><div class="line">    response.header.rcode = consts.NAME_TO_RCODE.NOERROR;</div><div class="line">    <span class="keyword">return</span> response.send();</div><div class="line">    <span class="keyword">break</span>;</div></pre></td></tr></table></figure>
+
+<p>然后发现把 <code>case &quot;A&quot;</code> 写到前面不对… 然后把这段改到了 <code>case &quot;AAAA&quot;</code> 和 <code>case &quot;CNAME&quot;</code> 后面，另外在 MySQL 模块中也做了修改，防止在有 IPv6 时返回 IPv4。咱基本不会写 SQL 于是做了两步查询。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">exports.queryAAAA = <span class="function"><span class="keyword">function</span><span class="params">(name, callback)</span> {</span></div><div class="line">    pool.getConnection(<span class="function"><span class="keyword">function</span><span class="params">(err, connection)</span> {</span></div><div class="line">        <span class="keyword">if</span> (err) {</div><div class="line">            console.log(err.message);</div><div class="line">        }</div><div class="line">        connection.query(<span class="string">'SELECT * from `records` WHERE `paused` IS NOT TRUE AND `name` = ? AND (`type` ="AAAA"OR `type` ="CNAME")'</span>,</div><div class="line">            name,</div><div class="line">            <span class="function"><span class="keyword">function</span><span class="params">(err, result)</span> {</span></div><div class="line">                <span class="keyword">if</span> (err) {</div><div class="line">                    connection.release();</div><div class="line">                    <span class="keyword">return</span> callback(err, <span class="literal">null</span>);</div><div class="line">                }</div><div class="line">                <span class="keyword">if</span> (result[<span class="number">0</span>]) {</div><div class="line">                    connection.release();</div><div class="line">                    callback(<span class="literal">null</span>, result);</div><div class="line">                } <span class="keyword">else</span> {</div><div class="line">                    connection.query(<span class="string">'SELECT * from `records` WHERE `paused` IS NOT TRUE AND `name` = ? AND `type` ="A"'</span>,</div><div class="line">                        name,</div><div class="line">                        <span class="function"><span class="keyword">function</span><span class="params">(err, resultA)</span> {</span></div><div class="line">                            <span class="keyword">if</span> (err) {</div><div class="line">                                connection.release();</div><div class="line">                                <span class="keyword">return</span> callback(err, <span class="literal">null</span>);</div><div class="line">                            }</div><div class="line">                            connection.release();</div><div class="line">                            callback(<span class="literal">null</span>, resultA);</div><div class="line">                        });</div><div class="line">                }</div><div class="line">            });</div><div class="line">    });</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>看起来处理的有点 ugly 不过咱才疏学浅只好先这样了。 commit 之后所有略萌 DNS 节点更新，于是再次查询就正常了 w</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">~&gt; dig <span class="at_rule">@<span class="number">8.8</span>.<span class="number">8.8</span><span class="preprocessor"> talk.archlinuxcn.org</span><span class="preprocessor"> AAAA</span></span></div><div class="line"></div><div class="line">; &lt;&lt;&gt;&gt; DiG 9<span class="class">.9</span><span class="class">.2-P2</span> &lt;&lt;&gt;&gt; <span class="at_rule">@<span class="number">8.8</span>.<span class="number">8.8</span><span class="preprocessor"> talk.archlinuxcn.org</span><span class="preprocessor"> AAAA</span></span></div><div class="line">; (1 server found)</div><div class="line">;; global options<span class="value">: +cmd</span></div><div class="line">;; Got answer<span class="value">:</span></div><div class="line">;; -&gt;&gt;<span class="tag">HEADER</span>&lt;&lt;- opcode<span class="value">: QUERY, status: NOERROR, id: <span class="number">26181</span></span></div><div class="line">;; flags<span class="value">: qr rd ra;</span> QUERY<span class="value">: <span class="number">1</span>, ANSWER: <span class="number">0</span>, AUTHORITY: <span class="number">1</span>, ADDITIONAL: <span class="number">1</span></span></div><div class="line"></div><div class="line">;; OPT PSEUDOSECTION<span class="value">:</span></div><div class="line">; EDNS<span class="value">: version: <span class="number">0</span>, flags:;</span> udp<span class="value">: <span class="number">512</span></span></div><div class="line">;; QUESTION <span class="tag">SECTION</span><span class="value">:</span></div><div class="line">;talk<span class="class">.archlinuxcn</span><span class="class">.org</span>.          IN      AAAA</div><div class="line"></div><div class="line">;; AUTHORITY <span class="tag">SECTION</span><span class="value">:</span></div><div class="line">archlinuxcn.org.        <span class="number">1800</span>    IN      SOA     ns1.moedns.net. admin.moedns.com. <span class="number">1391266676</span> <span class="number">3600</span> <span class="number">360</span> <span class="number">1209600</span> <span class="number">180</span></div><div class="line"></div><div class="line">;; Query <span class="tag">time</span><span class="value">: <span class="number">224</span> msec</span></div><div class="line">;; SERVER<span class="value">: <span class="number">8.8</span>.<span class="number">8.8</span><span class="hexcolor">#53</span>(<span class="number">8.8</span>.<span class="number">8.8</span>)</span></div><div class="line">;; WHEN<span class="value">: Sun Feb  <span class="number">2</span> <span class="number">12</span>:<span class="number">23</span>:<span class="number">18</span> <span class="number">2014</span></span></div><div class="line">;; MSG SIZE  rcvd<span class="value">: <span class="number">115</span></span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+
+  <nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:blog.phoenixlzx.com">
+  </form>
+</div>
+
+  <div class="widget tag">
+    <h3 class="title">关于</h3>
+    <div class="entry">
+        <img src="/static/img/avatar/avatar.jpg" style="margin: auto; width: 100%;"/>
+        <h4 style="text-align: center">Phoenix Nemo (phoenixlzx)</h4>
+        <div style="margin: auto; text-align: center;">
+            <a href="https://plus.google.com/107142103119739092775" target="_blank"><i class="fa fa-google-plus fa-2x"></i></a>&nbsp;&nbsp;
+            <a href="https://twitter.com/phoenixlzx" target="_blank"><i class="fa fa-twitter fa-2x"></i></a>&nbsp;&nbsp;
+            <a href="https://github.com/phoenixlzx" target="_blank"><i class="fa fa-github fa-2x"></i></a>&nbsp;&nbsp;
+            <a class="fancybox" href="#emailme"><i class="fa fa-envelope-o fa-2x"></i></a>
+        </div>
+        <div style="display: none;">
+            <div id="emailme">
+                <p><strong>个人邮箱地址</strong></p>
+                <br/>
+                <code>echo 'aUBwaG9lbml4bHp4LmNvbQo='|base64 --decode</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>1</small></li>
+  
+    <li><a href="/categories/Database/">Database</a><small>1</small></li>
+  
+    <li><a href="/categories/Life/">Life</a><small>4</small></li>
+  
+    <li><a href="/categories/Linux/">Linux</a><small>2</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>3</small></li>
+  
+    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+  
+    <li><a href="/categories/Notes/">Notes</a><small>8</small></li>
+  
+    <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 12.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+  </div>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2014/07/21/setup-openconnect-server-on-ubuntu/">在 Ubuntu 服务器上搭建 OpenConnect 服务器小记</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/17/repo-arm-disk-rescue-and-resize/">修复 Arch Rollback Machine 磁盘占用</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/16/accelerate-apple-services-in-cn/">为国内用户加速 Apple 服务</a>
+      </li>
+    
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2014 Phoenix Nemo
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'phoenixhexo';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js?https';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

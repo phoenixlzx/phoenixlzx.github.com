@@ -1,0 +1,263 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>SubLive: 本地播放器的弹幕 API 服务器 | Phoenix&#39;s island</title>
+    <meta name="author" content="Phoenix Nemo">
+    
+    <meta name="description" content="Phoenix&#39;s Blog">
+    
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta property="og:title" content="SubLive: 本地播放器的弹幕 API 服务器"/>
+    <meta property="og:site_name" content="Phoenix&#39;s island"/>
+
+    
+    <meta property="og:image" content="undefined"/>
+    
+
+    <link href="/favicon.png" rel="icon">
+    <link rel="alternate" href="/atom.xml" title="Phoenix&#39;s island" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.css"/>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Phoenix&#39;s island</a></h1>
+  <h2><a href="/">Sun will shine on the horizon.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+      <li><a href="/links">Links</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-04-28T12:53:55.000Z"><a href="/2014/04/28/sublive-live-subtitle-for-local-players/">2014-04-28</a></time>
+      
+      
+  
+    <h1 class="title">SubLive: 本地播放器的弹幕 API 服务器</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>昨晚 KNA 群里在讨论给本地播放器加弹幕功能。之前虽然听说过但是并未接触过所谓「弹幕池」的概念，但是星光菊苣说只要生成 SSA 字幕直接交给播放器挂上就成。并且，(虽然很想顺带吐槽 Zht 和我们争了半天最后槽点根本不在一个点子上 orz) 少将也表示时效并不重要，不需要考虑播放器的字幕自动重载问题。</p>
+<p>所以躺在床上的时候就考虑了下整体的架构。还是最拿手的 HTTP RESTful API，基本功能的话就是获取字幕和发送弹幕。大致的思路如下。</p>
+<ul>
+<li>客户端打开媒体文件后首先获得文件的 hash。有些播放器自动寻找字幕似乎是通过文件名.. 这样的话我改个名字岂不是彻底失效。不过用 hash 来做检索文件的唯一信息的话，不同压制组放出的同一部片源都会有不同的弹幕… 不过似乎也好，如果压制了字幕进去的话，有些针对字幕君的吐槽啊什么的.. 嘛于是就这样。</li>
+<li>服务端通过文件 hash 值来查找有无已存在的字幕文件。如果找到则直接发送文件给客户端，如果没有则在数据库中创建该条目，并生成新的字幕文件发送给客户端。</li>
+<li>客户端以约定好的数据格式发送弹幕信息。用户友好啊之类的(所见即所得什么的..) 就都是客户端的问题了.. 服务端拿到的应该是处理好的数据。</li>
+<li>服务端接收到新的弹幕后将其存进数据库，并追加到已有字幕文件。这样下次其他客户端再次请求该文件的时候就会看到弹幕。</li>
+</ul>
+<p>…</p>
+<p>剩下的就不知道了，因为上面几条出来之后我就睡着了 zzzzZ</p>
+<p>…</p>
+<p>早上翘课写代码这种事情早就习以为常了… 更何况是 (我已经不知道该如何吐槽) 的老师的上机课….</p>
+<p>基本架构和功能大概 3 小时搞定，之前大概花了将近 1 个小时看 <a href="http://matroska.org/technical/specs/subtitles/ssa.html" target="_blank" rel="external">SSA/ASS Subtitles</a> 以及 Express 4.x 的文档。因为 <a href="https://github.com/visionmedia/express#quick-start" target="_blank" rel="external">Express 4.x 开始命令行工具被单独分开</a>，害我半天没找到生成模板的命令… (你丫瞎改啥啊啊啊啊</p>
+<p>编码过程里倒是没遇到啥坑，就是数据处理有点烦。因为没找到啥比较好的 SSA 字幕处理库，生成的时候都是手动处理，各种 <code>+ &#39;\n&#39;</code> 什么的..</p>
+<p>以及，SSA/ASS 字幕的格式特性让 <code>Array.prototype.join</code> 得以利用，省掉不少麻烦。</p>
+<p>于是源码在 <a href="https://github.com/phoenixlzx/sublive" target="_blank" rel="external"> 这里</a>。在基础架构之上还可以很方便的添加大量其他功能，验证啊什么的.. 顺便我还木有做 POST 数据的检查。这个大概晚些时候会加上。</p>
+<p>四月的荒废状态持续了 27 天宣告结束。嘛，挣脱五月病要感谢星光菊苣、Zht、少将以及 KNA 字幕组的所有小伙伴们 &gt;///&lt; 感谢你们～</p>
+<p>以后要继续加油喵！～</p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Nodejs/">Node.js</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Nodejs/">Node.js</a>, <a href="/tags/Anime/">Anime</a>
+  </div>
+
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:blog.phoenixlzx.com">
+  </form>
+</div>
+
+  <div class="widget tag">
+    <h3 class="title">关于</h3>
+    <div class="entry">
+        <img src="/static/img/avatar/avatar.jpg" style="margin: auto; width: 100%;"/>
+        <h4 style="text-align: center">Phoenix Nemo (phoenixlzx)</h4>
+        <div style="margin: auto; text-align: center;">
+            <a href="https://plus.google.com/107142103119739092775" target="_blank"><i class="fa fa-google-plus fa-2x"></i></a>&nbsp;&nbsp;
+            <a href="https://twitter.com/phoenixlzx" target="_blank"><i class="fa fa-twitter fa-2x"></i></a>&nbsp;&nbsp;
+            <a href="https://github.com/phoenixlzx" target="_blank"><i class="fa fa-github fa-2x"></i></a>&nbsp;&nbsp;
+            <a class="fancybox" href="#emailme"><i class="fa fa-envelope-o fa-2x"></i></a>
+        </div>
+        <div style="display: none;">
+            <div id="emailme">
+                <p><strong>个人邮箱地址</strong></p>
+                <br/>
+                <code>echo 'aUBwaG9lbml4bHp4LmNvbQo='|base64 --decode</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>1</small></li>
+  
+    <li><a href="/categories/Database/">Database</a><small>1</small></li>
+  
+    <li><a href="/categories/Life/">Life</a><small>4</small></li>
+  
+    <li><a href="/categories/Linux/">Linux</a><small>2</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>3</small></li>
+  
+    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+  
+    <li><a href="/categories/Notes/">Notes</a><small>8</small></li>
+  
+    <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 12.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+  </div>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2014/07/21/setup-openconnect-server-on-ubuntu/">在 Ubuntu 服务器上搭建 OpenConnect 服务器小记</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/17/repo-arm-disk-rescue-and-resize/">修复 Arch Rollback Machine 磁盘占用</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/16/accelerate-apple-services-in-cn/">为国内用户加速 Apple 服务</a>
+      </li>
+    
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2014 Phoenix Nemo
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'phoenixhexo';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js?https';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

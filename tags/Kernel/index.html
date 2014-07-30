@@ -1,0 +1,252 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Kernel | Phoenix&#39;s island</title>
+    <meta name="author" content="Phoenix Nemo">
+    
+    <meta name="description" content="Phoenix&#39;s Blog">
+    
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    
+    <meta property="og:site_name" content="Phoenix&#39;s island"/>
+
+    
+    <meta property="og:image" content="undefined"/>
+    
+
+    <link href="/favicon.png" rel="icon">
+    <link rel="alternate" href="/atom.xml" title="Phoenix&#39;s island" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.css"/>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Phoenix&#39;s island</a></h1>
+  <h2><a href="/">Sun will shine on the horizon.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+      <li><a href="/links">Links</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<h2 class="archive-title tag">Kernel</h2>
+
+
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-02-23T10:39:58.000Z"><a href="/2014/02/23/kernel-hook-auto-build-dkms-modules/">2014-02-23</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/02/23/kernel-hook-auto-build-dkms-modules/">自动编译 DKMS 模组的内核 HOOK</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><a href="http://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support" target="_blank" rel="external">DKMS</a> 是个好东西，像我们这些喜欢自定义内核的家伙有了 DKMS 之后就不用为各种第三方的内核模组发愁了～</p>
+<p>于是也没看是不是有人做过了(基本上是有人做了吧…) 于是参照 <a href="https://aur.archlinux.org/packages/nvidia-hook/" target="_blank" rel="external">nvidia-hook</a> 做了一个 <a href="https://aur.archlinux.org/packages/autodkms/" target="_blank" rel="external">autodkms</a>。</p>
+<p>按照 <a href="https://wiki.archlinux.org/index.php/Dynamic_Kernel_Module_Support" target="_blank" rel="external">ArchWiki</a>，自动编译所有模组的命令是：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dkms autoinstall <span class="attribute">-k</span> NEW_KERNEL_VERSION</div></pre></td></tr></table></figure>
+
+<p>于是照葫芦画瓢写的 hook 文件 <code>/usr/lib/initcpio/install/autodkms</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">build</span></span> ()</div><div class="line">{</div><div class="line">  <span class="built_in">echo</span> <span class="string">"Building dkms modules for <span class="variable">${KERNELVERSION}</span> kernel..."</span></div><div class="line">  dkms autoinstall -k <span class="variable">${KERNELVERSION}</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"Build complete."</span></div><div class="line">}</div><div class="line"></div><div class="line"><span class="function"><span class="title">help</span></span> ()</div><div class="line">{</div><div class="line">cat&lt;&lt;HELPEOF</div><div class="line">    This hook rebuilds all dkms modules <span class="keyword">for</span> new kernel.</div><div class="line">HELPEOF</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>全部源码在 <a href="https://github.com/phoenixlzx/autodkms" target="_blank" rel="external"> 这里 </a> <del> 其实一共就几行…</del></p>
+<p>打包好之后在 <code>/etc/mkinitcpio.conf</code> 的 <code>HOOKS</code> 最后加上 <code>autodkms</code> 就可以在更新内核的时候重新编译所有模组啦。</p>
+<p>=== 2014-03-10 更新 ===</p>
+<p>在没有装对应内核的 headers 之前脚本执行会出错——</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Building dkms modules <span class="keyword">for</span> <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts kernel...</div><div class="line"><span class="keyword">Error</span>! echo</div><div class="line">Your kernel headers <span class="keyword">for</span> kernel <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts cannot be found at</div><div class="line">/usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/build <span class="keyword">or</span> /usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/source.</div><div class="line"><span class="keyword">Error</span>! echo</div><div class="line">Your kernel headers <span class="keyword">for</span> kernel <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts cannot be found at</div><div class="line">/usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/build <span class="keyword">or</span> /usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/source.</div><div class="line">Build complete.</div></pre></td></tr></table></figure>
+
+<p>但是一般升级的时候都是先装内核再装 headers 所以脚本可以完善下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">build</span></span> ()</div><div class="line">{</div><div class="line">  <span class="keyword">if</span> [! <span class="operator">-d</span> <span class="string">"/usr/lib/modules/<span class="variable">${KERNELVERSION}</span>/build"</span> ]; <span class="keyword">then</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"You need to install or update <span class="variable">${KERNELVERSION}</span> headers before build kernel image."</span></div><div class="line">    <span class="keyword">exit</span> <span class="number">1</span></div><div class="line">  <span class="keyword">fi</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"Building dkms modules for <span class="variable">${KERNELVERSION}</span> kernel..."</span></div><div class="line">  dkms autoinstall -k <span class="variable">${KERNELVERSION}</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"Build complete."</span></div><div class="line">}</div><div class="line"></div><div class="line"><span class="function"><span class="title">help</span></span> ()</div><div class="line">{</div><div class="line">cat&lt;&lt;HELPEOF</div><div class="line">    This hook rebuilds all dkms modules <span class="keyword">for</span> new kernel.</div><div class="line">HELPEOF</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+
+  <nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:blog.phoenixlzx.com">
+  </form>
+</div>
+
+  <div class="widget tag">
+    <h3 class="title">关于</h3>
+    <div class="entry">
+        <img src="/static/img/avatar/avatar.jpg" style="margin: auto; width: 100%;"/>
+        <h4 style="text-align: center">Phoenix Nemo (phoenixlzx)</h4>
+        <div style="margin: auto; text-align: center;">
+            <a href="https://plus.google.com/107142103119739092775" target="_blank"><i class="fa fa-google-plus fa-2x"></i></a>&nbsp;&nbsp;
+            <a href="https://twitter.com/phoenixlzx" target="_blank"><i class="fa fa-twitter fa-2x"></i></a>&nbsp;&nbsp;
+            <a href="https://github.com/phoenixlzx" target="_blank"><i class="fa fa-github fa-2x"></i></a>&nbsp;&nbsp;
+            <a class="fancybox" href="#emailme"><i class="fa fa-envelope-o fa-2x"></i></a>
+        </div>
+        <div style="display: none;">
+            <div id="emailme">
+                <p><strong>个人邮箱地址</strong></p>
+                <br/>
+                <code>echo 'aUBwaG9lbml4bHp4LmNvbQo='|base64 --decode</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>1</small></li>
+  
+    <li><a href="/categories/Database/">Database</a><small>1</small></li>
+  
+    <li><a href="/categories/Life/">Life</a><small>4</small></li>
+  
+    <li><a href="/categories/Linux/">Linux</a><small>2</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>3</small></li>
+  
+    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+  
+    <li><a href="/categories/Notes/">Notes</a><small>8</small></li>
+  
+    <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 12.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+  </div>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2014/07/21/setup-openconnect-server-on-ubuntu/">在 Ubuntu 服务器上搭建 OpenConnect 服务器小记</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/17/repo-arm-disk-rescue-and-resize/">修复 Arch Rollback Machine 磁盘占用</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/16/accelerate-apple-services-in-cn/">为国内用户加速 Apple 服务</a>
+      </li>
+    
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2014 Phoenix Nemo
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'phoenixhexo';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js?https';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
