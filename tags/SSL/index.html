@@ -1,0 +1,255 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>SSL | Phoenix&#39;s island</title>
+    <meta name="author" content="Phoenix Nemo">
+    
+    <meta name="description" content="Phoenix&#39;s Blog">
+    
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    
+    <meta property="og:site_name" content="Phoenix&#39;s island"/>
+
+    
+    <meta property="og:image" content="undefined"/>
+    
+
+    <link href="/favicon.png" rel="icon">
+    <link rel="alternate" href="/atom.xml" title="Phoenix&#39;s island" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.css"/>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Phoenix&#39;s island</a></h1>
+  <h2><a href="/">Sun will shine on the horizon.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+      <li><a href="/links">Links</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<h2 class="archive-title tag">SSL</h2>
+
+
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-10-14T05:03:07.000Z"><a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">2014-10-14</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">关于 SSL 和 IPKVM/VNC Applet 的笔记两则</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p> 虽然是没啥关系的两个东西不过最近没啥可写的所以放在一块做个笔记。</p>
+<h3 id="COMODO_SSL_CA_正确的串联姿势">COMODO SSL CA 正确的串联姿势 </h3>
+<p> 有客户买了 COMODO Positive SSL 之后问我证书链变了要怎么串联。嘛确实文件变多了不过不至于这就不会了吧…</p>
+<p>SSL 证书串联用 <code>cat</code> 命令的话顺序是自下而上，也就是 自己的证书 -&gt; 二级 Intermediate CA -&gt; 一级 Intermediate CA -&gt; Root CA</p>
+<p> 所以不管文件有多少这个顺序总是有的。以 COMODO Positive SSL 为例，假设域名为 <code>example.com</code>，<code>cat</code> 的串联命令：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat example_com<span class="preprocessor">.crt</span> COMODORSADomainValidationSecureServerCA<span class="preprocessor">.crt</span> COMODORSAAddTrustCA<span class="preprocessor">.crt</span> AddTrustExternalCARoot<span class="preprocessor">.crt</span> &gt; example_com<span class="preprocessor">.signed</span><span class="preprocessor">.crt</span></div></pre></td></tr></table></figure>
+
+<p> 于是就可以拿着 <code>example_com.signed.crt</code> 和生成 CSR 时一并生成的 <code>example_com.key</code> 去给 NGINX 咯。</p>
+<p> 附一份 NGINX 配置样例。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="title">server</span> {</div><div class="line">      <span class="title">listen</span>      <span class="number">80</span>;</div><div class="line">      <span class="title">listen</span>      [::]:<span class="number">80</span> ipv6only=<span class="built_in">on</span>;</div><div class="line">      <span class="title">server_name</span> example.com;</div><div class="line">      <span class="comment">## redirect http to https ##</span></div><div class="line">      <span class="title">rewrite</span>       <span class="regexp"> ^</span> <span class="url">https://example.com$request_uri?</span> <span class="built_in">permanent</span>;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="title">server</span> {</div><div class="line">    <span class="title">listen</span> <span class="number">443</span> ssl;</div><div class="line">    <span class="title">listen</span> [::]:<span class="number">443</span> ssl ipv6only=<span class="built_in">on</span>;</div><div class="line">    <span class="title">server_name</span> example.com;</div><div class="line"></div><div class="line">    <span class="title">ssl</span>                  <span class="built_in">on</span>; </div><div class="line">    <span class="title">ssl_certificate</span>      /etc/nginx/ssl/example_com.signed.crt;</div><div class="line">    <span class="title">ssl_certificate_key</span>  /etc/nginx/ssl/example_com.key;</div><div class="line">    <span class="title">ssl_protocols</span> SSLv3 TLSv1;</div><div class="line">    <span class="title">ssl_prefer_server_ciphers</span>   <span class="built_in">on</span>;</div><div class="line">    <span class="title">ssl_ciphers</span> ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM;</div><div class="line">    <span class="title">keepalive_timeout</span>    <span class="number">70</span>;</div><div class="line">    <span class="title">ssl_session_cache</span>    shared:SSL:<span class="number">10m</span>;</div><div class="line">    <span class="title">ssl_session_timeout</span>  <span class="number">10m</span>;</div><div class="line">    </div><div class="line">    <span class="title">location</span> / {</div><div class="line">        <span class="comment"># ...</span></div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h3 id="IPKVM/VNC_Applet_的使用">IPKVM/VNC Applet 的使用 </h3>
+<p><strong> 丑话放前面：Java 你就是个彻头彻尾的垃圾。垃圾中的轰炸机。</strong></p>
+<p> 从 7u45 版本之后的 Java Webstart 就不能再直接执行 Ubersmith/SolusVM/Proxmox 等等的 IPKVM/VNC Applet 了。虽然实际上是这些商业软件的错不过还是很想让人骂 Java。</p>
+<p> 解决方案：下载一个旧版的 Java，比如 jdk6。</p>
+<p> 但是直接安装也是不能运行的，因为实际上调用的 java executable 是最新版 Java 的，所以一样报错。</p>
+<p> 如果是在 Linux 下，jre6 的目录在 <code>$HOME/jre6/jre1.6.0_38</code>，那么下载到 Applet 之后用下面的命令启动：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">applet_path<span class="subst">=</span>/path/<span class="keyword">to</span>/your/applet<span class="built_in">.</span>jnlp</div><div class="line">~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/bin/java <span class="attribute">-verbose</span> <span class="attribute">-Xbootclasspath</span>/a:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/javaws<span class="built_in">.</span>jar:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/deploy<span class="built_in">.</span>jar:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/plugin<span class="built_in">.</span>jar <span class="attribute">-classpath</span> ~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/deploy<span class="built_in">.</span>jar <span class="attribute">-Djava</span><span class="built_in">.</span>security<span class="built_in">.</span>policy<span class="subst">=</span>file:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/security/javaws<span class="built_in">.</span>policy <span class="attribute">-DtrustProxy</span><span class="subst">=</span><span class="literal">true</span> <span class="attribute">-Xverify</span>:remote <span class="attribute">-Djnlpx</span><span class="built_in">.</span>home<span class="subst">=</span>~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/bin <span class="attribute">-Dsun</span><span class="built_in">.</span>awt<span class="built_in">.</span>warmup<span class="subst">=</span><span class="literal">true</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>origFilenameArg<span class="subst">=</span><span class="variable">$applet_path</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>remove<span class="subst">=</span><span class="literal">false</span> <span class="attribute">-esa</span> <span class="attribute">-Xnoclassgc</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>splashport<span class="subst">=</span><span class="number">59999</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>jvm<span class="subst">=</span>~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/bin/java <span class="attribute">-Djnlpx</span><span class="built_in">.</span>vmargs<span class="subst">=</span><span class="string">"-esa -Xnoclassgc"</span> com<span class="built_in">.</span>sun<span class="built_in">.</span>javaws<span class="built_in">.</span>Main <span class="variable">$applet_path</span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+
+  <nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:blog.phoenixlzx.com">
+  </form>
+</div>
+
+  <div class="widget tag">
+    <h3 class="title">关于</h3>
+    <div class="entry">
+        <img src="/static/img/avatar/avatar.jpg" style="margin: auto; width: 100%;"/>
+        <h4 style="text-align: center">Phoenix Nemo (phoenixlzx)</h4>
+        <div style="margin: auto; text-align: center;">
+            <a href="https://plus.google.com/107142103119739092775" target="_blank"><i class="fa fa-google-plus fa-2x"></i></a>&nbsp;&nbsp;
+            <a href="https://twitter.com/phoenixlzx" target="_blank"><i class="fa fa-twitter fa-2x"></i></a>&nbsp;&nbsp;
+            <a href="https://github.com/phoenixlzx" target="_blank"><i class="fa fa-github fa-2x"></i></a>&nbsp;&nbsp;
+            <a class="fancybox" href="#emailme"><i class="fa fa-envelope-o fa-2x"></i></a>
+        </div>
+        <div style="display: none;">
+            <div id="emailme">
+                <p><strong>个人邮箱地址</strong></p>
+                <br/>
+                <code>echo 'aUBwaG9lbml4bHp4LmNvbQo='|base64 --decode</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>1</small></li>
+  
+    <li><a href="/categories/Database/">Database</a><small>1</small></li>
+  
+    <li><a href="/categories/Life/">Life</a><small>5</small></li>
+  
+    <li><a href="/categories/Linux/">Linux</a><small>2</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>3</small></li>
+  
+    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+  
+    <li><a href="/categories/Notes/">Notes</a><small>9</small></li>
+  
+    <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+  </div>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">关于 SSL 和 IPKVM/VNC Applet 的笔记两则</a>
+      </li>
+    
+      <li>
+        <a href="/2014/09/03/2014-natsu/">2014·夏</a>
+      </li>
+    
+      <li>
+        <a href="/2014/07/21/setup-openconnect-server-on-ubuntu/">在 Ubuntu 服务器上搭建 OpenConnect 服务器小记</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+      </li>
+    
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2014 Phoenix Nemo
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'phoenixhexo';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js?https';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
