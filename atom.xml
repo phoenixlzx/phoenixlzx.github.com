@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Sun will shine on the horizon.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.phoenixlzx.com/"/>
-  <updated>2014-10-13T13:23:04.627Z</updated>
+  <updated>2014-10-13T13:32:49.782Z</updated>
   <id>http://blog.phoenixlzx.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.phoenixlzx.com/2014/10/14/2-notes-for-ssl-and-ipkvm/"/>
     <id>http://blog.phoenixlzx.com/2014/10/14/2-notes-for-ssl-and-ipkvm/</id>
     <published>2014-10-14T05:03:07.000Z</published>
-    <updated>2014-10-13T13:22:51.000Z</updated>
+    <updated>2014-10-13T13:32:40.000Z</updated>
     <content type="html"><![CDATA[<p> 虽然是没啥关系的两个东西不过最近没啥可写的所以放在一块做个笔记。</p>
 <h3 id="COMODO_SSL_CA_正确的串联姿势">COMODO SSL CA 正确的串联姿势 </h3>
 <p> 有客户买了 COMODO Positive SSL 之后问我证书链变了要怎么串联。嘛确实文件变多了不过不至于这就不会了吧…</p>
@@ -31,8 +31,8 @@
 <p> 附一份 NGINX 配置样例。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="title">server</span> {</div><div class="line">      <span class="title">listen</span>      <span class="number">80</span>;</div><div class="line">      <span class="title">listen</span>      [::]:<span class="number">80</span> ipv6only=<span class="built_in">on</span>;</div><div class="line">      <span class="title">server_name</span> example.com;</div><div class="line">      <span class="comment">## redirect http to https ##</span></div><div class="line">      <span class="title">rewrite</span>       <span class="regexp"> ^</span> <span class="url">https://example.com$request_uri?</span> <span class="built_in">permanent</span>;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="title">server</span> {</div><div class="line">    <span class="title">listen</span> <span class="number">443</span> ssl;</div><div class="line">    <span class="title">listen</span> [::]:<span class="number">443</span> ssl ipv6only=<span class="built_in">on</span>;</div><div class="line">    <span class="title">server_name</span> example.com;</div><div class="line"></div><div class="line">    <span class="title">ssl</span>                  <span class="built_in">on</span>; </div><div class="line">    <span class="title">ssl_certificate</span>      /etc/nginx/ssl/example_com.signed.crt;</div><div class="line">    <span class="title">ssl_certificate_key</span>  /etc/nginx/ssl/example_com.key;</div><div class="line">    <span class="title">ssl_protocols</span> SSLv3 TLSv1;</div><div class="line">    <span class="title">ssl_prefer_server_ciphers</span>   <span class="built_in">on</span>;</div><div class="line">    <span class="title">ssl_ciphers</span> ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM;</div><div class="line">    <span class="title">keepalive_timeout</span>    <span class="number">70</span>;</div><div class="line">    <span class="title">ssl_session_cache</span>    shared:SSL:<span class="number">10m</span>;</div><div class="line">    <span class="title">ssl_session_timeout</span>  <span class="number">10m</span>;</div><div class="line">    </div><div class="line">    <span class="title">location</span> / {</div><div class="line">        <span class="comment"># ...</span></div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
 
+<p> 最后不忘打广告： [<a href="https://c.phoenixlzx.com" target="_blank" rel="external">https://c.phoenixlzx.com</a>]</p>
 <h3 id="IPKVM/VNC_Applet_的使用">IPKVM/VNC Applet 的使用 </h3>
-<p><strong> 丑话放前面：Java 你就是个彻头彻尾的垃圾。垃圾中的轰炸机。</strong></p>
 <p> 从 7u45 版本之后的 Java Webstart 就不能再直接执行 Ubersmith/SolusVM/Proxmox 等等的 IPKVM/VNC Applet 了。虽然实际上是这些商业软件的错不过还是很想让人骂 Java。</p>
 <p> 解决方案：下载一个旧版的 Java，比如 jdk6。</p>
 <p> 但是直接安装也是不能运行的，因为实际上调用的 java executable 是最新版 Java 的，所以一样报错。</p>
