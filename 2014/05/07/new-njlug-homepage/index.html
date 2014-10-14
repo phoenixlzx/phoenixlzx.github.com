@@ -1,0 +1,254 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>新的 NJLUG 主站 | Phoenix&#39;s island</title>
+    <meta name="author" content="Phoenix Nemo">
+    
+    <meta name="description" content="Phoenix&#39;s Blog">
+    
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta property="og:title" content="新的 NJLUG 主站"/>
+    <meta property="og:site_name" content="Phoenix&#39;s island"/>
+
+    
+    <meta property="og:image" content="undefined"/>
+    
+
+    <link href="/favicon.png" rel="icon">
+    <link rel="alternate" href="/atom.xml" title="Phoenix&#39;s island" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.css"/>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Phoenix&#39;s island</a></h1>
+  <h2><a href="/">Sun will shine on the horizon.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+      <li><a href="/links">Links</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-05-07T11:46:09.000Z"><a href="/2014/05/07/new-njlug-homepage/">2014-05-07</a></time>
+      
+      
+  
+    <h1 class="title">新的 NJLUG 主站</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>南京 Linux 用户组有一段时间没有聚会了。偶然想起来之前我用 Jekyll 折腾的那个主页，随手敲了主页地址… 啊啦，还基本上没变啊…</p>
+<p>嘛虽然自己写了那么几个东西，不过在组里待了也有一段时间也学到了不少东西。用户对社区的回报应该就在这时候展现出来吧。</p>
+<p>依旧是 Express.js 框架，依旧是 Bootstrap。不过这回不想用数据库了，改用文本存储。除了主页和关于，顺便集成一个 Planet 在里面。RSS feed 的话，除了遍历一遍 upsert (不存在的添加，已存在的跳过)之外没想到什么更好的办法。实际上本来就是 RSS 没必要存储所有的文章，更何况又不是做之前想做的类似 Google Reader 的东西。</p>
+<p>目前的 Planet 工作方式为首先检测是否存在文章数据文件 <code>posts.array</code>，如果不存在则读取 <code>planet.list</code> 中的订阅链接，获取到文章后 push 到一个数组中，按照发表日期排序并保存在 <code>posts.array</code> 里。到底是先排序再保存还是先存进去，渲染页面的时候再排序，这个稍微纠结了下。因为自己的配置文件里更新频率是 1 hour, 而且似乎每次更新到的文章数量还挺多的。所以保存时排序的话，则每天固定排序 23 次；如果渲染时排序的话，就看每天能有几个访问了…. 然后发现自己在这种小问题上纠结个毛毛啊啊啊啊啊。</p>
+<p>排序后保存进文件之前和从文件读出之后要有两个 JSON 操作。保存之前 <code>JSON.stringify(posts)</code> 转换成字符串再保存，否则文件里是 <code>[[object Object], [object Object]]</code>。读出来之后 <code>JSON.parse(posts)</code> 再转换成对象数组，否则直接就一字符串没办法处理。</p>
+<p>接下来就是主页和关于。因为不想写用户系统了所以就不发文章了吧… 关于可以是万年不变的页面，首页的话，显示最近的公告好了。最简单的实现就是存两个 markdown 文件然后用 marked 渲染出来插在页面里。</p>
+<p>全部的源码在 <a href="https://github.com/phoenixlzx/NJLUG-site" target="_blank" rel="external"> 这里</a>。</p>
+<p>目前似乎域名还没解析，田华兄也未必决定用这个.. 所以效果的话戳 <a href="http://njlug.phoenixlzx.com" target="_blank" rel="external"> 这里 </a> 看。</p>
+<p>然后顺便说一句.. 现在已经健忘到我已经忘记刚刚想起来要写的东西了<em>(:з」∠)</em></p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Nodejs/">Node.js</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Nodejs/">Node.js</a>
+  </div>
+
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:blog.phoenixlzx.com">
+  </form>
+</div>
+
+  <div class="widget tag">
+    <h3 class="title">关于</h3>
+    <div class="entry">
+        <img src="/static/img/avatar/avatar.jpg" style="margin: auto; width: 100%;"/>
+        <h4 style="text-align: center">Phoenix Nemo (phoenixlzx)</h4>
+        <div style="margin: auto; text-align: center;">
+            <a href="https://plus.google.com/107142103119739092775" target="_blank"><i class="fa fa-google-plus fa-2x"></i></a>&nbsp;&nbsp;
+            <a href="https://twitter.com/phoenixlzx" target="_blank"><i class="fa fa-twitter fa-2x"></i></a>&nbsp;&nbsp;
+            <a href="https://github.com/phoenixlzx" target="_blank"><i class="fa fa-github fa-2x"></i></a>&nbsp;&nbsp;
+            <a class="fancybox" href="#emailme"><i class="fa fa-envelope-o fa-2x"></i></a>
+        </div>
+        <div style="display: none;">
+            <div id="emailme">
+                <p><strong>个人邮箱地址</strong></p>
+                <br/>
+                <code>echo 'aUBwaG9lbml4bHp4LmNvbQo='|base64 --decode</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>1</small></li>
+  
+    <li><a href="/categories/Database/">Database</a><small>1</small></li>
+  
+    <li><a href="/categories/Life/">Life</a><small>5</small></li>
+  
+    <li><a href="/categories/Linux/">Linux</a><small>2</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>3</small></li>
+  
+    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+  
+    <li><a href="/categories/Notes/">Notes</a><small>9</small></li>
+  
+    <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+  </div>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">关于 SSL 和 IPKVM/VNC Applet 的笔记两则</a>
+      </li>
+    
+      <li>
+        <a href="/2014/09/03/2014-natsu/">2014·夏</a>
+      </li>
+    
+      <li>
+        <a href="/2014/07/21/setup-openconnect-server-on-ubuntu/">在 Ubuntu 服务器上搭建 OpenConnect 服务器小记</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
+      </li>
+    
+      <li>
+        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+      </li>
+    
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2014 Phoenix Nemo
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'phoenixhexo';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js?https';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
