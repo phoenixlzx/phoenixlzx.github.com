@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Sun will shine on the horizon.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.phoenixlzx.com/"/>
-  <updated>2014-10-13T13:32:49.782Z</updated>
+  <updated>2014-10-14T14:33:04.634Z</updated>
   <id>http://blog.phoenixlzx.com/</id>
   
   <author>
@@ -16,8 +16,8 @@
   
   <entry>
     <title><![CDATA[关于 SSL 和 IPKVM/VNC Applet 的笔记两则]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/10/14/2-notes-for-ssl-and-ipkvm/"/>
-    <id>http://blog.phoenixlzx.com/2014/10/14/2-notes-for-ssl-and-ipkvm/</id>
+    <link href="http://blog.phoenixlzx.com/post/2-notes-for-ssl-and-ipkvm/"/>
+    <id>http://blog.phoenixlzx.com/post/2-notes-for-ssl-and-ipkvm/</id>
     <published>2014-10-14T05:03:07.000Z</published>
     <updated>2014-10-13T13:32:40.000Z</updated>
     <content type="html"><![CDATA[<p> 虽然是没啥关系的两个东西不过最近没啥可写的所以放在一块做个笔记。</p>
@@ -59,8 +59,8 @@
   
   <entry>
     <title><![CDATA[2014·夏]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/09/03/2014-natsu/"/>
-    <id>http://blog.phoenixlzx.com/2014/09/03/2014-natsu/</id>
+    <link href="http://blog.phoenixlzx.com/post/2014-natsu/"/>
+    <id>http://blog.phoenixlzx.com/post/2014-natsu/</id>
     <published>2014-09-02T22:27:23.000Z</published>
     <updated>2014-09-02T14:45:06.000Z</updated>
     <content type="html"><![CDATA[<p>2014 年的夏天应该是我一直以来度过的最繁忙和劳累的一段时光。多方面的压力、打击、困扰，加上自身各种情况条件不利，这个暑假真的让人感觉非常憋屈窝囊。</p>
@@ -109,8 +109,8 @@
   
   <entry>
     <title><![CDATA[在 Ubuntu 服务器上搭建 OpenConnect 服务器小记]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/07/21/setup-openconnect-server-on-ubuntu/"/>
-    <id>http://blog.phoenixlzx.com/2014/07/21/setup-openconnect-server-on-ubuntu/</id>
+    <link href="http://blog.phoenixlzx.com/post/setup-openconnect-server-on-ubuntu/"/>
+    <id>http://blog.phoenixlzx.com/post/setup-openconnect-server-on-ubuntu/</id>
     <published>2014-07-21T13:21:57.000Z</published>
     <updated>2014-07-21T09:11:30.000Z</updated>
     <content type="html"><![CDATA[<p> 最近猫给推荐的 Cisco AnyConnect，面基的时候也看到 Aveline 菊苣在用 AnyConnect(插嘴：正太菊苣果然好可爱！！！) 于是自己折腾了下。作为少有的能让我折腾起来的 VPN，暂且把搭建步骤简单记录下。</p>
@@ -164,8 +164,8 @@
   
   <entry>
     <title><![CDATA[使用 iptables 过滤 DNS 放大攻击]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/"/>
-    <id>http://blog.phoenixlzx.com/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/</id>
+    <link href="http://blog.phoenixlzx.com/post/iptables-rate-limiting-rules-to-block-dns-amplification-attack/"/>
+    <id>http://blog.phoenixlzx.com/post/iptables-rate-limiting-rules-to-block-dns-amplification-attack/</id>
     <published>2014-05-23T20:52:59.000Z</published>
     <updated>2014-05-23T22:17:50.000Z</updated>
     <content type="html"><![CDATA[<p>昨晚开始我们的 DNS 日志中出现大量的针对 <code>wradish.com</code> 的<code>ANY</code>记录请求，导致大量正常解析请求超时。今天上午到中午时分再次出现流量更大、针对 <code>ping.zong.co.ua</code> 的<code>ANY</code>记录请求，导致整个 DNS 服务瘫痪，完全无法响应正常解析请求。</p>
@@ -194,8 +194,8 @@
   
   <entry>
     <title><![CDATA[在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/05/19/for-loop-in-async-function-with-async-in-it/"/>
-    <id>http://blog.phoenixlzx.com/2014/05/19/for-loop-in-async-function-with-async-in-it/</id>
+    <link href="http://blog.phoenixlzx.com/post/for-loop-in-async-function-with-async-in-it/"/>
+    <id>http://blog.phoenixlzx.com/post/for-loop-in-async-function-with-async-in-it/</id>
     <published>2014-05-19T03:18:20.000Z</published>
     <updated>2014-05-19T09:07:12.000Z</updated>
     <content type="html"><![CDATA[<p>又是熬夜干活。</p>
@@ -223,8 +223,8 @@
   
   <entry>
     <title><![CDATA[修复 Arch Rollback Machine 磁盘占用]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/05/17/repo-arm-disk-rescue-and-resize/"/>
-    <id>http://blog.phoenixlzx.com/2014/05/17/repo-arm-disk-rescue-and-resize/</id>
+    <link href="http://blog.phoenixlzx.com/post/repo-arm-disk-rescue-and-resize/"/>
+    <id>http://blog.phoenixlzx.com/post/repo-arm-disk-rescue-and-resize/</id>
     <published>2014-05-17T15:59:48.000Z</published>
     <updated>2014-05-17T00:43:49.000Z</updated>
     <content type="html"><![CDATA[<p>最近发现 downgrade 失效了，降级啥包都是直接错误退出。然后排查的时候发现是 Arch Rollback Machine 挂了，原因是——磁盘不足。</p>
@@ -253,8 +253,8 @@
   
   <entry>
     <title><![CDATA[为国内用户加速 Apple 服务]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/05/16/accelerate-apple-services-in-cn/"/>
-    <id>http://blog.phoenixlzx.com/2014/05/16/accelerate-apple-services-in-cn/</id>
+    <link href="http://blog.phoenixlzx.com/post/accelerate-apple-services-in-cn/"/>
+    <id>http://blog.phoenixlzx.com/post/accelerate-apple-services-in-cn/</id>
     <published>2014-05-15T21:57:19.000Z</published>
     <updated>2014-05-15T06:24:46.000Z</updated>
     <content type="html"><![CDATA[<p>偶然看到 <a href="https://plus.google.com/105938465531761409080/posts/3EXLAUerxMD" target="_blank" rel="external"> 雅诗的 po</a> 才发觉自己 DNS 的 Apple 服务加速已经几乎不能用了，速度非常慢。倒是挺奇怪的，因为自己做的 DNS 服务器对于整个 Apple 域的上游都是 V2EX DNS，难道是 V2EX DNS 出问题了？</p>
@@ -284,8 +284,8 @@
   
   <entry>
     <title><![CDATA[新的 NJLUG 主站]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/05/07/new-njlug-homepage/"/>
-    <id>http://blog.phoenixlzx.com/2014/05/07/new-njlug-homepage/</id>
+    <link href="http://blog.phoenixlzx.com/post/new-njlug-homepage/"/>
+    <id>http://blog.phoenixlzx.com/post/new-njlug-homepage/</id>
     <published>2014-05-07T11:46:09.000Z</published>
     <updated>2014-05-06T20:21:46.000Z</updated>
     <content type="html"><![CDATA[<p>南京 Linux 用户组有一段时间没有聚会了。偶然想起来之前我用 Jekyll 折腾的那个主页，随手敲了主页地址… 啊啦，还基本上没变啊…</p>
@@ -308,8 +308,8 @@
   
   <entry>
     <title><![CDATA[SubLive: 本地播放器的弹幕 API 服务器]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/04/28/sublive-live-subtitle-for-local-players/"/>
-    <id>http://blog.phoenixlzx.com/2014/04/28/sublive-live-subtitle-for-local-players/</id>
+    <link href="http://blog.phoenixlzx.com/post/sublive-live-subtitle-for-local-players/"/>
+    <id>http://blog.phoenixlzx.com/post/sublive-live-subtitle-for-local-players/</id>
     <published>2014-04-28T12:53:55.000Z</published>
     <updated>2014-04-27T22:06:11.000Z</updated>
     <content type="html"><![CDATA[<p>昨晚 KNA 群里在讨论给本地播放器加弹幕功能。之前虽然听说过但是并未接触过所谓「弹幕池」的概念，但是星光菊苣说只要生成 SSA 字幕直接交给播放器挂上就成。并且，(虽然很想顺带吐槽 Zht 和我们争了半天最后槽点根本不在一个点子上 orz) 少将也表示时效并不重要，不需要考虑播放器的字幕自动重载问题。</p>
@@ -343,8 +343,8 @@
   
   <entry>
     <title><![CDATA[为 Linux 服务器编写的 BDRip 脚本]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/04/08/bdrip-script-for-linux-server/"/>
-    <id>http://blog.phoenixlzx.com/2014/04/08/bdrip-script-for-linux-server/</id>
+    <link href="http://blog.phoenixlzx.com/post/bdrip-script-for-linux-server/"/>
+    <id>http://blog.phoenixlzx.com/post/bdrip-script-for-linux-server/</id>
     <published>2014-04-07T20:54:18.000Z</published>
     <updated>2014-04-07T05:35:58.000Z</updated>
     <content type="html"><![CDATA[<p> 最近状态比较不好… 所以准备拿学校的服务器撒撒气 <em>(:з」∠)</em></p>
@@ -389,8 +389,8 @@
   
   <entry>
     <title><![CDATA[制作更好的 GIF: 另一种更好的办法]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/03/25/yet-anothor-better-gif-method/"/>
-    <id>http://blog.phoenixlzx.com/2014/03/25/yet-anothor-better-gif-method/</id>
+    <link href="http://blog.phoenixlzx.com/post/yet-anothor-better-gif-method/"/>
+    <id>http://blog.phoenixlzx.com/post/yet-anothor-better-gif-method/</id>
     <published>2014-03-25T11:11:46.000Z</published>
     <updated>2014-03-24T20:29:17.000Z</updated>
     <content type="html"><![CDATA[<p>之前使用 <a href="http://blog.phoenixlzx.com/2014/02/19/make-gif-with-ffmpeg/" target="_blank" rel="external">FFmpeg 制作 GIF</a> 被 zyo 吐槽 <a href="https://plus.google.com/107142103119739092775/posts/asBTCqCnP9A" target="_blank" rel="external">明显的网纹</a>，于是找到了更好的办法。</p>
@@ -424,8 +424,8 @@
   
   <entry>
     <title><![CDATA[MongoDB 中文分字搜索]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/03/22/chinese-word-split-search-with-mongodb/"/>
-    <id>http://blog.phoenixlzx.com/2014/03/22/chinese-word-split-search-with-mongodb/</id>
+    <link href="http://blog.phoenixlzx.com/post/chinese-word-split-search-with-mongodb/"/>
+    <id>http://blog.phoenixlzx.com/post/chinese-word-split-search-with-mongodb/</id>
     <published>2014-03-22T13:05:43.000Z</published>
     <updated>2014-05-28T07:06:44.000Z</updated>
     <content type="html"><![CDATA[<p>为工作室开发的 <a href="http://idoc.nuister.org" target="_blank" rel="external">iDocument</a> 文档分享平台，因为后端数据库是 MongoDB 所以没有做站内搜索，只是放了个百度站内搜索的工具。不过后来发现 BAKA 百度根本不收录站内链接，所以主席强烈要求做站内搜索<em>(:з」∠)</em></p>
@@ -471,8 +471,8 @@
   
   <entry>
     <title><![CDATA[DNSMasq 建立自定义 DNS]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/03/12/setup-custom-dns-with-dnsmasq/"/>
-    <id>http://blog.phoenixlzx.com/2014/03/12/setup-custom-dns-with-dnsmasq/</id>
+    <link href="http://blog.phoenixlzx.com/post/setup-custom-dns-with-dnsmasq/"/>
+    <id>http://blog.phoenixlzx.com/post/setup-custom-dns-with-dnsmasq/</id>
     <published>2014-03-11T19:24:56.000Z</published>
     <updated>2014-03-17T04:55:47.000Z</updated>
     <content type="html"><![CDATA[<p>一直想写的 <a href="https://github.com/phoenixlzx/micromoedns" target="_blank" rel="external"> 微萌 DNS</a> 在今天上午准备好基本架构后却在下午遇到各种各样的坑而弃掉了… 心情有够不爽。所以把自己维护的缓存 DNS 解决方案写出来，想要折腾类似的东西的童鞋可以试试看。</p>
@@ -531,8 +531,8 @@
   
   <entry>
     <title><![CDATA[浏览器A到Z]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/03/11/browser-from-a-to-z/"/>
-    <id>http://blog.phoenixlzx.com/2014/03/11/browser-from-a-to-z/</id>
+    <link href="http://blog.phoenixlzx.com/post/browser-from-a-to-z/"/>
+    <id>http://blog.phoenixlzx.com/post/browser-from-a-to-z/</id>
     <published>2014-03-10T16:26:48.000Z</published>
     <updated>2014-03-10T00:58:52.000Z</updated>
     <content type="html"><![CDATA[<p> 貌似很好玩的样子？</p>
@@ -574,8 +574,8 @@
   
   <entry>
     <title><![CDATA[自动编译 DKMS 模组的内核 HOOK]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/02/23/kernel-hook-auto-build-dkms-modules/"/>
-    <id>http://blog.phoenixlzx.com/2014/02/23/kernel-hook-auto-build-dkms-modules/</id>
+    <link href="http://blog.phoenixlzx.com/post/kernel-hook-auto-build-dkms-modules/"/>
+    <id>http://blog.phoenixlzx.com/post/kernel-hook-auto-build-dkms-modules/</id>
     <published>2014-02-23T10:39:58.000Z</published>
     <updated>2014-03-09T18:47:27.000Z</updated>
     <content type="html"><![CDATA[<p><a href="http://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support" target="_blank" rel="external">DKMS</a> 是个好东西，像我们这些喜欢自定义内核的家伙有了 DKMS 之后就不用为各种第三方的内核模组发愁了～</p>
@@ -608,8 +608,8 @@
   
   <entry>
     <title><![CDATA[使用 FFmpeg 制作 GIF]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/02/19/make-gif-with-ffmpeg/"/>
-    <id>http://blog.phoenixlzx.com/2014/02/19/make-gif-with-ffmpeg/</id>
+    <link href="http://blog.phoenixlzx.com/post/make-gif-with-ffmpeg/"/>
+    <id>http://blog.phoenixlzx.com/post/make-gif-with-ffmpeg/</id>
     <published>2014-02-19T14:03:05.000Z</published>
     <updated>2014-02-18T22:29:59.000Z</updated>
     <content type="html"><![CDATA[<p>貌似好久之前秋水学姐就问过如何制作 GIF，回想当时制作境界の彼方中「約束の絆」的<a href="https://plus.google.com/u/0/+PhoenixNemo/posts/RqPTgGrksLV" target="_blank" rel="external">GIF 动画</a>，现在也已经把命令忘光了。所以觉得还是稍微做个笔记。</p>
@@ -639,8 +639,8 @@
   
   <entry>
     <title><![CDATA[使用 Express.js 和 Formidable 上传文件]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/02/18/file-upload-with-expressjs-and-formidable/"/>
-    <id>http://blog.phoenixlzx.com/2014/02/18/file-upload-with-expressjs-and-formidable/</id>
+    <link href="http://blog.phoenixlzx.com/post/file-upload-with-expressjs-and-formidable/"/>
+    <id>http://blog.phoenixlzx.com/post/file-upload-with-expressjs-and-formidable/</id>
     <published>2014-02-17T19:49:22.000Z</published>
     <updated>2014-02-18T22:06:06.000Z</updated>
     <content type="html"><![CDATA[<p> 写 <a href="/2014/02/06/directshare-a-simple-file-sharing-using-direct-http-links/"> 之前一篇文章 </a> 时发现 Express.js 更新到 3.4.x 了，运行的时候出现警告 </p>
@@ -671,8 +671,8 @@
   
   <entry>
     <title><![CDATA[Nyaabot: 为喵窝服务器构建的 IRC 机器人]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/02/17/nyaabot-bot-for-nyaacat-irc/"/>
-    <id>http://blog.phoenixlzx.com/2014/02/17/nyaabot-bot-for-nyaacat-irc/</id>
+    <link href="http://blog.phoenixlzx.com/post/nyaabot-bot-for-nyaacat-irc/"/>
+    <id>http://blog.phoenixlzx.com/post/nyaabot-bot-for-nyaacat-irc/</id>
     <published>2014-02-16T19:19:34.000Z</published>
     <updated>2014-02-16T17:30:03.000Z</updated>
     <content type="html"><![CDATA[<p>第一次写 IRC 机器人。之前已经看到仙子酱等等菊苣们写了好多种 IRC 机器人，但是都是 Python 写的。倒不是歧视 Python 啊什么的… 主要是咱服务器上木有方便的环境跑，而且也有需要自己做的功能。正好在逛 NPM 的时候发现了 <a href="https://npmjs.org/node-irc" target="_blank" rel="external">node-irc</a> 这个包，于是折腾一下午搞出来一个机器人程序。</p>
@@ -718,8 +718,8 @@
   
   <entry>
     <title><![CDATA[一个简单的 WordPress 备份脚本]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/02/12/a-simple-wordpress-backup-script/"/>
-    <id>http://blog.phoenixlzx.com/2014/02/12/a-simple-wordpress-backup-script/</id>
+    <link href="http://blog.phoenixlzx.com/post/a-simple-wordpress-backup-script/"/>
+    <id>http://blog.phoenixlzx.com/post/a-simple-wordpress-backup-script/</id>
     <published>2014-02-11T20:08:56.000Z</published>
     <updated>2014-02-11T04:23:41.000Z</updated>
     <content type="html"><![CDATA[<p> 居然会有人问我要这个东西… 我最不会写脚本了好吧呀！</p>
@@ -748,8 +748,8 @@
   
   <entry>
     <title><![CDATA[为 KDM 和 Ksplash 自定义壁纸]]></title>
-    <link href="http://blog.phoenixlzx.com/2014/02/12/custom-wallpaper-for-kdm-and-ksplash/"/>
-    <id>http://blog.phoenixlzx.com/2014/02/12/custom-wallpaper-for-kdm-and-ksplash/</id>
+    <link href="http://blog.phoenixlzx.com/post/custom-wallpaper-for-kdm-and-ksplash/"/>
+    <id>http://blog.phoenixlzx.com/post/custom-wallpaper-for-kdm-and-ksplash/</id>
     <published>2014-02-11T17:45:36.000Z</published>
     <updated>2014-05-06T18:51:16.000Z</updated>
     <content type="html"><![CDATA[<p>嘛非常简单的几个小步骤，不过 KDE 的 KDM 和启动屏幕不能直接自定义壁纸确实很讨厌。</p>

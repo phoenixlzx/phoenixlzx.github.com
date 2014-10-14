@@ -1,0 +1,262 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>为 KDM 和 Ksplash 自定义壁纸 | Phoenix&#39;s island</title>
+    <meta name="author" content="Phoenix Nemo">
+    
+    <meta name="description" content="Phoenix&#39;s Blog">
+    
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta property="og:title" content="为 KDM 和 Ksplash 自定义壁纸"/>
+    <meta property="og:site_name" content="Phoenix&#39;s island"/>
+
+    
+    <meta property="og:image" content="undefined"/>
+    
+
+    <link href="/favicon.png" rel="icon">
+    <link rel="alternate" href="/atom.xml" title="Phoenix&#39;s island" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.css"/>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Phoenix&#39;s island</a></h1>
+  <h2><a href="/">Sun will shine on the horizon.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+      <li><a href="/links">Links</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-02-11T17:45:36.000Z"><a href="/post/custom-wallpaper-for-kdm-and-ksplash/">2014-02-12</a></time>
+      
+      
+  
+    <h1 class="title">为 KDM 和 Ksplash 自定义壁纸</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>嘛非常简单的几个小步骤，不过 KDE 的 KDM 和启动屏幕不能直接自定义壁纸确实很讨厌。</p>
+<h3 id="KDM">KDM</h3>
+<p>表示 KDM 相对简单所以先说了。首先是下载对应的 KDM 主题，然后解压到一个临时目录下。</p>
+<p>我下载的是 Glassified，在 <a href="http://kde-look.org/content/show.php/Glassified+Splash?content=84124" target="_blank" rel="external">kde-look</a> 上非常受欢迎的一款玻璃效果主题。</p>
+<p>Glassified 主题解压后得到了 <code>background.svg</code> 和 <code>glassfied.xml</code> 等等文件。由于我的壁纸是 JPEG 格式而且本机没安装 Inkscape (放心 GIMP 不支持矢量图的…) 所以只好直接把图片切割并缩放为适合我屏幕分辨率的文件放进来，重命名为 <code>background.jpg</code>。因为文件变了，所以打开 <code>glassified.xml</code> 文件，查找 <code>background.svg</code> 并全部替换成 <code>background.jpg</code> <del>其实就替换了一处</del></p>
+<p>接下来返回上级目录，把 <code>Glassified</code> 目录压缩为 <code>.tar.gz</code> 或 <code>.tar.bz2</code> 文件，就可以直接在 KDE 系统设置里安装了。(安装 KDM 主题需要 root 权限哦)</p>
+<h3 id="KSplash">KSplash</h3>
+<p>Ksplash 其实也不复杂，就是比较蛋疼的是目录很多，一般自己用的话… 我反正是把和我分辨率靠不着边的目录都删了。一样是下载的 Glassified 主题，解压后得到以分辨率命名的目录，扫了一眼居然没有 16:9 的分辨率啊啊啊啊！虽然我更喜欢 16:10 但是这也太蛋疼了吧！</p>
+<p>在 <code>1600x1200</code> 这个目录里找到了所有的文件。其他目录里应该只有 <code>background.png</code> 或者类似的文件。于是进入 <code>1600x1200</code> 这个目录，用博丽灵梦的壁纸覆盖了 <code>background.png</code>。需要注意一点，本本是 16:9 1600×900 分辨率的 (嗯就是这么奇葩又正常的分辨率) 所以灵梦的壁纸原本是 1600x900，被我缩放成 1600x1200。图片看起来是被压窄了，不过放心——KDE 会自动帮你从 1600x1200 拉伸成适合屏幕分辨率的… 如果放的文件是 1600x900 或者其他 16:9 分辨率的话… <del> 效果非常鬼畜哦</del></p>
+<p>留给自己用的，所以把其他分辨率的都删掉了。如果想要做来分享，那么还需要把图像文件放缩放成正确的比例和分辨率放在对应的目录下。完成后返回上级目录，像 KDM 主题一样压缩成 <code>.tar.gz</code> 即可。不需要 root 权限，可以直接在系统设置里安装。装好了记得测试下哦。</p>
+<p>下面上效果图。</p>
+<p><img src="http://blog.phoenixlzx.com/static/img/posts/2014-02-11-ksplash.jpg" alt="KSplash - Hakurei Reimu"></p>
+<p>PS. Glassifed 这款主题的链接貌似死掉好久了。于是顺便附上下载链接好了。Dropbox 访问不能的话.. 嘛我相信大家都有办法的对吧～</p>
+<ul>
+<li><a href="https://dl.dropboxusercontent.com/u/2705405/Glassified.KDM.tar.gz" target="_blank" rel="external">Glassifed KDM</a></li>
+<li><a href="https://dl.dropboxusercontent.com/u/2705405/Glassified.ksplash.tar.gz" target="_blank" rel="external">Glassifed KSplash</a></li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Notes/">Notes</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/KDE/">KDE</a>, <a href="/tags/Artwork/">Artwork</a>
+  </div>
+
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:blog.phoenixlzx.com">
+  </form>
+</div>
+
+  <div class="widget tag">
+    <h3 class="title">关于</h3>
+    <div class="entry">
+        <img src="/static/img/avatar/avatar.jpg" style="margin: auto; width: 100%;"/>
+        <h4 style="text-align: center">Phoenix Nemo (phoenixlzx)</h4>
+        <div style="margin: auto; text-align: center;">
+            <a href="https://plus.google.com/107142103119739092775" target="_blank"><i class="fa fa-google-plus fa-2x"></i></a>&nbsp;&nbsp;
+            <a href="https://twitter.com/phoenixlzx" target="_blank"><i class="fa fa-twitter fa-2x"></i></a>&nbsp;&nbsp;
+            <a href="https://github.com/phoenixlzx" target="_blank"><i class="fa fa-github fa-2x"></i></a>&nbsp;&nbsp;
+            <a class="fancybox" href="#emailme"><i class="fa fa-envelope-o fa-2x"></i></a>
+        </div>
+        <div style="display: none;">
+            <div id="emailme">
+                <p><strong>个人邮箱地址</strong></p>
+                <br/>
+                <code>echo 'aUBwaG9lbml4bHp4LmNvbQo='|base64 --decode</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>1</small></li>
+  
+    <li><a href="/categories/Database/">Database</a><small>1</small></li>
+  
+    <li><a href="/categories/Life/">Life</a><small>5</small></li>
+  
+    <li><a href="/categories/Linux/">Linux</a><small>2</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>3</small></li>
+  
+    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+  
+    <li><a href="/categories/Notes/">Notes</a><small>9</small></li>
+  
+    <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+  </div>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/post/2-notes-for-ssl-and-ipkvm/">关于 SSL 和 IPKVM/VNC Applet 的笔记两则</a>
+      </li>
+    
+      <li>
+        <a href="/post/2014-natsu/">2014·夏</a>
+      </li>
+    
+      <li>
+        <a href="/post/setup-openconnect-server-on-ubuntu/">在 Ubuntu 服务器上搭建 OpenConnect 服务器小记</a>
+      </li>
+    
+      <li>
+        <a href="/post/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
+      </li>
+    
+      <li>
+        <a href="/post/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+      </li>
+    
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2014 Phoenix Nemo
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'phoenixhexo';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js?https';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
