@@ -68,7 +68,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-05-17T15:59:48.000Z"><a href="/2014/05/17/repo-arm-disk-rescue-and-resize/">2014-05-17</a></time>
+        <time datetime="2014-05-17T07:59:48.000Z"><a href="/2014/05/17/repo-arm-disk-rescue-and-resize/">2014-05-17</a></time>
       
       
   
@@ -79,13 +79,13 @@
     <div class="entry">
       
         <p>最近发现 downgrade 失效了，降级啥包都是直接错误退出。然后排查的时候发现是 Arch Rollback Machine 挂了，原因是——磁盘不足。</p>
-<p>检查后发现 pm2 的日志有 7G，850 天前的包有 5000 多个，365 天内的包有 10 万余，磁盘已经被吃得满满当当。</p>
+<p>检查后发现 pm2 的日志有 7G，850天前的包有5000多个，365天内的包有10万余，磁盘已经被吃得满满当当。</p>
 <p>日志好说，因为没啥特别有用的东西也不用拿来做分析，直接删掉就好。Felix 也把 850 天前的包全部删干净了。不过再次检查的时候 <code>df -h</code> 显示依旧是磁盘被吃满的，而 <code>df -ih</code> 显示 inode 占用没有问题。猫怀疑是有文件句柄还开着，但是把所有可能的进程杀掉之后依旧没有变化，排除。另外一个现象是文件删除进程完成后过了一段时间磁盘开始有少量空闲空间了，可能是磁盘缓存…? </p>
 <p>于是靠着这空出来的 900M 多点的空间执行了几个操作：把有 HTTP flood 漏洞的 Node.js 0.10.16 升级到最新版 0.10.28，将包同步的 cronjob 降低到每天执行一次，压缩旧的 NGINX 日志。</p>
-<p>以及用户一直要求的包归档功能，实际上是已经有了的，但是并没通过 NGINX 配置来实现 (Pia!&lt;(=ｏ ‵-′) ノ☆猫) 所以准备把归档功能写到 API 服务端里。因为之前很有预见性的同步的时候把每天的包数据库按照 <code>/year/month/day/repo</code> 的结构保存起来(然后这部分的数据库文件就有 30G！)，所以用户按照这个路径来请求包数据库的时候直接把对应的数据库文件丢给客户端，请求包文件的时候则直接从包目录里丢过去。这样的话其实从一个较早的时间结构最后请求一个较新的包文件也能拿到…. 不过这个不是问题，因为包归档给 pacman 用的话，有哪些包还是 pacman 要读数据库的。</p>
-<p>包归档的 index 确实花了不少时间，目前的实现貌似也不很好，虽然貌似还挺快的，但是也挺吃硬盘的…而且一连好几次手残敲错了东西、少加了分隔符、加了冗余的配置变量…. 总之就是爆肝熬夜的效率超级差，4 点多基本上没问题的时候已经能感觉到身体很不舒服了…</p>
+<p>以及用户一直要求的包归档功能，实际上是已经有了的，但是并没通过 NGINX 配置来实现(Pia!&lt;(=ｏ ‵-′)ノ☆猫) 所以准备把归档功能写到 API 服务端里。因为之前很有预见性的同步的时候把每天的包数据库按照 <code>/year/month/day/repo</code> 的结构保存起来(然后这部分的数据库文件就有 30G！)，所以用户按照这个路径来请求包数据库的时候直接把对应的数据库文件丢给客户端，请求包文件的时候则直接从包目录里丢过去。这样的话其实从一个较早的时间结构最后请求一个较新的包文件也能拿到….不过这个不是问题，因为包归档给 pacman 用的话，有哪些包还是 pacman 要读数据库的。</p>
+<p>包归档的 index 确实花了不少时间，目前的实现貌似也不很好，虽然貌似还挺快的，但是也挺吃硬盘的…而且一连好几次手残敲错了东西、少加了分隔符、加了冗余的配置变量…. 总之就是爆肝熬夜的效率超级差，4点多基本上没问题的时候已经能感觉到身体很不舒服了…</p>
 <p>然后是一觉睡到第二天中午。觅食归来给 A.R.M 的 KVM 虚拟机硬盘增加了 100G。执行 <code>resize2fs</code> 的时候报错说已经达到最大空间，删掉 swap 之后依旧。接下来干了一件很作死的事情——把所有分区删掉了，然后按照原来的分区方案重建了新的分区。Reboot 之后 lsblk 是对了，但是 df -h 依旧是原来的分区。一叶说是 resize 没成功，要进 LiveCD 里面 resize2fs。不过我没镜像… 按照一叶的建议挂上 VNC 进 recovery 然后 fsck，再正常进系统执行 <code>resize2fs</code>，成功。</p>
-<p>回过神来的时候发现这种作死的行为我居然手都没抖一下 = = 几百 G 的数据呐…</p>
+<p>回过神来的时候发现这种作死的行为我居然手都没抖一下 = = 几百G的数据呐…</p>
 <p>晚上还要做字幕，再去休息下好了…</p>
 
       
@@ -167,9 +167,9 @@
   
     <li><a href="/categories/Network/">Network</a><small>3</small></li>
   
-    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+    <li><a href="/categories/Node-js/">Node.js</a><small>5</small></li>
   
-    <li><a href="/categories/Notes/">Notes</a><small>9</small></li>
+    <li><a href="/categories/Notes/">Notes</a><small>10</small></li>
   
     <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
   
@@ -181,7 +181,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Node-js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/OS-X/" style="font-size: 10.00px;">OS X</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
   </div>
 </div>
 
@@ -192,11 +192,15 @@
   <ul class="entry">
     
       <li>
+        <a href="/2014/11/11/set-language-for-individual-app-in-os-x-the-elegant-way/">用优雅的方式在 OS X 中为单个应用设置语言</a>
+      </li>
+    
+      <li>
         <a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">关于 SSL 和 IPKVM/VNC Applet 的笔记两则</a>
       </li>
     
       <li>
-        <a href="/2014/09/03/2014-natsu/">2014·夏</a>
+        <a href="/2014/09/02/2014-natsu/">2014·夏</a>
       </li>
     
       <li>
@@ -204,11 +208,7 @@
       </li>
     
       <li>
-        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
-      </li>
-    
-      <li>
-        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+        <a href="/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
       </li>
     
   </ul>

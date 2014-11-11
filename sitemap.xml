@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.phoenixlzx.com/2014/11/11/set-language-for-individual-app-in-os-x-the-elegant-way/</loc>
+    <lastmod>2014-11-11T00:09:23.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://blog.phoenixlzx.com/links/index.html</loc>
     <lastmod>2014-10-29T05:14:39.000Z</lastmod>
   </url>
@@ -17,7 +22,7 @@
   </url>
   
   <url>
-    <loc>http://blog.phoenixlzx.com/2014/09/03/2014-natsu/</loc>
+    <loc>http://blog.phoenixlzx.com/2014/09/02/2014-natsu/</loc>
     <lastmod>2014-09-02T14:45:06.000Z</lastmod>
   </url>
   
@@ -42,7 +47,7 @@
   </url>
   
   <url>
-    <loc>http://blog.phoenixlzx.com/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/</loc>
+    <loc>http://blog.phoenixlzx.com/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/</loc>
     <lastmod>2014-05-23T22:17:50.000Z</lastmod>
   </url>
   
@@ -57,7 +62,7 @@
   </url>
   
   <url>
-    <loc>http://blog.phoenixlzx.com/2014/05/16/accelerate-apple-services-in-cn/</loc>
+    <loc>http://blog.phoenixlzx.com/2014/05/15/accelerate-apple-services-in-cn/</loc>
     <lastmod>2014-05-15T06:24:46.000Z</lastmod>
   </url>
   
@@ -72,7 +77,7 @@
   </url>
   
   <url>
-    <loc>http://blog.phoenixlzx.com/2014/02/12/custom-wallpaper-for-kdm-and-ksplash/</loc>
+    <loc>http://blog.phoenixlzx.com/2014/02/11/custom-wallpaper-for-kdm-and-ksplash/</loc>
     <lastmod>2014-05-06T18:51:16.000Z</lastmod>
   </url>
   
@@ -82,7 +87,7 @@
   </url>
   
   <url>
-    <loc>http://blog.phoenixlzx.com/2014/04/08/bdrip-script-for-linux-server/</loc>
+    <loc>http://blog.phoenixlzx.com/2014/04/07/bdrip-script-for-linux-server/</loc>
     <lastmod>2014-04-07T05:35:58.000Z</lastmod>
   </url>
   
@@ -92,12 +97,12 @@
   </url>
   
   <url>
-    <loc>http://blog.phoenixlzx.com/2014/03/12/setup-custom-dns-with-dnsmasq/</loc>
+    <loc>http://blog.phoenixlzx.com/2014/03/11/setup-custom-dns-with-dnsmasq/</loc>
     <lastmod>2014-03-17T04:55:47.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://blog.phoenixlzx.com/2014/03/11/browser-from-a-to-z/</loc>
+    <loc>http://blog.phoenixlzx.com/2014/03/10/browser-from-a-to-z/</loc>
     <lastmod>2014-03-10T00:58:52.000Z</lastmod>
   </url>
   
@@ -112,22 +117,22 @@
   </url>
   
   <url>
-    <loc>http://blog.phoenixlzx.com/2014/02/18/file-upload-with-expressjs-and-formidable/</loc>
+    <loc>http://blog.phoenixlzx.com/2014/02/17/file-upload-with-expressjs-and-formidable/</loc>
     <lastmod>2014-02-18T22:06:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://blog.phoenixlzx.com/2014/02/17/nyaabot-bot-for-nyaacat-irc/</loc>
+    <loc>http://blog.phoenixlzx.com/2014/02/16/nyaabot-bot-for-nyaacat-irc/</loc>
     <lastmod>2014-02-16T17:30:03.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://blog.phoenixlzx.com/2014/02/12/a-simple-wordpress-backup-script/</loc>
+    <loc>http://blog.phoenixlzx.com/2014/02/11/a-simple-wordpress-backup-script/</loc>
     <lastmod>2014-02-11T04:23:41.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://blog.phoenixlzx.com/2014/02/07/a-new-expjs-for-mypet-using-fastfibo/</loc>
+    <loc>http://blog.phoenixlzx.com/2014/02/06/a-new-expjs-for-mypet-using-fastfibo/</loc>
     <lastmod>2014-02-06T01:23:26.000Z</lastmod>
   </url>
   

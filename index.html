@@ -69,7 +69,63 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-10-14T05:03:07.000Z"><a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">2014-10-14</a></time>
+        <time datetime="2014-11-10T23:42:27.000Z"><a href="/2014/11/11/set-language-for-individual-app-in-os-x-the-elegant-way/">2014-11-11</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/11/11/set-language-for-individual-app-in-os-x-the-elegant-way/">用优雅的方式在 OS X 中为单个应用设置语言</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>买到 CLIP STUDIO PAINT Pro，激活之后发现不给启动，显示 <code>Unsupported OS</code> 并退出。搜索了下发现是因为语言设置的问题导致，需要将系统环境设置为应用所支持的语言才能运行。</p>
+<p>嘛。日本人做事情也是让人无话可说，那么多应用都没有多语言支持的… 用能支持的语言来显示就好了嘛。</p>
+<p>话说回来，我一开始设置的系统语言是简体中文，虽然后备语言加了 English 和日本語，不过有些不能自动变更语言的应用在更换系统语言为 English 之后变得很别扭。于是寻找可以单独设置应用语言的方法。</p>
+<p>用惯了 Linux 再用 OS X 其实并没有那么容易的改变习惯… 当我准备尝试单独 export 一份 locale 再运行 app 的时候 OS X 直接告诉我不适用我的表情简直和伊莉雅一样。</p>
+<p>…</p>
+<p>睡了一觉起来继续 Google。找到了可以单独为应用设置语言并且 launch 的 app <a href="http://www.tj-hd.co.uk/en-gb/languageswitcher/" target="_blank" rel="external">Language Switcher</a>，看起来不错，但是每次启动 CLIP STUDIO PAINT 都要先打开这货，这不是我想要的效果。</p>
+<p>于是最终找到一个合适的解决方案：用 <code>defaults</code> 命令。</p>
+<p>原帖在<a href="http://hints.macworld.com/article.php?story=20061001065101830" target="_blank" rel="external">这里</a></p>
+<p>设置 CLIP STUDIO PAINT Pro 语言环境命令：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">defaults <span class="keyword">write</span> jp.<span class="keyword">co</span>.celsys.CLIPSTUDIOPAINT.lip AppleLanguages <span class="string">'("en-US")'</span></div></pre></td></tr></table></figure>
+
+<p>其中 <code>jp.co.celsys.CLIPSTUDIOPAINT.lip</code> 可以在应用的显示包信息 -&gt; Contents -&gt; Info.plist 中找到。</p>
+<p>执行后就可以直接双击启动啦~</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-10-13T21:03:07.000Z"><a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">2014-10-14</a></time>
       
       
   
@@ -84,7 +140,7 @@
 <p>有客户买了 COMODO Positive SSL 之后问我证书链变了要怎么串联。嘛确实文件变多了不过不至于这就不会了吧…</p>
 <p>SSL 证书串联用 <code>cat</code> 命令的话顺序是自下而上，也就是 自己的证书 -&gt; 二级 Intermediate CA -&gt; 一级 Intermediate CA -&gt; Root CA</p>
 <p>所以不管文件有多少这个顺序总是有的。以 COMODO Positive SSL 为例，假设域名为 <code>example.com</code>，<code>cat</code> 的串联命令：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat example_com<span class="preprocessor">.crt</span> COMODORSADomainValidationSecureServerCA<span class="preprocessor">.crt</span> COMODORSAAddTrustCA<span class="preprocessor">.crt</span> AddTrustExternalCARoot<span class="preprocessor">.crt</span> &gt; example_com<span class="preprocessor">.signed</span><span class="preprocessor">.crt</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">cat example_com.crt COMODORSADomainValidationSecureServerCA.crt COMODORSAAddTrustCA.crt AddTrustExternalCARoot.crt &gt;</span> example_com.signed.crt</span></div></pre></td></tr></table></figure>
 
 <p>于是就可以拿着 <code>example_com.signed.crt</code> 和生成 CSR 时一并生成的 <code>example_com.key</code> 去给 NGINX 咯。</p>
 <p>附一份 NGINX 配置样例。</p>
@@ -96,11 +152,13 @@
 <p>解决方案：下载一个旧版的 Java，比如 jdk6。</p>
 <p>但是直接安装也是不能运行的，因为实际上调用的 java executable 是最新版 Java 的，所以一样报错。</p>
 <p>如果是在 Linux 下，jre6 的目录在 <code>$HOME/jre6/jre1.6.0_38</code>，那么下载到 Applet 之后用下面的命令启动：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">applet_path<span class="subst">=</span>/path/<span class="keyword">to</span>/your/applet<span class="built_in">.</span>jnlp</div><div class="line">~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/bin/java <span class="attribute">-verbose</span> <span class="attribute">-Xbootclasspath</span>/a:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/javaws<span class="built_in">.</span>jar:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/deploy<span class="built_in">.</span>jar:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/plugin<span class="built_in">.</span>jar <span class="attribute">-classpath</span> ~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/deploy<span class="built_in">.</span>jar <span class="attribute">-Djava</span><span class="built_in">.</span>security<span class="built_in">.</span>policy<span class="subst">=</span>file:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/security/javaws<span class="built_in">.</span>policy <span class="attribute">-DtrustProxy</span><span class="subst">=</span><span class="literal">true</span> <span class="attribute">-Xverify</span>:remote <span class="attribute">-Djnlpx</span><span class="built_in">.</span>home<span class="subst">=</span>~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/bin <span class="attribute">-Dsun</span><span class="built_in">.</span>awt<span class="built_in">.</span>warmup<span class="subst">=</span><span class="literal">true</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>origFilenameArg<span class="subst">=</span><span class="variable">$applet_path</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>remove<span class="subst">=</span><span class="literal">false</span> <span class="attribute">-esa</span> <span class="attribute">-Xnoclassgc</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>splashport<span class="subst">=</span><span class="number">59999</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>jvm<span class="subst">=</span>~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/bin/java <span class="attribute">-Djnlpx</span><span class="built_in">.</span>vmargs<span class="subst">=</span><span class="string">"-esa -Xnoclassgc"</span> com<span class="built_in">.</span>sun<span class="built_in">.</span>javaws<span class="built_in">.</span>Main <span class="variable">$applet_path</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">applet_path=<span class="regexp">/path/</span>to<span class="regexp">/your/</span>applet.jnlp</div><div class="line">~<span class="regexp">/jre6/</span>jre1.<span class="number">6.0</span>_38<span class="regexp">/bin/</span>java -verbose -Xbootclasspath<span class="regexp">/a:~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/javaws.jar:~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/deploy.jar:~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/plugin.jar -classpath ~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/deploy.jar -Djava.security.policy=file:~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/security/</span>javaws.policy -DtrustProxy=<span class="keyword">true</span> -Xverify:remote -Djnlpx.home=~<span class="regexp">/jre6/</span>jre1.<span class="number">6.0</span>_38<span class="regexp">/bin -Dsun.awt.warmup=true -Djnlpx.origFilenameArg=$applet_path -Djnlpx.remove=false -esa -Xnoclassgc -Djnlpx.splashport=59999 -Djnlpx.jvm=~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>bin<span class="regexp">/java -Djnlpx.vmargs="-esa -Xnoclassgc" com.sun.javaws.Main $applet_path</span></div></pre></td></tr></table></figure>
 
 <h3 id="===_2014-10-15_更新_===">=== 2014-10-15 更新 ===</h3>
-<p>SSLv3 <a href="http://googleonlinesecurity.blogspot.com/2014/10/this-poodle-bites-exploiting-ssl-30.html" target="_blank" rel="external">再次爆出漏洞 </a>，在 Google 的新草案 <a href="https://tools.ietf.org/html/draft-ietf-tls-downgrade-scsv-00" target="_blank" rel="external">TLS_FALLBACK_SCSV</a> 还未明朗的情况下，目前禁用 SSLv3 是一个 <strong> 不考虑 IE6</strong> 的 workaround。</p>
+<p>SSLv3 <a href="http://googleonlinesecurity.blogspot.com/2014/10/this-poodle-bites-exploiting-ssl-30.html" target="_blank" rel="external">再次爆出漏洞</a>，在 Google 的新草案 <a href="https://tools.ietf.org/html/draft-ietf-tls-downgrade-scsv-00" target="_blank" rel="external">TLS_FALLBACK_SCSV</a> 还未明朗的情况下，目前禁用 SSLv3 是一个 <strong>不考虑 IE6</strong> 的 workaround。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function_or_atom">ssl_protocols</span> <span class="variable">TLSv1</span> <span class="variable">TLSv1</span>.<span class="number">1</span> <span class="variable">TLSv1</span>.<span class="number">2</span>;</div><div class="line"><span class="function_or_atom">ssl_ciphers</span> <span class="variable">ECDHE</span>-<span class="variable">RSA</span>-<span class="variable">AES256</span>-<span class="variable">SHA384</span>:<span class="variable">AES256</span>-<span class="variable">SHA256</span>:<span class="variable">RC4</span>:<span class="variable">HIGH</span>:<span class="exclamation_mark">!</span><span class="variable">MD5</span>:<span class="exclamation_mark">!</span><span class="function_or_atom">aNULL</span>:<span class="exclamation_mark">!</span><span class="function_or_atom">eNULL</span>:<span class="exclamation_mark">!</span><span class="variable">NULL</span>:<span class="exclamation_mark">!</span><span class="variable">DH</span>:<span class="exclamation_mark">!</span><span class="variable">EDH</span>:<span class="exclamation_mark">!</span><span class="variable">AESGCM</span>;</div><div class="line"><span class="function_or_atom">ssl_prefer_server_ciphers</span> <span class="function_or_atom">on</span>;</div><div class="line"><span class="function_or_atom">ssl_session_cache</span> <span class="function_or_atom">shared</span>:<span class="variable">SSL</span>:<span class="number">10</span>m;</div><div class="line"><span class="function_or_atom">ssl_session_timeout</span> <span class="number">10</span>m;</div></pre></td></tr></table></figure>
+
+
       
     </div>
     <footer>
@@ -133,53 +191,53 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-09-02T22:27:23.000Z"><a href="/2014/09/03/2014-natsu/">2014-09-03</a></time>
+        <time datetime="2014-09-02T14:27:23.000Z"><a href="/2014/09/02/2014-natsu/">2014-09-02</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/09/03/2014-natsu/">2014·夏</a></h1>
+    <h1 class="title"><a href="/2014/09/02/2014-natsu/">2014·夏</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>2014 年的夏天应该是我一直以来度过的最繁忙和劳累的一段时光。多方面的压力、打击、困扰，加上自身各种情况条件不利，这个暑假真的让人感觉非常憋屈窝囊。</p>
-<h3 id="实习"> 实习 </h3>
-<p> 最值得一提的当然是我的第一份实习。大三下学期那会也就是想找个实习锻炼下自己，也可以给家里减轻一些经济负担。在 Twitter / V2EX 发布求职贴之后陆续有不少公司找上门来，大部分公司都给出了非常不错的条件，有些甚至在我明确答应之前就问我什么时候过去…虽然简历写得比较糟糕，不过仅仅通过和各种公司打交道还是见识到了一点互联网行业的竞争状态。<del> 也算是头一回知道原来北京的创业公司工资可以给这么高 </del></p>
-<p> 最终选择爱奇艺的原因大概就是 iven 前辈所说可以玩集群和虚拟化。虽然公司给的待遇实在让我不知道说啥比较好 (除去房租几乎不够生活费，回学校一趟花掉一半工资在路费上…)，但是在经济状况还没有糟糕到不得不去待遇最高的公司的时候，我还是想多见识点东西学学经验。说实话爱奇艺没怎么让我失望，工位上就有质量非常好的千兆公网带宽，配备 23 寸 Dell 显示器 (虽然主机配置不怎么样…)，弹性工作制，且几乎没有看到员工加班 (虽然听说很多人回家后还是会挂上 VPN 连回公司继续工作)，办公环境有物业定时打扫，茶水间的阿姨遇到自动售货机有优惠活动就会通知大家，看我打了几个喷嚏还专门去帮我拿了药，公司对于新员工和实习生的成长也算是费了脑筋… </p>
-<p> 感受颇深的是我所在的团队。在校期间经常和已经参加工作的前辈们闲聊，前辈们吐槽和抱怨比较多的基本上就是一些比较奇葩的同事，其次是公司的种种不合理。我一直认为在公司遇到奇葩同事属于及其正常甚至一定会发生的现象，在决定动身去帝都的时候也做了很多心理准备和各种应对处理办法。不过来到之后发现我想太多… 团队成员友好和睦程度完全超出我的想像，完全没有遇到之前朋友们吐槽的种种情况。每天中午都是一起出去吃饭，路上一边挑餐厅挑半天一遍各种调侃…互相尊重、理解、关心、帮助几乎是整个团队互动的原则。</p>
-<p> 说到这里其实我有些愧疚。因为自身的很多原因，每天工作的效率都非常低，心情也相当不好，写代码自然也极其浮躁。iven 前辈每次 review 代码的时候都会提出一大堆完美主义的问题，要我一遍一遍修改重构，甚至有时候让我感觉「为什么要把一大堆坑死人不偿命的框架揉在一起，为什么我有一只处女座的 mentor」… 不过事实是我发现自己在写代码的时候越来越想着更优化的解决方案，框架内提供了解决方案的尽量不去用 hack 的方法。在面对一堆完全陌生的框架揉在一起的坑，且自己整个人都很不好的情况下，还是发挥出了平日 1/3 的开发效率。韧性应该有不少提高吧…</p>
-<h3 id="跑路"> 跑路 </h3>
-<p> 曾经津津乐道卖 VPS 的某某某又跑路了~ (为何是「又」…) 可是现在我也要干这种事。想想真是可笑。</p>
-<p> 其实跑路并不是一方原因直接决定，也算是很多方面的共同作用结果。一直以来 UltraKVM 项目都处于亏损状态且耗费了我大量的精力，但是由于整个虚拟化平台上还有很多朋友在跑的应用，我也还是一直坚持着做下去。8 月份的攻击事件之后我把机房寄发的账单转给了吸引攻击流量的客户，却被喷小公司服务不靠谱。客户修改了自己的联系信息之后不见踪影 (其实修改客户信息，财务面板是会发邮件的… 所有历史信息都会留底，所以不要觉得自己改了信息就找不到了)。无奈之中找朋友诉苦，意想不到地得到了帮助。于是向机房发邮件请求下架机器，并向他们一直以来的高质量服务表示感谢 (MultaCOM 机房是我目前见过的最好的机房没有之一，不管是网络还是服务)。机房帮我取消了攻击流量的账单，在我指定的日期帮我下架机器并寄送到另外的机房。因此对 MC 机房也抱有很深的歉意。</p>
-<p> 为了这件事情，我三天没吃下饭，睡不着觉，通知客户备份数据的邮件发了一遍又一遍，担心用 sendmail 发会被丢到垃圾箱还用自己的个人邮箱发了两遍，承诺会在新机房上线并为所有有效客户提供为期至少一年的免费 VPS 服务。(吐槽：就这样还有人在下架之后找我说 VPS 为啥不能访问了云云让我感觉非常不爽，同时感谢朋友的帮助才让我有偿还客户的机会)。一直到给机房发送了最后要付的所有费用之后才算是舒坦了一些。</p>
-<h3 id="权限狗"> 权限狗 </h3>
-<p> 暑假里另外一件闹得比较欢乐的事情是喵窝服务器。应该是敖厂长的原因 (?) 整个姬家都可以看到很多人在玩 Minecraft。一边在姬家宣传，管理组也是费尽了心思来准备向墙内玩家开放申请。</p>
-<p> 其实向墙内玩家开放也是我主要在推，因为墙内确实很多高素质的玩家 (先不说游戏技术如何)，我很希望能吸引到这些玩家来玩。17 精心策划了宣传帖，二小姐把之前用的服务器寄到了帝都，我和壕桥手忙脚乱地把服务器送到机房调试了一个晚上，我还花了两个小时写了申请表单的程序，都是在为了迎接新玩家所做的准备。</p>
-<p> 不过事实上情况并没有我们想像得那么好。前三天来申请的玩家里，过审率只有不到 1/12，接下来的两天里更是掉到了 1/20。从开放申请到开学之前，几乎每天都是好几十封白名单申请邮件。前几天去大概看了下，过审率依旧是 1/15 的样子。不过就算如此严格的审核，我们依然遇到了漏网之鱼…</p>
-<p> 事件经过详细说的话估计今晚我就不用睡觉了。大致就是先后有三个熊孩子在服里发飙被封，一个是要在毫无干系的百度贴吧到处发帖把我和其他几个管理骂了一通，要和我「正面刚」(…错字？)，另一个则恐吓我说要去 mcbbs 「好好说说这件事」。再后面则是一个熊孩子根本没过审核，在群里刷屏伸手被拒绝后骂我们对新手不友好，是「虐待他」….. 于是目前还记得的就这仨。</p>
-<p> 熊孩子被封么无非就是到处发帖子骂，是不是相关论坛也不管 (素质…)，然后拼命要求加群加好友然后在附言里破口大骂权限狗一类的词，或者是各种无理取闹要求入群入服或者挑衅之类。这么看咱这开源社区的管理员都算是非常好当的了 233，对付熊孩子咱也只有放置 play 咯。”Argue with idiots, and you become an idiot.” — <em>Hackers and Painters</em></p>
-<h3 id="客户中心"> 客户中心 </h3>
-<p> 从大一开始我就在做各种域名 / 主机 / 数字证书的代理商，来找我买的都是姬家或者其他 SNS 的朋友，我也没怎么去宣传，权当是自己用也方便下朋友用吧。不过麻烦在于一个域名后缀在几家注册商都可以注册这样的问题，客户为了拿到更低的价格光在我这里就要注册好几个帐户。因此整合自己的业务，做统一的客户中心算是早就有的想法。在返校前两天的时候终于抽时间搭了起来，顺便用掉了两张阿里云的抵用券。广告：地址在 [<a href="https://c.phoenixlzx.com" target="_blank" rel="external">https://c.phoenixlzx.com</a>]</p>
-<p> 于是麻烦又来了——</p>
-<p> 坑：换了域名，支付宝的接口要重新审核。一连三次审核失败：</p>
+        <p>2014年的夏天应该是我一直以来度过的最繁忙和劳累的一段时光。多方面的压力、打击、困扰，加上自身各种情况条件不利，这个暑假真的让人感觉非常憋屈窝囊。</p>
+<h3 id="实习">实习</h3>
+<p>最值得一提的当然是我的第一份实习。大三下学期那会也就是想找个实习锻炼下自己，也可以给家里减轻一些经济负担。在 Twitter / V2EX 发布求职贴之后陆续有不少公司找上门来，大部分公司都给出了非常不错的条件，有些甚至在我明确答应之前就问我什么时候过去…虽然简历写得比较糟糕，不过仅仅通过和各种公司打交道还是见识到了一点互联网行业的竞争状态。<del>也算是头一回知道原来北京的创业公司工资可以给这么高</del></p>
+<p>最终选择爱奇艺的原因大概就是 iven 前辈所说可以玩集群和虚拟化。虽然公司给的待遇实在让我不知道说啥比较好(除去房租几乎不够生活费，回学校一趟花掉一半工资在路费上…)，但是在经济状况还没有糟糕到不得不去待遇最高的公司的时候，我还是想多见识点东西学学经验。说实话爱奇艺没怎么让我失望，工位上就有质量非常好的千兆公网带宽，配备23寸 Dell 显示器(虽然主机配置不怎么样…)，弹性工作制，且几乎没有看到员工加班(虽然听说很多人回家后还是会挂上 VPN 连回公司继续工作)，办公环境有物业定时打扫，茶水间的阿姨遇到自动售货机有优惠活动就会通知大家，看我打了几个喷嚏还专门去帮我拿了药，公司对于新员工和实习生的成长也算是费了脑筋… </p>
+<p>感受颇深的是我所在的团队。在校期间经常和已经参加工作的前辈们闲聊，前辈们吐槽和抱怨比较多的基本上就是一些比较奇葩的同事，其次是公司的种种不合理。我一直认为在公司遇到奇葩同事属于及其正常甚至一定会发生的现象，在决定动身去帝都的时候也做了很多心理准备和各种应对处理办法。不过来到之后发现我想太多… 团队成员友好和睦程度完全超出我的想像，完全没有遇到之前朋友们吐槽的种种情况。每天中午都是一起出去吃饭，路上一边挑餐厅挑半天一遍各种调侃…互相尊重、理解、关心、帮助几乎是整个团队互动的原则。</p>
+<p>说到这里其实我有些愧疚。因为自身的很多原因，每天工作的效率都非常低，心情也相当不好，写代码自然也极其浮躁。iven 前辈每次 review 代码的时候都会提出一大堆完美主义的问题，要我一遍一遍修改重构，甚至有时候让我感觉「为什么要把一大堆坑死人不偿命的框架揉在一起，为什么我有一只处女座的 mentor」… 不过事实是我发现自己在写代码的时候越来越想着更优化的解决方案，框架内提供了解决方案的尽量不去用 hack 的方法。在面对一堆完全陌生的框架揉在一起的坑，且自己整个人都很不好的情况下，还是发挥出了平日 1/3 的开发效率。韧性应该有不少提高吧…</p>
+<h3 id="跑路">跑路</h3>
+<p>曾经津津乐道卖 VPS 的某某某又跑路了~ (为何是「又」…) 可是现在我也要干这种事。想想真是可笑。</p>
+<p>其实跑路并不是一方原因直接决定，也算是很多方面的共同作用结果。一直以来 UltraKVM 项目都处于亏损状态且耗费了我大量的精力，但是由于整个虚拟化平台上还有很多朋友在跑的应用，我也还是一直坚持着做下去。8月份的攻击事件之后我把机房寄发的账单转给了吸引攻击流量的客户，却被喷小公司服务不靠谱。客户修改了自己的联系信息之后不见踪影(其实修改客户信息，财务面板是会发邮件的… 所有历史信息都会留底，所以不要觉得自己改了信息就找不到了)。无奈之中找朋友诉苦，意想不到地得到了帮助。于是向机房发邮件请求下架机器，并向他们一直以来的高质量服务表示感谢(MultaCOM 机房是我目前见过的最好的机房没有之一，不管是网络还是服务)。机房帮我取消了攻击流量的账单，在我指定的日期帮我下架机器并寄送到另外的机房。因此对 MC 机房也抱有很深的歉意。</p>
+<p>为了这件事情，我三天没吃下饭，睡不着觉，通知客户备份数据的邮件发了一遍又一遍，担心用 sendmail 发会被丢到垃圾箱还用自己的个人邮箱发了两遍，承诺会在新机房上线并为所有有效客户提供为期至少一年的免费 VPS 服务。(吐槽：就这样还有人在下架之后找我说 VPS 为啥不能访问了云云让我感觉非常不爽，同时感谢朋友的帮助才让我有偿还客户的机会)。一直到给机房发送了最后要付的所有费用之后才算是舒坦了一些。</p>
+<h3 id="权限狗">权限狗</h3>
+<p>暑假里另外一件闹得比较欢乐的事情是喵窝服务器。应该是敖厂长的原因(?) 整个姬家都可以看到很多人在玩 Minecraft。一边在姬家宣传，管理组也是费尽了心思来准备向墙内玩家开放申请。</p>
+<p>其实向墙内玩家开放也是我主要在推，因为墙内确实很多高素质的玩家(先不说游戏技术如何)，我很希望能吸引到这些玩家来玩。17精心策划了宣传帖，二小姐把之前用的服务器寄到了帝都，我和壕桥手忙脚乱地把服务器送到机房调试了一个晚上，我还花了两个小时写了申请表单的程序，都是在为了迎接新玩家所做的准备。</p>
+<p>不过事实上情况并没有我们想像得那么好。前三天来申请的玩家里，过审率只有不到1/12，接下来的两天里更是掉到了 1/20。从开放申请到开学之前，几乎每天都是好几十封白名单申请邮件。前几天去大概看了下，过审率依旧是 1/15 的样子。不过就算如此严格的审核，我们依然遇到了漏网之鱼…</p>
+<p>事件经过详细说的话估计今晚我就不用睡觉了。大致就是先后有三个熊孩子在服里发飙被封，一个是要在毫无干系的百度贴吧到处发帖把我和其他几个管理骂了一通，要和我「正面刚」(…错字？)，另一个则恐吓我说要去 mcbbs 「好好说说这件事」。再后面则是一个熊孩子根本没过审核，在群里刷屏伸手被拒绝后骂我们对新手不友好，是「虐待他」…..于是目前还记得的就这仨。</p>
+<p>熊孩子被封么无非就是到处发帖子骂，是不是相关论坛也不管(素质…)，然后拼命要求加群加好友然后在附言里破口大骂权限狗一类的词，或者是各种无理取闹要求入群入服或者挑衅之类。这么看咱这开源社区的管理员都算是非常好当的了233，对付熊孩子咱也只有放置 play 咯。”Argue with idiots, and you become an idiot.” — <em>Hackers and Painters</em></p>
+<h3 id="客户中心">客户中心</h3>
+<p>从大一开始我就在做各种域名/主机/数字证书的代理商，来找我买的都是姬家或者其他 SNS 的朋友，我也没怎么去宣传，权当是自己用也方便下朋友用吧。不过麻烦在于一个域名后缀在几家注册商都可以注册这样的问题，客户为了拿到更低的价格光在我这里就要注册好几个帐户。因此整合自己的业务，做统一的客户中心算是早就有的想法。在返校前两天的时候终于抽时间搭了起来，顺便用掉了两张阿里云的抵用券。广告：地址在 [<a href="https://c.phoenixlzx.com" target="_blank" rel="external">https://c.phoenixlzx.com</a>]</p>
+<p>于是麻烦又来了——</p>
+<p>坑：换了域名，支付宝的接口要重新审核。一连三次审核失败：</p>
 <ul>
-<li> 第一次：网站无法访问——泥煤啊我是 https 好吗！</li>
-<li> 第二次：网站非中文——泥煤啊我有多语言支持的好吗！另外狗爹那样的专业坑爹英文站怎么过审的？！</li>
-<li> 第三次：网站未备案——泥煤啊我之前一样不备案怎么过审的？！一个二级域名你给我备案试试看啊！</li>
+<li>第一次：网站无法访问——泥煤啊我是 https 好吗！</li>
+<li>第二次：网站非中文——泥煤啊我有多语言支持的好吗！另外狗爹那样的专业坑爹英文站怎么过审的？！</li>
+<li>第三次：网站未备案——泥煤啊我之前一样不备案怎么过审的？！一个二级域名你给我备案试试看啊！</li>
 </ul>
-<p> 于是干脆不提交审核了，我想其他办法用。</p>
-<p> 坑：Hostbill 默认货币选择的 USD，于是支付宝接口愣是不显示。不要那么智能好吗？敢不敢在结帐的时候自动转换？！</p>
-<p> 然后我批量更新了下产品价格，然后手残误操作把价格提太高了，想再降回去，于是玩完：所有产品的价格配置坏掉了。200 多个产品啊！我一个个改得心脏都早搏了………</p>
-<p> 坑：Hostbill 自己的 whois 文件有问题，很多域名后缀无法正确查询可用性。Google 了半天找到一个论坛的帖子有解决方案，却没有提供 patch 过的文件。没办法自己一点点按照修改步骤打了 patch。由于在公司被 mentor 带出来的习惯，每一处独立的变更都会 commit 一次，然后创了一晚上 80 个 commit 的记录….. 壕桥我超过你的一天 50 个记录了！</p>
-<p> 剩下没有的域名自己按照类似的方法也修了，文件丢在 <a href="https://github.com/phoenixlzx/hostbill-whois" target="_blank" rel="external">Github</a>。</p>
-<h3 id="返校"> 返校 </h3>
-<p> 学校的事情一直想等毕业以后再写，写本文的时候也纠结了很久，最后还是稍微写一点点。本来公司的项目第一个版本就要上线，还差最后的几个功能，突然接到母上大人的电话要求我返校报到。直接结果是——我下个月生活费不够了。</p>
-<p> 然后在学校便是各种跑宿舍分配、联系任课老师等等等…</p>
-<p> 比较让我提起精神的事情是发现社团办公室整洁了不少，书架上也放满了各种著名的计算机类书籍。新任主席也不像以前那么傲娇，而且一个月写出了一套很不错的前端页面 (blueed 老伙计你可以安心的去了…</p>
-<h3 id="归京"> 归京 </h3>
-<p> 明天就回帝都了。今晚好好休息… 虽然还有很多憋屈的事情根本都没提，不过也算是吐出来不少。希望回去公司可以有更好的状态吧。</p>
-<p> 晚安，好梦。</p>
+<p>于是干脆不提交审核了，我想其他办法用。</p>
+<p>坑：Hostbill 默认货币选择的 USD，于是支付宝接口愣是不显示。不要那么智能好吗？敢不敢在结帐的时候自动转换？！</p>
+<p>然后我批量更新了下产品价格，然后手残误操作把价格提太高了，想再降回去，于是玩完：所有产品的价格配置坏掉了。200多个产品啊！我一个个改得心脏都早搏了………</p>
+<p>坑：Hostbill 自己的 whois 文件有问题，很多域名后缀无法正确查询可用性。Google 了半天找到一个论坛的帖子有解决方案，却没有提供 patch 过的文件。没办法自己一点点按照修改步骤打了 patch。由于在公司被 mentor 带出来的习惯，每一处独立的变更都会 commit 一次，然后创了一晚上80个 commit 的记录…..壕桥我超过你的一天50个记录了！</p>
+<p>剩下没有的域名自己按照类似的方法也修了，文件丢在 <a href="https://github.com/phoenixlzx/hostbill-whois" target="_blank" rel="external">Github</a>。</p>
+<h3 id="返校">返校</h3>
+<p>学校的事情一直想等毕业以后再写，写本文的时候也纠结了很久，最后还是稍微写一点点。本来公司的项目第一个版本就要上线，还差最后的几个功能，突然接到母上大人的电话要求我返校报到。直接结果是——我下个月生活费不够了。</p>
+<p>然后在学校便是各种跑宿舍分配、联系任课老师等等等…</p>
+<p>比较让我提起精神的事情是发现社团办公室整洁了不少，书架上也放满了各种著名的计算机类书籍。新任主席也不像以前那么傲娇，而且一个月写出了一套很不错的前端页面(blueed 老伙计你可以安心的去了…</p>
+<h3 id="归京">归京</h3>
+<p>明天就回帝都了。今晚好好休息… 虽然还有很多憋屈的事情根本都没提，不过也算是吐出来不少。希望回去公司可以有更好的状态吧。</p>
+<p>晚安，好梦。</p>
 
       
     </div>
@@ -213,7 +271,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-07-21T13:21:57.000Z"><a href="/2014/07/21/setup-openconnect-server-on-ubuntu/">2014-07-21</a></time>
+        <time datetime="2014-07-21T05:21:57.000Z"><a href="/2014/07/21/setup-openconnect-server-on-ubuntu/">2014-07-21</a></time>
       
       
   
@@ -223,36 +281,36 @@
     </header>
     <div class="entry">
       
-        <p> 最近猫给推荐的 Cisco AnyConnect，面基的时候也看到 Aveline 菊苣在用 AnyConnect(插嘴：正太菊苣果然好可爱！！！) 于是自己折腾了下。作为少有的能让我折腾起来的 VPN，暂且把搭建步骤简单记录下。</p>
-<p>AnyConnect 的好处是基于 HTTPS，证书可以申请 StartSSL 的，而且配置也不很复杂。另外配置文件里发现了很多专门为商业化 / 企业服务定制的选项，例如最大同时在线客户端数量，同账户最大在线设备数量等等。</p>
+        <p>最近猫给推荐的 Cisco AnyConnect，面基的时候也看到 Aveline 菊苣在用 AnyConnect(插嘴：正太菊苣果然好可爱！！！) 于是自己折腾了下。作为少有的能让我折腾起来的 VPN，暂且把搭建步骤简单记录下。</p>
+<p>AnyConnect 的好处是基于 HTTPS，证书可以申请 StartSSL 的，而且配置也不很复杂。另外配置文件里发现了很多专门为商业化/企业服务定制的选项，例如最大同时在线客户端数量，同账户最大在线设备数量等等。</p>
 <p>OpenConnect 是 AnyConnect 的开源实现。目前 0.8.0 版本需要 GnuTLS 3.1 以上版本，所以我们就直接在 Ubuntu 14.04 中搭建。另外 就算是基于 HTTPS，这货也是要用 TUN 设备的，所以 OpenVZ 用户们请注意。</p>
-<h3 id="准备"> 准备 </h3>
-<p> 命令 </p>
+<h3 id="准备">准备</h3>
+<p>命令</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">apt-get install build-essential libwrap0-dev libpam0g-dev libdbus-<span class="number">1</span>-dev \</div><div class="line">  libreadline-dev libnl-route-<span class="number">3</span>-dev libprotobuf-c0-dev libpcl1-dev libopts25-dev \</div><div class="line">  autogen libgnutls28 libgnutls28-dev libseccomp-dev libhttp-parser-dev</div></pre></td></tr></table></figure>
 
-<h3 id="安装"> 安装 </h3>
-<p> 下载源码 </p>
+<h3 id="安装">安装</h3>
+<p>下载源码</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">wget -c ftp://ftp.infradead.org/pub/ocserv/ocserv-<span class="number">0.8</span>.<span class="number">0</span>.tar.xz</div><div class="line">tar xvf ocserv-<span class="number">0.8</span>.<span class="number">0</span>.tar.xz</div><div class="line"><span class="built_in">cd</span> ocserv-<span class="number">0.8</span>.<span class="number">0</span></div></pre></td></tr></table></figure>
 
-<p> 编译安装 </p>
+<p>编译安装</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">./configure --prefix=/opt/ocserv </div><div class="line">make</div><div class="line">make install</div><div class="line">mkdir /opt/ocserv/etc/</div><div class="line">cp doc/sample.config /opt/ocserv/etc/config</div></pre></td></tr></table></figure>
 
-<h3 id="配置"> 配置 </h3>
-<p> 这里只记录需要修改的重点配置，其他配置请参照样例配置文件的注释按需修改。</p>
-<p> 文件 <code>/opt/ocserv/etc/config</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">auth <span class="subst">=</span> <span class="string">"plain[/opt/ocserv/etc/passwd]"</span></div><div class="line">listen<span class="attribute">-host</span> <span class="subst">=</span> connect<span class="built_in">.</span>your<span class="built_in">.</span>domain</div><div class="line"><span class="keyword">max</span><span class="attribute">-clients</span> <span class="subst">=</span> <span class="number">128</span></div><div class="line"><span class="keyword">max</span><span class="attribute">-same</span><span class="attribute">-clients</span> <span class="subst">=</span> <span class="number">4</span></div><div class="line">server<span class="attribute">-cert</span> <span class="subst">=</span> /opt/ocserv/etc/ssl/server<span class="attribute">-cert</span><span class="built_in">.</span>pem</div><div class="line">server<span class="attribute">-key</span> <span class="subst">=</span> /opt/ocserv/etc/ssl/server<span class="attribute">-key</span><span class="built_in">.</span>pem</div><div class="line">ca<span class="attribute">-cert</span> <span class="subst">=</span> /opt/ocserv/etc/ssl/ca<span class="built_in">.</span>pem</div><div class="line">mobile<span class="attribute">-idle</span><span class="attribute">-timeout</span> <span class="subst">=</span> <span class="number">2400</span></div><div class="line">ipv4<span class="attribute">-network</span> <span class="subst">=</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.0</span></div><div class="line">ipv4<span class="attribute">-netmask</span> <span class="subst">=</span> <span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span></div><div class="line">dns <span class="subst">=</span> <span class="number">8.8</span><span class="number">.8</span><span class="number">.8</span></div><div class="line">dns <span class="subst">=</span> <span class="number">8.8</span><span class="number">.4</span><span class="number">.4</span></div><div class="line">route <span class="subst">=</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.0</span>/<span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span></div><div class="line">route<span class="attribute">-add</span><span class="attribute">-cmd</span> <span class="subst">=</span> <span class="string">"ip route add 192.168.1.0 dev tun0"</span></div><div class="line">route<span class="attribute">-del</span><span class="attribute">-cmd</span> <span class="subst">=</span> <span class="string">"ip route delete 192.168.1.0 dev tun0"</span></div></pre></td></tr></table></figure>
+<h3 id="配置">配置</h3>
+<p>这里只记录需要修改的重点配置，其他配置请参照样例配置文件的注释按需修改。</p>
+<p>文件 <code>/opt/ocserv/etc/config</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="variable">auth =</span> <span class="string">"plain[/opt/ocserv/etc/passwd]"</span></div><div class="line"><span class="variable">listen-host =</span> connect.your.domain</div><div class="line"><span class="variable">max-clients =</span> <span class="number">128</span></div><div class="line"><span class="variable">max-same-clients =</span> <span class="number">4</span></div><div class="line"><span class="variable">server-cert =</span> /opt/ocserv/etc/ssl/server-cert.pem</div><div class="line"><span class="variable">server-key =</span> /opt/ocserv/etc/ssl/server-key.pem</div><div class="line"><span class="variable">ca-cert =</span> /opt/ocserv/etc/ssl/ca.pem</div><div class="line"><span class="variable">mobile-idle-timeout =</span> <span class="number">2400</span></div><div class="line"><span class="variable">ipv4-network =</span> <span class="number">192.168</span>.<span class="number">1.0</span></div><div class="line"><span class="variable">ipv4-netmask =</span> <span class="number">255.255</span>.<span class="number">255.0</span></div><div class="line"><span class="variable">dns =</span> <span class="number">8.8</span>.<span class="number">8.8</span></div><div class="line"><span class="variable">dns =</span> <span class="number">8.8</span>.<span class="number">4.4</span></div><div class="line"><span class="variable">route =</span> <span class="number">192.168</span>.<span class="number">1.0</span>/<span class="number">255.255</span>.<span class="number">255.0</span></div><div class="line"><span class="variable">route-add-cmd =</span> <span class="string">"ip route add 192.168.1.0 dev tun0"</span></div><div class="line"><span class="variable">route-del-cmd =</span> <span class="string">"ip route delete 192.168.1.0 dev tun0"</span></div></pre></td></tr></table></figure>
 
-<p> 创建用户，命令 </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/opt/ocserv/bin/ocpasswd <span class="attribute">-c</span> /opt/ocserv/etc/passwd username</div></pre></td></tr></table></figure>
+<p>创建用户，命令</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="regexp">/opt/</span>ocserv<span class="regexp">/bin/</span>ocpasswd -c <span class="regexp">/opt/</span>ocserv<span class="regexp">/etc/</span>passwd username</div></pre></td></tr></table></figure>
 
-<p> 按提示输入两次密码。</p>
-<p>iptables 规则 </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables <span class="attribute">-t</span> nat <span class="attribute">-A</span> POSTROUTING <span class="attribute">-j</span> SNAT <span class="subst">--</span><span class="keyword">to</span><span class="attribute">-source</span> <span class="subst">&lt;</span>server ip<span class="subst">&gt;</span> <span class="attribute">-o</span> <span class="subst">&lt;</span>nic<span class="subst">&gt;</span></div></pre></td></tr></table></figure>
+<p>按提示输入两次密码。</p>
+<p>iptables 规则</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">iptables -t nat -A POSTROUTING -j SNAT --to-source &lt;server ip&gt;</span> -o &lt;nic&gt;</span></div></pre></td></tr></table></figure>
 
-<p> 记得把 <code>&lt;server ip&gt;</code> 和 <code>&lt;nic&gt;</code> 改为服务器公网 IP 和对应网卡的名称。</p>
-<h3 id="搞定"> 搞定 </h3>
-<p> 折腾完毕，AnyConnect 客户端可以成功使用了。</p>
-<p><del> 不过呢折腾完之后发现这货其实被干扰得很厉害啊…</del></p>
+<p>记得把 <code>&lt;server ip&gt;</code> 和 <code>&lt;nic&gt;</code> 改为服务器公网 IP 和对应网卡的名称。</p>
+<h3 id="搞定">搞定</h3>
+<p>折腾完毕，AnyConnect 客户端可以成功使用了。</p>
+<p><del>不过呢折腾完之后发现这货其实被干扰得很厉害啊…</del></p>
 
       
     </div>
@@ -286,27 +344,27 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-05-23T20:52:59.000Z"><a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">2014-05-24</a></time>
+        <time datetime="2014-05-23T12:52:59.000Z"><a href="/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">2014-05-23</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a></h1>
+    <h1 class="title"><a href="/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>昨晚开始我们的 DNS 日志中出现大量的针对 <code>wradish.com</code> 的<code>ANY</code>记录请求，导致大量正常解析请求超时。今天上午到中午时分再次出现流量更大、针对 <code>ping.zong.co.ua</code> 的<code>ANY</code>记录请求，导致整个 DNS 服务瘫痪，完全无法响应正常解析请求。</p>
+        <p>昨晚开始我们的 DNS 日志中出现大量的针对<code>wradish.com</code>的<code>ANY</code>记录请求，导致大量正常解析请求超时。今天上午到中午时分再次出现流量更大、针对<code>ping.zong.co.ua</code>的<code>ANY</code>记录请求，导致整个 DNS 服务瘫痪，完全无法响应正常解析请求。</p>
 <p>检查后发现 <code>wradish.com</code> 早已因多次 DNS 放大攻击而被列入开放 DNS 服务器黑名单，网络上也有大量的针对该域名攻击请求包的过滤方法。<code>ping.zong.co.ua</code> 却完全没有任何搜索记录。</p>
 <p>DNS 放大攻击 (DNS Amplification Attack) 即通过向多台 DNS 开放服务器发送无意义的 recursive 解析请求，从而使得根域名服务器遭到超大流量的解析请求包，无暇顾及正常的解析请求，由此实现分布式拒绝服务攻击 (Distributed Denial of Service)。我们的 DNS 服务器在这里既是攻击者，也是受害者。</p>
-<p>DNSMasq 默认允许 recursive 请求，且似乎本身就没有设计为开放 DNS 服务，所以貌似也没有办法禁用掉 recursive 请求。因此我们使用 <a href="http://blog.dataforce.org.uk/2013/08/limiting-the-effectiveness-of-dns-amplification/" target="_blank" rel="external">iptables 规则 </a> 来过滤掉这些请求。</p>
+<p>DNSMasq 默认允许 recursive 请求，且似乎本身就没有设计为开放 DNS 服务，所以貌似也没有办法禁用掉 recursive 请求。因此我们使用 <a href="http://blog.dataforce.org.uk/2013/08/limiting-the-effectiveness-of-dns-amplification/" target="_blank" rel="external">iptables 规则</a>来过滤掉这些请求。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Create a chain to store block rules in</span></div><div class="line">iptables -N BADDNS </div><div class="line"></div><div class="line"><span class="comment"># Match all "IN ANY" DNS Queries, and run them past the BADDNS chain.</span></div><div class="line">iptables -A INPUT -p udp --dport <span class="number">53</span> -m string --hex-string <span class="string">"|00 00 ff 00 01|"</span> --to <span class="number">255</span> --algo bm -m comment --comment <span class="string">"IN ANY?"</span> -j BADDNS</div><div class="line">iptables -A FORWARD -p udp --dport <span class="number">53</span> -m string --hex-string <span class="string">"|00 00 ff 00 01|"</span> --to <span class="number">255</span> --algo bm -m comment --comment <span class="string">"IN ANY?"</span> -j BADDNS</div><div class="line"></div><div class="line"><span class="comment"># Block domains that are being used for DNS Amplification...</span></div><div class="line">iptables -A BADDNS -m string --hex-string <span class="string">"|04 72 69 70 65 03 6e 65 74 00|"</span> --algo bm -j DROP --to <span class="number">255</span> -m comment --comment <span class="string">"ripe.net"</span></div><div class="line">iptables -A BADDNS -m string --hex-string <span class="string">"|03 69 73 63 03 6f 72 67 00|"</span> --algo bm -j DROP --to <span class="number">255</span> -m comment --comment <span class="string">"isc.org"</span></div><div class="line">iptables -A BADDNS -m string --hex-string <span class="string">"|04 73 65 6d 61 02 63 7a 00|"</span> --algo bm -j DROP --to <span class="number">255</span> -m comment --comment <span class="string">"sema.cz"</span></div><div class="line">iptables -A BADDNS -m string --hex-string <span class="string">"|09 68 69 7a 62 75 6c 6c 61 68 02 6d 65 00|"</span> --algo bm -j DROP --to <span class="number">255</span> -m comment --comment <span class="string">"hizbullah.me"</span></div><div class="line"></div><div class="line"><span class="comment"># Rate limit the rest.</span></div><div class="line">iptables -A BADDNS -m recent --set --name DNSQF --rsource</div><div class="line">iptables -A BADDNS -m recent --update --seconds <span class="number">10</span> --hitcount <span class="number">1</span> --name DNSQF --rsource -j DROP</div></pre></td></tr></table></figure>
 
 <p>添加以上规则后执行 <code>iptables-save</code> 来使更改生效。</p>
 <p>目前为止似乎没有报告出现了明显规模的 DNS 放大攻击征兆，攻击者针对我们防火墙封锁的反应速度、攻击所用的记录以及从日志中发现的大量不同请求源也暗示着我们的服务器可能是最终攻击目标，用攻击流量消耗尽服务器带宽而导致服务瘫痪。至于原因，我也没有想明白为何会有攻击者对一个小型私用服务器感兴趣。</p>
 <p>PS. 到本文发表时，攻击依旧在继续，且流量越来越大。目前阿里云的云盾设置可以说无力，只能依靠 iptables 暂时缓解。后续的应对计划仍在制定中。</p>
 <p>=== 2014-05-24 更新 ===</p>
-<p>Aveline 菊苣给出了一个<a href="https://github.com/smurfmonitor/dns-iptables-rules" target="_blank" rel="external">DNS Amplification IPTABLES block lists</a> 给点 128 个赞！</p>
+<p>Aveline 菊苣给出了一个<a href="https://github.com/smurfmonitor/dns-iptables-rules" target="_blank" rel="external">DNS Amplification IPTABLES block lists</a> 给点128个赞！</p>
 
       
     </div>
@@ -340,7 +398,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-05-19T03:18:20.000Z"><a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">2014-05-19</a></time>
+        <time datetime="2014-05-18T19:18:20.000Z"><a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">2014-05-19</a></time>
       
       
   
@@ -351,19 +409,19 @@
     <div class="entry">
       
         <p>又是熬夜干活。</p>
-<p>之前在 StackOverflow 上看到过 <a href="http://stackoverflow.com/questions/5050265/javascript-nodejs-is-array-foreach-asynchronous" target="_blank" rel="external">Array.forEach 是同步 (阻塞) 的</a>，但是实际使用的时候，特别是我在写 Node.js 程序的时候几乎没感觉到过它的阻塞—— forEach 或者其他 for 循环之后的 callback 从来都是被立即调用，没有等待整个循环执行完。&lt;== 这个命题是个假命题，下面会说明。</p>
+<p>之前在 StackOverflow 上看到过 <a href="http://stackoverflow.com/questions/5050265/javascript-nodejs-is-array-foreach-asynchronous" target="_blank" rel="external">Array.forEach 是同步(阻塞)的</a>，但是实际使用的时候，特别是我在写 Node.js 程序的时候几乎没感觉到过它的阻塞—— forEach 或者其他 for 循环之后的 callback 从来都是被立即调用，没有等待整个循环执行完。&lt;== 这个命题是个假命题，下面会说明。</p>
 <p>今天又一次掉进异步的坑里才发现 for 循环确实是阻塞的。至于为何它后面的回调函数会立即被调用，原因是 for 循环里有异步方法。整个循环不会等待异步方法结束，而是直接进入下一个循环，所以它 <strong>看起来</strong> 像是异步的，后面的回调函数「立即」被调用了。<a href="http://stackoverflow.com/questions/21184340/async-for-loop-in-node-js" target="_blank" rel="external">StackOverflow</a> 上有更详细的例子和说明。</p>
 <p>不过如果是数组，那么直接使用 <a href="https://github.com/caolan/async" target="_blank" rel="external">async</a> 替代原生的 forEach 和其他 for 语句即可简单解决。但是问题出在我这里的情况是要用 <code>for in</code> 语句处理 Object，虽说 Javascript 里 Object 和 Array 非常相似但是毕竟没有 Array 那些好用的方法，在这种情况下也不方便使用 prototype 来给我的 object 新增类似方法。二小姐给出的解决方案是手动设置计数器，获得 object 长度的办法是使用 <code>Object.keys(obj).length</code>。</p>
 <p><strong>注意</strong> <code>Object.keys(obj).length</code> 并不一定是要循环的次数，具体需要看 Object 的结构。我这里就是解析 DOM 得到的 Object 所以有额外的东西，<code>length - 3</code> 才是需要的结果。</p>
 <p>代码写出来大概是这个样子</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(obj, callback)</span> {</span></div><div class="line"></div><div class="line">    <span class="keyword">var</span> tasks = <span class="built_in">Object</span>.keys(obj).length;</div><div class="line">    </div><div class="line">    <span class="keyword">var</span> arr = [<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>];</div><div class="line">    </div><div class="line">    <span class="keyword">for</span> (key <span class="keyword">in</span> obj) {</div><div class="line">	</div><div class="line">	tasks--;</div><div class="line">	</div><div class="line">	async.eachSeries(arr, someFunc(n, cb) {</div><div class="line">	</div><div class="line">	    <span class="comment">// do stuff here.</span></div><div class="line">	    </div><div class="line">	    cb();</div><div class="line">	</div><div class="line">	}, <span class="function"><span class="keyword">function</span><span class="params">(err)</span> {</span></div><div class="line">	</div><div class="line">	    <span class="comment">// operations after array iteration completed.</span></div><div class="line">	    </div><div class="line">	    <span class="keyword">if</span> (tasks === <span class="number">0</span>) {</div><div class="line">	    </div><div class="line">		<span class="comment">// All tasks done, return to callback</span></div><div class="line">		<span class="keyword">return</span> callback();</div><div class="line">	    </div><div class="line">	    }</div><div class="line">	    </div><div class="line">	});</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(obj, callback)</span> </span>{</div><div class="line"></div><div class="line">    <span class="keyword">var</span> tasks = <span class="built_in">Object</span>.keys(obj).length;</div><div class="line">    </div><div class="line">    <span class="keyword">var</span> arr = [<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>];</div><div class="line">    </div><div class="line">    <span class="keyword">for</span> (key <span class="keyword">in</span> obj) {</div><div class="line">	</div><div class="line">	tasks--;</div><div class="line">	</div><div class="line">	async.eachSeries(arr, someFunc(n, cb) {</div><div class="line">	</div><div class="line">	    <span class="comment">// do stuff here.</span></div><div class="line">	    </div><div class="line">	    cb();</div><div class="line">	</div><div class="line">	}, <span class="function"><span class="keyword">function</span><span class="params">(err)</span> </span>{</div><div class="line">	</div><div class="line">	    <span class="comment">// operations after array iteration completed.</span></div><div class="line">	    </div><div class="line">	    <span class="keyword">if</span> (tasks === <span class="number">0</span>) {</div><div class="line">	    </div><div class="line">		<span class="comment">// All tasks done, return to callback</span></div><div class="line">		<span class="keyword">return</span> callback();</div><div class="line">	    </div><div class="line">	    }</div><div class="line">	    </div><div class="line">	});</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
 
-<p>判断的语句其实也可以放在 <code>async.eachSeries</code> 之后，这样可以明显减少判断的计算 (虽然那点计算不算啥) 但是也有可能会在没等待最后一次 async 执行结束的时候就返回了，所以保险起见还是多花点处理器来保证全部任务执行完。以及在最后 <code>callback</code> 的时候如果不写 <code>return</code> 就会失效。我还没查原因，因为已经累得不行了… 所以(当回伸手党) 如果哪位童鞋知道的麻烦告知… 有灵梦的节操相送哦 &gt;///&lt;</p>
+<p>判断的语句其实也可以放在 <code>async.eachSeries</code> 之后，这样可以明显减少判断的计算(虽然那点计算不算啥) 但是也有可能会在没等待最后一次 async 执行结束的时候就返回了，所以保险起见还是多花点处理器来保证全部任务执行完。以及在最后 <code>callback</code> 的时候如果不写 <code>return</code> 就会失效。我还没查原因，因为已经累得不行了… 所以(当回伸手党)如果哪位童鞋知道的麻烦告知… 有灵梦的节操相送哦 &gt;///&lt;</p>
 <p>==== 2014-05-20 更新 ====</p>
 <p>感谢 Xuetian Weng 菊苣为了灵梦的节操不远万里给我纠错 /w\ 上面的代码在 <code>async.eachSeries</code> 里有异步方法时存在多次 <code>tasks === 0</code> 的情况，因为同样的因为 <code>for in</code> 循环不会等待 async 结束，async 的回调不一定会在 <code>tasks</code> 下一次自减之前被调用。解决办法是 <code>tasks--</code> 放在 <code>async.eachSeries</code> 的回调函数里。更好些的代码如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(obj, callback)</span> {</span></div><div class="line"></div><div class="line">    <span class="keyword">var</span> tasks = <span class="built_in">Object</span>.keys(obj).length;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> arr = [<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>];</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (key <span class="keyword">in</span> obj) {</div><div class="line"></div><div class="line">        async.eachSeries(arr, someFunc(n, cb) {</div><div class="line"></div><div class="line">            <span class="comment">// do stuff here.</span></div><div class="line"></div><div class="line">            cb();</div><div class="line"></div><div class="line">        }, <span class="function"><span class="keyword">function</span><span class="params">(err)</span> {</span></div><div class="line"></div><div class="line">            <span class="comment">// operations after array iteration completed.</span></div><div class="line">	    </div><div class="line">            <span class="comment">// tasks self-decrease should be here to ensure every async.eachSeries call has ended.</span></div><div class="line">            tasks--;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (tasks === <span class="number">0</span>) {</div><div class="line"></div><div class="line">                <span class="comment">// All tasks done, return to callback</span></div><div class="line">                <span class="keyword">return</span> callback();</div><div class="line"></div><div class="line">            }</div><div class="line"></div><div class="line">        });</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(obj, callback)</span> </span>{</div><div class="line"></div><div class="line">    <span class="keyword">var</span> tasks = <span class="built_in">Object</span>.keys(obj).length;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> arr = [<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>];</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (key <span class="keyword">in</span> obj) {</div><div class="line"></div><div class="line">        async.eachSeries(arr, someFunc(n, cb) {</div><div class="line"></div><div class="line">            <span class="comment">// do stuff here.</span></div><div class="line"></div><div class="line">            cb();</div><div class="line"></div><div class="line">        }, <span class="function"><span class="keyword">function</span><span class="params">(err)</span> </span>{</div><div class="line"></div><div class="line">            <span class="comment">// operations after array iteration completed.</span></div><div class="line">	    </div><div class="line">            <span class="comment">// tasks self-decrease should be here to ensure every async.eachSeries call has ended.</span></div><div class="line">            tasks--;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (tasks === <span class="number">0</span>) {</div><div class="line"></div><div class="line">                <span class="comment">// All tasks done, return to callback</span></div><div class="line">                <span class="keyword">return</span> callback();</div><div class="line"></div><div class="line">            }</div><div class="line"></div><div class="line">        });</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
 
-<p>不过菊苣说最后的 return 是可有可无，我这里的测试是不加 return (不管是在前面还是后面) 这个 callback 都不会被正确调用… 所以 return 的问题并没有算是解决，于是放到后面有时间的话来满满折腾吧~ 看 Xuetian Weng 菊苣如此渴求节操的表情咱就给一点表示感谢好了呜(双手奉上</p>
+<p>不过菊苣说最后的 return 是可有可无，我这里的测试是不加 return (不管是在前面还是后面) 这个 callback 都不会被正确调用… 所以 return 的问题并没有算是解决，于是放到后面有时间的话来满满折腾吧~看 Xuetian Weng 菊苣如此渴求节操的表情咱就给一点表示感谢好了呜(双手奉上</p>
 
       
     </div>
@@ -397,7 +455,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-05-17T15:59:48.000Z"><a href="/2014/05/17/repo-arm-disk-rescue-and-resize/">2014-05-17</a></time>
+        <time datetime="2014-05-17T07:59:48.000Z"><a href="/2014/05/17/repo-arm-disk-rescue-and-resize/">2014-05-17</a></time>
       
       
   
@@ -408,13 +466,13 @@
     <div class="entry">
       
         <p>最近发现 downgrade 失效了，降级啥包都是直接错误退出。然后排查的时候发现是 Arch Rollback Machine 挂了，原因是——磁盘不足。</p>
-<p>检查后发现 pm2 的日志有 7G，850 天前的包有 5000 多个，365 天内的包有 10 万余，磁盘已经被吃得满满当当。</p>
+<p>检查后发现 pm2 的日志有 7G，850天前的包有5000多个，365天内的包有10万余，磁盘已经被吃得满满当当。</p>
 <p>日志好说，因为没啥特别有用的东西也不用拿来做分析，直接删掉就好。Felix 也把 850 天前的包全部删干净了。不过再次检查的时候 <code>df -h</code> 显示依旧是磁盘被吃满的，而 <code>df -ih</code> 显示 inode 占用没有问题。猫怀疑是有文件句柄还开着，但是把所有可能的进程杀掉之后依旧没有变化，排除。另外一个现象是文件删除进程完成后过了一段时间磁盘开始有少量空闲空间了，可能是磁盘缓存…? </p>
 <p>于是靠着这空出来的 900M 多点的空间执行了几个操作：把有 HTTP flood 漏洞的 Node.js 0.10.16 升级到最新版 0.10.28，将包同步的 cronjob 降低到每天执行一次，压缩旧的 NGINX 日志。</p>
-<p>以及用户一直要求的包归档功能，实际上是已经有了的，但是并没通过 NGINX 配置来实现 (Pia!&lt;(=ｏ ‵-′) ノ☆猫) 所以准备把归档功能写到 API 服务端里。因为之前很有预见性的同步的时候把每天的包数据库按照 <code>/year/month/day/repo</code> 的结构保存起来(然后这部分的数据库文件就有 30G！)，所以用户按照这个路径来请求包数据库的时候直接把对应的数据库文件丢给客户端，请求包文件的时候则直接从包目录里丢过去。这样的话其实从一个较早的时间结构最后请求一个较新的包文件也能拿到…. 不过这个不是问题，因为包归档给 pacman 用的话，有哪些包还是 pacman 要读数据库的。</p>
-<p>包归档的 index 确实花了不少时间，目前的实现貌似也不很好，虽然貌似还挺快的，但是也挺吃硬盘的…而且一连好几次手残敲错了东西、少加了分隔符、加了冗余的配置变量…. 总之就是爆肝熬夜的效率超级差，4 点多基本上没问题的时候已经能感觉到身体很不舒服了…</p>
+<p>以及用户一直要求的包归档功能，实际上是已经有了的，但是并没通过 NGINX 配置来实现(Pia!&lt;(=ｏ ‵-′)ノ☆猫) 所以准备把归档功能写到 API 服务端里。因为之前很有预见性的同步的时候把每天的包数据库按照 <code>/year/month/day/repo</code> 的结构保存起来(然后这部分的数据库文件就有 30G！)，所以用户按照这个路径来请求包数据库的时候直接把对应的数据库文件丢给客户端，请求包文件的时候则直接从包目录里丢过去。这样的话其实从一个较早的时间结构最后请求一个较新的包文件也能拿到….不过这个不是问题，因为包归档给 pacman 用的话，有哪些包还是 pacman 要读数据库的。</p>
+<p>包归档的 index 确实花了不少时间，目前的实现貌似也不很好，虽然貌似还挺快的，但是也挺吃硬盘的…而且一连好几次手残敲错了东西、少加了分隔符、加了冗余的配置变量…. 总之就是爆肝熬夜的效率超级差，4点多基本上没问题的时候已经能感觉到身体很不舒服了…</p>
 <p>然后是一觉睡到第二天中午。觅食归来给 A.R.M 的 KVM 虚拟机硬盘增加了 100G。执行 <code>resize2fs</code> 的时候报错说已经达到最大空间，删掉 swap 之后依旧。接下来干了一件很作死的事情——把所有分区删掉了，然后按照原来的分区方案重建了新的分区。Reboot 之后 lsblk 是对了，但是 df -h 依旧是原来的分区。一叶说是 resize 没成功，要进 LiveCD 里面 resize2fs。不过我没镜像… 按照一叶的建议挂上 VNC 进 recovery 然后 fsck，再正常进系统执行 <code>resize2fs</code>，成功。</p>
-<p>回过神来的时候发现这种作死的行为我居然手都没抖一下 = = 几百 G 的数据呐…</p>
+<p>回过神来的时候发现这种作死的行为我居然手都没抖一下 = = 几百G的数据呐…</p>
 <p>晚上还要做字幕，再去休息下好了…</p>
 
       
@@ -449,30 +507,30 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-05-15T21:57:19.000Z"><a href="/2014/05/16/accelerate-apple-services-in-cn/">2014-05-16</a></time>
+        <time datetime="2014-05-15T13:57:19.000Z"><a href="/2014/05/15/accelerate-apple-services-in-cn/">2014-05-15</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/05/16/accelerate-apple-services-in-cn/">为国内用户加速 Apple 服务</a></h1>
+    <h1 class="title"><a href="/2014/05/15/accelerate-apple-services-in-cn/">为国内用户加速 Apple 服务</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>偶然看到 <a href="https://plus.google.com/105938465531761409080/posts/3EXLAUerxMD" target="_blank" rel="external"> 雅诗的 po</a> 才发觉自己 DNS 的 Apple 服务加速已经几乎不能用了，速度非常慢。倒是挺奇怪的，因为自己做的 DNS 服务器对于整个 Apple 域的上游都是 V2EX DNS，难道是 V2EX DNS 出问题了？</p>
+        <p>偶然看到<a href="https://plus.google.com/105938465531761409080/posts/3EXLAUerxMD" target="_blank" rel="external">雅诗的po</a> 才发觉自己 DNS 的 Apple 服务加速已经几乎不能用了，速度非常慢。倒是挺奇怪的，因为自己做的 DNS 服务器对于整个 Apple 域的上游都是 V2EX DNS，难道是 V2EX DNS 出问题了？</p>
 <p>总之先不管那些。现在来简单做一份 Apple 服务加速的配置。</p>
 <p>稍微 Google 下 Apple 的服务地址，目前获得的地址如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">a{<span class="number">1</span>-<span class="number">2000</span>}<span class="preprocessor">.phobos</span><span class="preprocessor">.apple</span><span class="preprocessor">.com</span></div><div class="line">swdist<span class="preprocessor">.apple</span><span class="preprocessor">.com</span></div><div class="line">itunes<span class="preprocessor">.apple</span><span class="preprocessor">.com</span></div><div class="line">contentdelivery<span class="preprocessor">.itunes</span><span class="preprocessor">.apple</span><span class="preprocessor">.com</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">a<span class="list">{1-2000}</span>.phobos.apple.com</div><div class="line">swdist.apple.com</div><div class="line">itunes.apple.com</div><div class="line">contentdelivery.itunes.apple.com</div></pre></td></tr></table></figure>
 
 <p>对应在国内的 CDN 地址是</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">a1-a200<span class="preprocessor">.phobos</span><span class="preprocessor">.apple</span><span class="preprocessor">.chinacache</span><span class="preprocessor">.net</span></div><div class="line">swdist<span class="preprocessor">.apple</span><span class="preprocessor">.ccgslb</span><span class="preprocessor">.net</span></div><div class="line">itunes<span class="preprocessor">.apple</span><span class="preprocessor">.ccgslb</span><span class="preprocessor">.com</span><span class="preprocessor">.cn</span></div><div class="line">(最后一个没找到 CDN 地址..)</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">a1-a200.phobos.apple.chinacache.net</div><div class="line">swdist.apple.ccgslb.net</div><div class="line">itunes.apple.ccgslb.<span class="keyword">com</span>.<span class="keyword">cn</span></div><div class="line">(最后一个没找到CDN地址..)</div></pre></td></tr></table></figure>
 
 <p>然后根据 114DNS 和 Google DNS 综合查询以上地址的 IP。顺便发现地址里有 <code>cnc</code>, <code>cncssr</code> 这样的关键字，于是正好尝试把 <code>cnc</code> 改成 <code>tel</code> 于是得到了电信节点的 IP。</p>
 <p>现在写一个两句话的 js 脚本来生成一份针对 <code>a{1-2000}.phobos.apple.com</code> 的加速列表(废话这种东西能手写吗要累死啦)，以达到尽可能将电信、联通的节点混在一起，保证各个 ISP 用户的下载速度。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Accelerate IPs for Apple download service.</span></div><div class="line"><span class="comment">// apple-ips.js</span></div><div class="line"><span class="keyword">var</span> ips = [</div><div class="line">  <span class="string">'221.192.144.12'</span>,</div><div class="line">  <span class="string">'182.118.46.137'</span>,</div><div class="line">  <span class="string">'124.95.150.148'</span>,</div><div class="line">  <span class="string">'123.235.32.2'</span>,</div><div class="line">  <span class="string">'119.84.69.17'</span>,</div><div class="line">  <span class="string">'122.228.85.196'</span>,</div><div class="line">  <span class="string">'115.231.150.15'</span>,</div><div class="line">  <span class="string">'61.164.153.7'</span>,</div><div class="line">  <span class="string">'183.57.28.18'</span></div><div class="line">]</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= <span class="number">2000</span>; i++) {</div><div class="line">  console.log(ips[<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random()*ips.length)] + <span class="string">'a'</span> + i + <span class="string">'.phobos.apple.com'</span>);</div><div class="line">}</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Accelerate IPs for Apple download service.</span></div><div class="line"><span class="comment">// apple-ips.js</span></div><div class="line"><span class="keyword">var</span> ips = [</div><div class="line">  <span class="string">'221.192.144.12'</span>,</div><div class="line">  <span class="string">'182.118.46.137'</span>,</div><div class="line">  <span class="string">'124.95.150.148'</span>,</div><div class="line">  <span class="string">'123.235.32.2'</span>,</div><div class="line">  <span class="string">'119.84.69.17'</span>,</div><div class="line">  <span class="string">'122.228.85.196'</span>,</div><div class="line">  <span class="string">'115.231.150.15'</span>,</div><div class="line">  <span class="string">'61.164.153.7'</span>,</div><div class="line">  <span class="string">'183.57.28.18'</span></div><div class="line">]</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= <span class="number">2000</span>; i++) {</div><div class="line">  <span class="built_in">console</span>.log(ips[<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random()*ips.length)] + <span class="string">' a'</span> + i + <span class="string">'.phobos.apple.com'</span>);</div><div class="line">}</div></pre></td></tr></table></figure>
 
 <p>然后</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">~&gt; node apple-ips<span class="preprocessor">.js</span> &gt; apple<span class="preprocessor">.conf</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">~&gt;</span> node apple-ips.js &gt; apple.conf</span></div></pre></td></tr></table></figure>
 
 <p>就得到一份可以直接用的加速列表啦。</p>
 
@@ -508,7 +566,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-05-07T11:46:09.000Z"><a href="/2014/05/07/new-njlug-homepage/">2014-05-07</a></time>
+        <time datetime="2014-05-07T03:46:09.000Z"><a href="/2014/05/07/new-njlug-homepage/">2014-05-07</a></time>
       
       
   
@@ -521,11 +579,11 @@
         <p>南京 Linux 用户组有一段时间没有聚会了。偶然想起来之前我用 Jekyll 折腾的那个主页，随手敲了主页地址… 啊啦，还基本上没变啊…</p>
 <p>嘛虽然自己写了那么几个东西，不过在组里待了也有一段时间也学到了不少东西。用户对社区的回报应该就在这时候展现出来吧。</p>
 <p>依旧是 Express.js 框架，依旧是 Bootstrap。不过这回不想用数据库了，改用文本存储。除了主页和关于，顺便集成一个 Planet 在里面。RSS feed 的话，除了遍历一遍 upsert (不存在的添加，已存在的跳过)之外没想到什么更好的办法。实际上本来就是 RSS 没必要存储所有的文章，更何况又不是做之前想做的类似 Google Reader 的东西。</p>
-<p>目前的 Planet 工作方式为首先检测是否存在文章数据文件 <code>posts.array</code>，如果不存在则读取 <code>planet.list</code> 中的订阅链接，获取到文章后 push 到一个数组中，按照发表日期排序并保存在 <code>posts.array</code> 里。到底是先排序再保存还是先存进去，渲染页面的时候再排序，这个稍微纠结了下。因为自己的配置文件里更新频率是 1 hour, 而且似乎每次更新到的文章数量还挺多的。所以保存时排序的话，则每天固定排序 23 次；如果渲染时排序的话，就看每天能有几个访问了…. 然后发现自己在这种小问题上纠结个毛毛啊啊啊啊啊。</p>
+<p>目前的 Planet 工作方式为首先检测是否存在文章数据文件 <code>posts.array</code>，如果不存在则读取 <code>planet.list</code> 中的订阅链接，获取到文章后 push 到一个数组中，按照发表日期排序并保存在 <code>posts.array</code> 里。到底是先排序再保存还是先存进去，渲染页面的时候再排序，这个稍微纠结了下。因为自己的配置文件里更新频率是 1 hour, 而且似乎每次更新到的文章数量还挺多的。所以保存时排序的话，则每天固定排序23次；如果渲染时排序的话，就看每天能有几个访问了…. 然后发现自己在这种小问题上纠结个毛毛啊啊啊啊啊。</p>
 <p>排序后保存进文件之前和从文件读出之后要有两个 JSON 操作。保存之前 <code>JSON.stringify(posts)</code> 转换成字符串再保存，否则文件里是 <code>[[object Object], [object Object]]</code>。读出来之后 <code>JSON.parse(posts)</code> 再转换成对象数组，否则直接就一字符串没办法处理。</p>
 <p>接下来就是主页和关于。因为不想写用户系统了所以就不发文章了吧… 关于可以是万年不变的页面，首页的话，显示最近的公告好了。最简单的实现就是存两个 markdown 文件然后用 marked 渲染出来插在页面里。</p>
-<p>全部的源码在 <a href="https://github.com/phoenixlzx/NJLUG-site" target="_blank" rel="external"> 这里</a>。</p>
-<p>目前似乎域名还没解析，田华兄也未必决定用这个.. 所以效果的话戳 <a href="http://njlug.phoenixlzx.com" target="_blank" rel="external"> 这里 </a> 看。</p>
+<p>全部的源码在<a href="https://github.com/phoenixlzx/NJLUG-site" target="_blank" rel="external">这里</a>。</p>
+<p>目前似乎域名还没解析，田华兄也未必决定用这个.. 所以效果的话戳<a href="http://njlug.phoenixlzx.com" target="_blank" rel="external">这里</a>看。</p>
 <p>然后顺便说一句.. 现在已经健忘到我已经忘记刚刚想起来要写的东西了<em>(:з」∠)</em></p>
 
       
@@ -560,7 +618,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-04-28T12:53:55.000Z"><a href="/2014/04/28/sublive-live-subtitle-for-local-players/">2014-04-28</a></time>
+        <time datetime="2014-04-28T04:53:55.000Z"><a href="/2014/04/28/sublive-live-subtitle-for-local-players/">2014-04-28</a></time>
       
       
   
@@ -570,7 +628,7 @@
     </header>
     <div class="entry">
       
-        <p>昨晚 KNA 群里在讨论给本地播放器加弹幕功能。之前虽然听说过但是并未接触过所谓「弹幕池」的概念，但是星光菊苣说只要生成 SSA 字幕直接交给播放器挂上就成。并且，(虽然很想顺带吐槽 Zht 和我们争了半天最后槽点根本不在一个点子上 orz) 少将也表示时效并不重要，不需要考虑播放器的字幕自动重载问题。</p>
+        <p>昨晚 KNA 群里在讨论给本地播放器加弹幕功能。之前虽然听说过但是并未接触过所谓「弹幕池」的概念，但是星光菊苣说只要生成 SSA 字幕直接交给播放器挂上就成。并且，(虽然很想顺带吐槽 Zht 和我们争了半天最后槽点根本不在一个点子上orz) 少将也表示时效并不重要，不需要考虑播放器的字幕自动重载问题。</p>
 <p>所以躺在床上的时候就考虑了下整体的架构。还是最拿手的 HTTP RESTful API，基本功能的话就是获取字幕和发送弹幕。大致的思路如下。</p>
 <ul>
 <li>客户端打开媒体文件后首先获得文件的 hash。有些播放器自动寻找字幕似乎是通过文件名.. 这样的话我改个名字岂不是彻底失效。不过用 hash 来做检索文件的唯一信息的话，不同压制组放出的同一部片源都会有不同的弹幕… 不过似乎也好，如果压制了字幕进去的话，有些针对字幕君的吐槽啊什么的.. 嘛于是就这样。</li>
@@ -579,13 +637,13 @@
 <li>服务端接收到新的弹幕后将其存进数据库，并追加到已有字幕文件。这样下次其他客户端再次请求该文件的时候就会看到弹幕。</li>
 </ul>
 <p>…</p>
-<p>剩下的就不知道了，因为上面几条出来之后我就睡着了 zzzzZ</p>
+<p>剩下的就不知道了，因为上面几条出来之后我就睡着了zzzzZ</p>
 <p>…</p>
-<p>早上翘课写代码这种事情早就习以为常了… 更何况是 (我已经不知道该如何吐槽) 的老师的上机课….</p>
+<p>早上翘课写代码这种事情早就习以为常了… 更何况是(我已经不知道该如何吐槽)的老师的上机课….</p>
 <p>基本架构和功能大概 3 小时搞定，之前大概花了将近 1 个小时看 <a href="http://matroska.org/technical/specs/subtitles/ssa.html" target="_blank" rel="external">SSA/ASS Subtitles</a> 以及 Express 4.x 的文档。因为 <a href="https://github.com/visionmedia/express#quick-start" target="_blank" rel="external">Express 4.x 开始命令行工具被单独分开</a>，害我半天没找到生成模板的命令… (你丫瞎改啥啊啊啊啊</p>
 <p>编码过程里倒是没遇到啥坑，就是数据处理有点烦。因为没找到啥比较好的 SSA 字幕处理库，生成的时候都是手动处理，各种 <code>+ &#39;\n&#39;</code> 什么的..</p>
 <p>以及，SSA/ASS 字幕的格式特性让 <code>Array.prototype.join</code> 得以利用，省掉不少麻烦。</p>
-<p>于是源码在 <a href="https://github.com/phoenixlzx/sublive" target="_blank" rel="external"> 这里</a>。在基础架构之上还可以很方便的添加大量其他功能，验证啊什么的.. 顺便我还木有做 POST 数据的检查。这个大概晚些时候会加上。</p>
+<p>于是源码在<a href="https://github.com/phoenixlzx/sublive" target="_blank" rel="external">这里</a>。在基础架构之上还可以很方便的添加大量其他功能，验证啊什么的.. 顺便我还木有做 POST 数据的检查。这个大概晚些时候会加上。</p>
 <p>四月的荒废状态持续了 27 天宣告结束。嘛，挣脱五月病要感谢星光菊苣、Zht、少将以及 KNA 字幕组的所有小伙伴们 &gt;///&lt; 感谢你们～</p>
 <p>以后要继续加油喵！～</p>
 
@@ -621,39 +679,39 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-04-07T20:54:18.000Z"><a href="/2014/04/08/bdrip-script-for-linux-server/">2014-04-08</a></time>
+        <time datetime="2014-04-07T12:54:18.000Z"><a href="/2014/04/07/bdrip-script-for-linux-server/">2014-04-07</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/04/08/bdrip-script-for-linux-server/">为 Linux 服务器编写的 BDRip 脚本</a></h1>
+    <h1 class="title"><a href="/2014/04/07/bdrip-script-for-linux-server/">为 Linux 服务器编写的 BDRip 脚本</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p> 最近状态比较不好… 所以准备拿学校的服务器撒撒气 <em>(:з」∠)</em></p>
-<p> 吐槽：学校个大土豪，居然用双路 E5-2620 + 16G 内存的服务器，强烈怀疑这服务器上的站加起来不如这俩 CPU 贵… 另外机器上只有一块 300G 的硬盘 (SAS?) 是什么情况… 以及盗版的 RHEL5 是什么情况… 以及 /opt 分了 236G，rootfs 只有 19G 是要闹哪样…</p>
-<p> 于是进入正题。Linux 服务器一般都不安装图形界面，更加节省资源。同时现在也能以每月数十美元的价格租到足够性能和带宽的独立服务器，更何况把任务丢给服务器自动化操作，人的时间便可以节省下来做更重要的事情。</p>
-<p> 脚本需要如下软件包：</p>
+        <p>最近状态比较不好… 所以准备拿学校的服务器撒撒气<em>(:з」∠)</em></p>
+<p>吐槽：学校个大土豪，居然用双路 E5-2620 + 16G 内存的服务器，强烈怀疑这服务器上的站加起来不如这俩CPU贵… 另外机器上只有一块 300G 的硬盘 (SAS?) 是什么情况… 以及盗版的 RHEL5 是什么情况… 以及 /opt 分了 236G，rootfs 只有 19G 是要闹哪样…</p>
+<p>于是进入正题。Linux 服务器一般都不安装图形界面，更加节省资源。同时现在也能以每月数十美元的价格租到足够性能和带宽的独立服务器，更何况把任务丢给服务器自动化操作，人的时间便可以节省下来做更重要的事情。</p>
+<p>脚本需要如下软件包：</p>
 <ul>
 <li>ffmpeg</li>
 <li>mencoder</li>
 <li>x264</li>
 <li>mkvtoolnix</li>
 </ul>
-<p> 学校的服务器是 RHEL5 还没给激活，没办法换了 CentOS 的源，上面的一些软件包需要从 repoforge 获得。Ubuntu/Debian 的话，一般启用专有软件仓库就可以了。</p>
-<p> 下面贴脚本。</p>
+<p>学校的服务器是 RHEL5 还没给激活，没办法换了 CentOS 的源，上面的一些软件包需要从 repoforge 获得。Ubuntu/Debian 的话，一般启用专有软件仓库就可以了。</p>
+<p>下面贴脚本。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="shebang">#!/bin/bash</span></div><div class="line"><span class="comment"># $1 = origin file</span></div><div class="line"><span class="comment"># $2 = output file</span></div><div class="line"><span class="comment"># $3 = quality</span></div><div class="line"><span class="comment"># $4 = threads</span></div><div class="line"></div><div class="line"><span class="comment"># The crf option controls encoding quality, and indirectly the final</span></div><div class="line"><span class="comment"># filesize. The higher the value, the more compression and thus smaller</span></div><div class="line"><span class="comment"># file size. Reduce the value and file size will go up. A value of 21</span></div><div class="line"><span class="comment"># should produce a file of approximately 4GB in size for a typical movie.</span></div><div class="line"></div><div class="line"><span class="comment"># Encode the video using x264, ignore the audio for now.</span></div><div class="line">mencoder <span class="variable">$1</span>.m2ts \</div><div class="line">-ovc x264 -x264encopts \</div><div class="line">crf=<span class="variable">$3</span>:frameref=<span class="number">3</span>:bframes=<span class="number">3</span>:direct_pred=auto:weight_b:partitions=all:<span class="number">8</span>x8dct:me=umh:mixed_refs:trellis=<span class="number">1</span>:nopsnr:nossim:subq=<span class="number">6</span>:level_idc=<span class="number">41</span>:threads=<span class="variable">$4</span> \</div><div class="line">-nosound \</div><div class="line">-of rawvideo \</div><div class="line">-o <span class="variable">$2</span>.x264</div><div class="line"></div><div class="line"><span class="comment"># Extract first sound track, normally stream 0:1 in BDs.</span></div><div class="line">ffmpeg -i <span class="variable">$1</span>.m2ts -map <span class="number">0</span>:<span class="number">1</span> -acodec flac <span class="variable">$2</span>.flac</div><div class="line"></div><div class="line"><span class="comment"># Convert raw x264 video to MP4</span></div><div class="line">ffmpeg -i <span class="variable">$2</span>.x264 -vcodec copy <span class="variable">$2</span>.mp4</div><div class="line"></div><div class="line"><span class="comment"># Finally, merge everything into a single MKV file</span></div><div class="line">mkvmerge -o <span class="variable">$2</span>.mkv <span class="variable">$2</span>.mp4 --track-name <span class="number">0</span>:Jpn <span class="variable">$2</span>.flac</div><div class="line"></div><div class="line"><span class="comment"># Uncomment if you want to clean up your working environment.</span></div><div class="line"><span class="comment"># rm $2.x264 $2.flac $2.mp4</span></div><div class="line"></div><div class="line"><span class="comment"># Tell the user we're done.</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Rip complete. Output file is <span class="variable">$2</span>.mkv"</span></div></pre></td></tr></table></figure>
 
-<p> 保存为 <code>transcode.sh</code> 并赋予可执行权限：</p>
+<p>保存为 <code>transcode.sh</code> 并赋予可执行权限：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ chmod +x transcode.sh</div></pre></td></tr></table></figure>
 
-<p> 脚本基本上是从下面的参考链接里抄来的，但是做了一些更改以适合我目前的需求。脚本接受 4 个参数，分别为输入文件 (不含扩展名)、输出文件 (不含扩展名)、质量、线程数。我在服务器上 Rip 的文件是 zyo 买的「未確認で進行形」第一卷 OVA，命令如下：</p>
+<p>脚本基本上是从下面的参考链接里抄来的，但是做了一些更改以适合我目前的需求。脚本接受 4 个参数，分别为输入文件(不含扩展名)、输出文件(不含扩展名)、质量、线程数。我在服务器上 Rip 的文件是 zyo 买的「未確認で進行形」第一卷OVA，命令如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ./transcode.sh <span class="number">00004</span> <span class="number">4</span> <span class="number">18</span> <span class="number">20</span></div></pre></td></tr></table></figure>
 
-<p><code>transcode.sh</code> 是当前目录下的脚本文件，<code>00004</code> 代表当前目录下的 <code>00004.m2ts</code> 片源，输出文件将是 <code>4.mkv</code>，压缩质量为 <code>18</code>，编码过程使用 20 个线程 (服务器一共 12 个核心 24 个线程么我就不客气啦。</p>
-<p>OVA 压缩大约使用了不到 20 分钟的时间，最终文件大小不到 500M。看起来效果还可以嗯…</p>
-<p> 参考：</p>
+<p><code>transcode.sh</code> 是当前目录下的脚本文件，<code>00004</code> 代表当前目录下的 <code>00004.m2ts</code> 片源，输出文件将是 <code>4.mkv</code>，压缩质量为 <code>18</code>，编码过程使用 20 个线程(服务器一共 12 个核心 24 个线程么我就不客气啦。</p>
+<p>OVA压缩大约使用了不到 20 分钟的时间，最终文件大小不到 500M。看起来效果还可以嗯…</p>
+<p>参考：</p>
 <ul>
 <li><a href="http://wiki.gentoo.org/wiki/FFmpeg_-_Extract_Blu-Ray_Audio" target="_blank" rel="external">FFmpeg - Extract Blu-Ray Audio - Gentoo Wiki</a></li>
 <li><a href="http://www.rcomputer.eu/21-zoznam/operacne-systemy/linux/157-howto-encode-a-blu-ray-rip-into-a-smaller-format-without-losing-quality" target="_blank" rel="external">HowTo: Encode a Blu-ray rip into a smaller format without losing quality</a></li>
@@ -691,7 +749,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-03-25T11:11:46.000Z"><a href="/2014/03/25/yet-anothor-better-gif-method/">2014-03-25</a></time>
+        <time datetime="2014-03-25T03:11:46.000Z"><a href="/2014/03/25/yet-anothor-better-gif-method/">2014-03-25</a></time>
       
       
   
@@ -703,91 +761,18 @@
       
         <p>之前使用 <a href="http://blog.phoenixlzx.com/2014/02/19/make-gif-with-ffmpeg/" target="_blank" rel="external">FFmpeg 制作 GIF</a> 被 zyo 吐槽 <a href="https://plus.google.com/107142103119739092775/posts/asBTCqCnP9A" target="_blank" rel="external">明显的网纹</a>，于是找到了更好的办法。</p>
 <p>需要：FFmpeg 以及 ImageMagick。</p>
-<p>依旧不讨论如何截取 / 剪裁视频文件的问题。例如我们这里要转换的视频文件为 <code>clip.mp4</code>，首先使用 ffmpeg 转换成一个个的 PNG 文件，保持纵横比，宽为 320 像素，帧率为 20。为防止文件名混乱，先建立一个 <code>png</code> 目录。</p>
+<p>依旧不讨论如何截取/剪裁视频文件的问题。例如我们这里要转换的视频文件为 <code>clip.mp4</code>，首先使用 ffmpeg 转换成一个个的 PNG 文件，保持纵横比，宽为320像素，帧率为20。为防止文件名混乱，先建立一个 <code>png</code> 目录。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p png</div><div class="line">ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="number">1</span> -r <span class="number">20</span> png/output%<span class="number">05</span>d.png</div></pre></td></tr></table></figure>
 
 <p>接下来使用 ImageMagick 的 <code>convert</code> 工具来把 png 连接成 gif。顺便做优化来缩小文件体积。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">convert -layers Optimize png/output*.png clip.gif</div></pre></td></tr></table></figure>
 
-<p>这样就得到了图象效果更好的 <code>clip.gif</code> 文件了。不过还有一个问题，不管是本地图象查看器还是浏览器里，这 gif 都像幻灯片似的。本来觉得是帧率的问题，但是就算是尝试了原帧率一样不行。<a href="http://superuser.com/questions/569924/why-is-the-gif-i-created-so-slow" target="_blank" rel="external">Google 之发现了问题…</a></p>
-<p>解决方案在 <a href="http://humpy77.deviantart.com/journal/Frame-Delay-Times-for-Animated-GIFs-214150546" target="_blank" rel="external"> 这里</a>。不使用 <code>-delay 0</code> 或者是大于 <code>6/100</code> 的值。</p>
+<p>这样就得到了图象效果更好的 <code>clip.gif</code> 文件了。不过还有一个问题，不管是本地图象查看器还是浏览器里，这gif都像幻灯片似的。本来觉得是帧率的问题，但是就算是尝试了原帧率一样不行。<a href="http://superuser.com/questions/569924/why-is-the-gif-i-created-so-slow" target="_blank" rel="external">Google 之发现了问题…</a></p>
+<p>解决方案在<a href="http://humpy77.deviantart.com/journal/Frame-Delay-Times-for-Animated-GIFs-214150546" target="_blank" rel="external">这里</a>。不使用 <code>-delay 0</code> 或者是大于 <code>6/100</code> 的值。</p>
 <p>所以刚才的命令可以稍微修改下。几次测试后发现对于我的原视频(23fps)，<code>4/100</code> 最合适。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">convert -layers Optimize -delay <span class="number">4</span>/<span class="number">100</span> png/output*.png clip.gif</div></pre></td></tr></table></figure>
 
-<p>这样制作出来的 gif 效果就非常赞啦。虽然比之前多了一个步骤，但是确实是制作了更好的 gif，是更好的方法。</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-03-22T13:05:43.000Z"><a href="/2014/03/22/chinese-word-split-search-with-mongodb/">2014-03-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/03/22/chinese-word-split-search-with-mongodb/">MongoDB 中文分字搜索</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>为工作室开发的 <a href="http://idoc.nuister.org" target="_blank" rel="external">iDocument</a> 文档分享平台，因为后端数据库是 MongoDB 所以没有做站内搜索，只是放了个百度站内搜索的工具。不过后来发现 BAKA 百度根本不收录站内链接，所以主席强烈要求做站内搜索<em>(:з」∠)</em></p>
-<p>MongoDB 的分词搜索不支持中文，而精确匹配的话基本上就没啥意义了。所以考虑一下几种方法。</p>
-<ul>
-<li>同义词匹配，高端的玩不转，初步想法是为每个文档对象添加一个 <code>tag</code> 来做搜索关键字，例如「高等数学」的文档可以有「高数」这个 tag，搜索「高等数学」和「高数」都能得到这个文档。</li>
-<li>分字匹配，可能会有少许误差，但是对于程序开发和网站运营人员来说都能减轻负担，因为不需要手动维护 tag 了。</li>
-</ul>
-<p>考虑到数据库中已经有之前的一些数据 (以及主席表示上传文档实在太累了所以强烈要求我保留原数据) 所以这里选择了分字搜索方式。</p>
-<p>按照喵菊给的方法，基本的步骤如下</p>
-<ol>
-<li>分字函数名称为 <code>split()</code>，文档标题为 <code>title</code>，搜索字段为 <code>querytext</code>。</li>
-<li>存入新的文档对象时，包含一个 attribute 名为 <code>searchIndex</code>，值为 <code>split(title)</code>。也就是将 <code>title</code> 分字后得到的数组。</li>
-<li>将 <code>searchIndex</code> 编入索引。<code>ensureIndex({searchIndex: 1})</code>，顺序的话，喵菊之前提到过，但是这里暂不考虑。</li>
-<li>搜索时把 <code>split(querytext)</code> 交给数据库来 <code>find()</code></li>
-</ol>
-<p>由于 Javascript 自带一个超级好用的 <code>String.prototype.split()</code> 方法，所以分字就是 <code>title.split(&#39;&#39;)</code>。</p>
-<p>以及，喵菊说如果用数组的话就不能用 <code>/variable/i</code> 这样的正则来忽略大小写了。所以存进去新 index 的时候要全部转换成小写，搜索的时候也要转换成小写来实现 Case-insensitive search.</p>
-<p>修改路由函数，添加一个新的属性 <code>searchIndex</code>：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> newdoc = {</div><div class="line">    title: req.body.title,</div><div class="line">    updateTime: <span class="built_in">Math</span>.round((<span class="keyword">new</span> <span class="built_in">Date</span>()).getTime() / <span class="number">1000</span>),</div><div class="line">    fileType: req.body.fileType,</div><div class="line">    belongs: req.body.belongs,</div><div class="line">    course: req.body.courseId,</div><div class="line">    type: req.body.type,</div><div class="line">    link: req.body.link,</div><div class="line">    downloads: <span class="number">0</span>,</div><div class="line">    searchIndex: req.body.title.toLowerCase().split(<span class="string">''</span>).clean(<span class="string">" "</span>) <span class="comment">// Remove space element after split to single text.</span></div><div class="line">};</div><div class="line"></div><div class="line"><span class="built_in">Array</span>.prototype.clean = <span class="function"><span class="keyword">function</span> <span class="params">(deleteValue)</span> {</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.length; i++) {</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>[i] == deleteValue) {</div><div class="line">            <span class="keyword">this</span>.splice(i, <span class="number">1</span>);</div><div class="line">            i--;</div><div class="line">        }</div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">};</div></pre></td></tr></table></figure>
-
-<p>修改文档模型函数，添加时将 <code>searchIndex</code> 编入索引：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">exports.addnew = <span class="function"><span class="keyword">function</span><span class="params">(newdoc, callback)</span> {</span></div><div class="line">    collection.insert(newdoc, {safe: <span class="literal">true</span>}, <span class="function"><span class="keyword">function</span><span class="params">(err)</span> {</span></div><div class="line">        <span class="keyword">if</span> (err) {</div><div class="line">            <span class="keyword">return</span> callback(err);</div><div class="line">        }</div><div class="line">        collection.ensureIndex({</div><div class="line">            searchIndex: <span class="number">1</span></div><div class="line">        }, <span class="function"><span class="keyword">function</span><span class="params">(err)</span> {</span></div><div class="line">            <span class="keyword">if</span> (err) {</div><div class="line">                <span class="keyword">return</span> callback(err);</div><div class="line">            }</div><div class="line">            callback(<span class="literal">null</span>);</div><div class="line">        });</div><div class="line">    });</div><div class="line">}</div></pre></td></tr></table></figure>
-
-<p>新建文档搜索函数。 <strong>坑：如果直接把分好字的数组交给数据库来 find 那么一样是精确匹配的效果。这里应该是我对 MongoDB 还不够熟悉才掉坑里…</strong></p>
-<p>正确的匹配方法是 <code>db.documents.find({searchIndex: {$all: splittedTextArray} })</code>。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">exports.searchdoc = <span class="function"><span class="keyword">function</span><span class="params">(splittedTextArray, callback)</span> {</span></div><div class="line">    collection.find({</div><div class="line">        searchIndex: {$all: splittedTextArray}</div><div class="line">    })</div><div class="line">        .sort({downloads: -<span class="number">1</span> })</div><div class="line">        .toArray(<span class="function"><span class="keyword">function</span><span class="params">(err, docs)</span> {</span></div><div class="line">            <span class="keyword">if</span> (err) {</div><div class="line">                <span class="keyword">return</span> callback(err, <span class="literal">null</span>);</div><div class="line">            }</div><div class="line">            callback(<span class="literal">null</span>, docs);</div><div class="line">        });</div><div class="line">}</div></pre></td></tr></table></figure>
-
-<p>然后按照主席的要求，写了个脚本来更新之前的数据。方法是将原来的数据全部取出，然后遍历写回的同时添加 <code>searchIndex</code>。看了下原来有的数据大约就 100 多条，所以直接全部取了没考虑分段的问题嗯。</p>
-<p>据喵菊说，数组处理是 MongoDB 的强项所以非常快～</p>
-<p>整个项目的源码在 <a href="https://github.com/DuoHuoStudio/iDocument" target="_blank" rel="external"> 这里</a></p>
-<p>修改完毕，测试效果非常赞 w 不过就是 BAKA 的 blueed 还没写搜索列表页的样式就是了… <del>据说前端苦逼</del></p>
+<p>这样制作出来的 gif 效果就非常赞啦。虽然比之前多了一个步骤，但是确实是制作了更好的gif，是更好的方法。</p>
 
       
     </div>
@@ -856,9 +841,9 @@
   
     <li><a href="/categories/Network/">Network</a><small>3</small></li>
   
-    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+    <li><a href="/categories/Node-js/">Node.js</a><small>5</small></li>
   
-    <li><a href="/categories/Notes/">Notes</a><small>9</small></li>
+    <li><a href="/categories/Notes/">Notes</a><small>10</small></li>
   
     <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
   
@@ -870,7 +855,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Node-js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/OS-X/" style="font-size: 10.00px;">OS X</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
   </div>
 </div>
 
@@ -881,11 +866,15 @@
   <ul class="entry">
     
       <li>
+        <a href="/2014/11/11/set-language-for-individual-app-in-os-x-the-elegant-way/">用优雅的方式在 OS X 中为单个应用设置语言</a>
+      </li>
+    
+      <li>
         <a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">关于 SSL 和 IPKVM/VNC Applet 的笔记两则</a>
       </li>
     
       <li>
-        <a href="/2014/09/03/2014-natsu/">2014·夏</a>
+        <a href="/2014/09/02/2014-natsu/">2014·夏</a>
       </li>
     
       <li>
@@ -893,11 +882,7 @@
       </li>
     
       <li>
-        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
-      </li>
-    
-      <li>
-        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+        <a href="/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
       </li>
     
   </ul>

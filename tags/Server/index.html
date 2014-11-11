@@ -73,7 +73,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-10-14T05:03:07.000Z"><a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">2014-10-14</a></time>
+        <time datetime="2014-10-13T21:03:07.000Z"><a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">2014-10-14</a></time>
       
       
   
@@ -88,7 +88,7 @@
 <p>有客户买了 COMODO Positive SSL 之后问我证书链变了要怎么串联。嘛确实文件变多了不过不至于这就不会了吧…</p>
 <p>SSL 证书串联用 <code>cat</code> 命令的话顺序是自下而上，也就是 自己的证书 -&gt; 二级 Intermediate CA -&gt; 一级 Intermediate CA -&gt; Root CA</p>
 <p>所以不管文件有多少这个顺序总是有的。以 COMODO Positive SSL 为例，假设域名为 <code>example.com</code>，<code>cat</code> 的串联命令：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat example_com<span class="preprocessor">.crt</span> COMODORSADomainValidationSecureServerCA<span class="preprocessor">.crt</span> COMODORSAAddTrustCA<span class="preprocessor">.crt</span> AddTrustExternalCARoot<span class="preprocessor">.crt</span> &gt; example_com<span class="preprocessor">.signed</span><span class="preprocessor">.crt</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">cat example_com.crt COMODORSADomainValidationSecureServerCA.crt COMODORSAAddTrustCA.crt AddTrustExternalCARoot.crt &gt;</span> example_com.signed.crt</span></div></pre></td></tr></table></figure>
 
 <p>于是就可以拿着 <code>example_com.signed.crt</code> 和生成 CSR 时一并生成的 <code>example_com.key</code> 去给 NGINX 咯。</p>
 <p>附一份 NGINX 配置样例。</p>
@@ -100,11 +100,13 @@
 <p>解决方案：下载一个旧版的 Java，比如 jdk6。</p>
 <p>但是直接安装也是不能运行的，因为实际上调用的 java executable 是最新版 Java 的，所以一样报错。</p>
 <p>如果是在 Linux 下，jre6 的目录在 <code>$HOME/jre6/jre1.6.0_38</code>，那么下载到 Applet 之后用下面的命令启动：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">applet_path<span class="subst">=</span>/path/<span class="keyword">to</span>/your/applet<span class="built_in">.</span>jnlp</div><div class="line">~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/bin/java <span class="attribute">-verbose</span> <span class="attribute">-Xbootclasspath</span>/a:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/javaws<span class="built_in">.</span>jar:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/deploy<span class="built_in">.</span>jar:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/plugin<span class="built_in">.</span>jar <span class="attribute">-classpath</span> ~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/deploy<span class="built_in">.</span>jar <span class="attribute">-Djava</span><span class="built_in">.</span>security<span class="built_in">.</span>policy<span class="subst">=</span>file:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/security/javaws<span class="built_in">.</span>policy <span class="attribute">-DtrustProxy</span><span class="subst">=</span><span class="literal">true</span> <span class="attribute">-Xverify</span>:remote <span class="attribute">-Djnlpx</span><span class="built_in">.</span>home<span class="subst">=</span>~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/bin <span class="attribute">-Dsun</span><span class="built_in">.</span>awt<span class="built_in">.</span>warmup<span class="subst">=</span><span class="literal">true</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>origFilenameArg<span class="subst">=</span><span class="variable">$applet_path</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>remove<span class="subst">=</span><span class="literal">false</span> <span class="attribute">-esa</span> <span class="attribute">-Xnoclassgc</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>splashport<span class="subst">=</span><span class="number">59999</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>jvm<span class="subst">=</span>~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/bin/java <span class="attribute">-Djnlpx</span><span class="built_in">.</span>vmargs<span class="subst">=</span><span class="string">"-esa -Xnoclassgc"</span> com<span class="built_in">.</span>sun<span class="built_in">.</span>javaws<span class="built_in">.</span>Main <span class="variable">$applet_path</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">applet_path=<span class="regexp">/path/</span>to<span class="regexp">/your/</span>applet.jnlp</div><div class="line">~<span class="regexp">/jre6/</span>jre1.<span class="number">6.0</span>_38<span class="regexp">/bin/</span>java -verbose -Xbootclasspath<span class="regexp">/a:~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/javaws.jar:~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/deploy.jar:~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/plugin.jar -classpath ~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/deploy.jar -Djava.security.policy=file:~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/security/</span>javaws.policy -DtrustProxy=<span class="keyword">true</span> -Xverify:remote -Djnlpx.home=~<span class="regexp">/jre6/</span>jre1.<span class="number">6.0</span>_38<span class="regexp">/bin -Dsun.awt.warmup=true -Djnlpx.origFilenameArg=$applet_path -Djnlpx.remove=false -esa -Xnoclassgc -Djnlpx.splashport=59999 -Djnlpx.jvm=~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>bin<span class="regexp">/java -Djnlpx.vmargs="-esa -Xnoclassgc" com.sun.javaws.Main $applet_path</span></div></pre></td></tr></table></figure>
 
 <h3 id="===_2014-10-15_更新_===">=== 2014-10-15 更新 ===</h3>
-<p>SSLv3 <a href="http://googleonlinesecurity.blogspot.com/2014/10/this-poodle-bites-exploiting-ssl-30.html" target="_blank" rel="external">再次爆出漏洞 </a>，在 Google 的新草案 <a href="https://tools.ietf.org/html/draft-ietf-tls-downgrade-scsv-00" target="_blank" rel="external">TLS_FALLBACK_SCSV</a> 还未明朗的情况下，目前禁用 SSLv3 是一个 <strong> 不考虑 IE6</strong> 的 workaround。</p>
+<p>SSLv3 <a href="http://googleonlinesecurity.blogspot.com/2014/10/this-poodle-bites-exploiting-ssl-30.html" target="_blank" rel="external">再次爆出漏洞</a>，在 Google 的新草案 <a href="https://tools.ietf.org/html/draft-ietf-tls-downgrade-scsv-00" target="_blank" rel="external">TLS_FALLBACK_SCSV</a> 还未明朗的情况下，目前禁用 SSLv3 是一个 <strong>不考虑 IE6</strong> 的 workaround。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function_or_atom">ssl_protocols</span> <span class="variable">TLSv1</span> <span class="variable">TLSv1</span>.<span class="number">1</span> <span class="variable">TLSv1</span>.<span class="number">2</span>;</div><div class="line"><span class="function_or_atom">ssl_ciphers</span> <span class="variable">ECDHE</span>-<span class="variable">RSA</span>-<span class="variable">AES256</span>-<span class="variable">SHA384</span>:<span class="variable">AES256</span>-<span class="variable">SHA256</span>:<span class="variable">RC4</span>:<span class="variable">HIGH</span>:<span class="exclamation_mark">!</span><span class="variable">MD5</span>:<span class="exclamation_mark">!</span><span class="function_or_atom">aNULL</span>:<span class="exclamation_mark">!</span><span class="function_or_atom">eNULL</span>:<span class="exclamation_mark">!</span><span class="variable">NULL</span>:<span class="exclamation_mark">!</span><span class="variable">DH</span>:<span class="exclamation_mark">!</span><span class="variable">EDH</span>:<span class="exclamation_mark">!</span><span class="variable">AESGCM</span>;</div><div class="line"><span class="function_or_atom">ssl_prefer_server_ciphers</span> <span class="function_or_atom">on</span>;</div><div class="line"><span class="function_or_atom">ssl_session_cache</span> <span class="function_or_atom">shared</span>:<span class="variable">SSL</span>:<span class="number">10</span>m;</div><div class="line"><span class="function_or_atom">ssl_session_timeout</span> <span class="number">10</span>m;</div></pre></td></tr></table></figure>
+
+
       
     </div>
     <footer>
@@ -137,7 +139,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-07-21T13:21:57.000Z"><a href="/2014/07/21/setup-openconnect-server-on-ubuntu/">2014-07-21</a></time>
+        <time datetime="2014-07-21T05:21:57.000Z"><a href="/2014/07/21/setup-openconnect-server-on-ubuntu/">2014-07-21</a></time>
       
       
   
@@ -147,36 +149,36 @@
     </header>
     <div class="entry">
       
-        <p> 最近猫给推荐的 Cisco AnyConnect，面基的时候也看到 Aveline 菊苣在用 AnyConnect(插嘴：正太菊苣果然好可爱！！！) 于是自己折腾了下。作为少有的能让我折腾起来的 VPN，暂且把搭建步骤简单记录下。</p>
-<p>AnyConnect 的好处是基于 HTTPS，证书可以申请 StartSSL 的，而且配置也不很复杂。另外配置文件里发现了很多专门为商业化 / 企业服务定制的选项，例如最大同时在线客户端数量，同账户最大在线设备数量等等。</p>
+        <p>最近猫给推荐的 Cisco AnyConnect，面基的时候也看到 Aveline 菊苣在用 AnyConnect(插嘴：正太菊苣果然好可爱！！！) 于是自己折腾了下。作为少有的能让我折腾起来的 VPN，暂且把搭建步骤简单记录下。</p>
+<p>AnyConnect 的好处是基于 HTTPS，证书可以申请 StartSSL 的，而且配置也不很复杂。另外配置文件里发现了很多专门为商业化/企业服务定制的选项，例如最大同时在线客户端数量，同账户最大在线设备数量等等。</p>
 <p>OpenConnect 是 AnyConnect 的开源实现。目前 0.8.0 版本需要 GnuTLS 3.1 以上版本，所以我们就直接在 Ubuntu 14.04 中搭建。另外 就算是基于 HTTPS，这货也是要用 TUN 设备的，所以 OpenVZ 用户们请注意。</p>
-<h3 id="准备"> 准备 </h3>
-<p> 命令 </p>
+<h3 id="准备">准备</h3>
+<p>命令</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">apt-get install build-essential libwrap0-dev libpam0g-dev libdbus-<span class="number">1</span>-dev \</div><div class="line">  libreadline-dev libnl-route-<span class="number">3</span>-dev libprotobuf-c0-dev libpcl1-dev libopts25-dev \</div><div class="line">  autogen libgnutls28 libgnutls28-dev libseccomp-dev libhttp-parser-dev</div></pre></td></tr></table></figure>
 
-<h3 id="安装"> 安装 </h3>
-<p> 下载源码 </p>
+<h3 id="安装">安装</h3>
+<p>下载源码</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">wget -c ftp://ftp.infradead.org/pub/ocserv/ocserv-<span class="number">0.8</span>.<span class="number">0</span>.tar.xz</div><div class="line">tar xvf ocserv-<span class="number">0.8</span>.<span class="number">0</span>.tar.xz</div><div class="line"><span class="built_in">cd</span> ocserv-<span class="number">0.8</span>.<span class="number">0</span></div></pre></td></tr></table></figure>
 
-<p> 编译安装 </p>
+<p>编译安装</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">./configure --prefix=/opt/ocserv </div><div class="line">make</div><div class="line">make install</div><div class="line">mkdir /opt/ocserv/etc/</div><div class="line">cp doc/sample.config /opt/ocserv/etc/config</div></pre></td></tr></table></figure>
 
-<h3 id="配置"> 配置 </h3>
-<p> 这里只记录需要修改的重点配置，其他配置请参照样例配置文件的注释按需修改。</p>
-<p> 文件 <code>/opt/ocserv/etc/config</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">auth <span class="subst">=</span> <span class="string">"plain[/opt/ocserv/etc/passwd]"</span></div><div class="line">listen<span class="attribute">-host</span> <span class="subst">=</span> connect<span class="built_in">.</span>your<span class="built_in">.</span>domain</div><div class="line"><span class="keyword">max</span><span class="attribute">-clients</span> <span class="subst">=</span> <span class="number">128</span></div><div class="line"><span class="keyword">max</span><span class="attribute">-same</span><span class="attribute">-clients</span> <span class="subst">=</span> <span class="number">4</span></div><div class="line">server<span class="attribute">-cert</span> <span class="subst">=</span> /opt/ocserv/etc/ssl/server<span class="attribute">-cert</span><span class="built_in">.</span>pem</div><div class="line">server<span class="attribute">-key</span> <span class="subst">=</span> /opt/ocserv/etc/ssl/server<span class="attribute">-key</span><span class="built_in">.</span>pem</div><div class="line">ca<span class="attribute">-cert</span> <span class="subst">=</span> /opt/ocserv/etc/ssl/ca<span class="built_in">.</span>pem</div><div class="line">mobile<span class="attribute">-idle</span><span class="attribute">-timeout</span> <span class="subst">=</span> <span class="number">2400</span></div><div class="line">ipv4<span class="attribute">-network</span> <span class="subst">=</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.0</span></div><div class="line">ipv4<span class="attribute">-netmask</span> <span class="subst">=</span> <span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span></div><div class="line">dns <span class="subst">=</span> <span class="number">8.8</span><span class="number">.8</span><span class="number">.8</span></div><div class="line">dns <span class="subst">=</span> <span class="number">8.8</span><span class="number">.4</span><span class="number">.4</span></div><div class="line">route <span class="subst">=</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.0</span>/<span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span></div><div class="line">route<span class="attribute">-add</span><span class="attribute">-cmd</span> <span class="subst">=</span> <span class="string">"ip route add 192.168.1.0 dev tun0"</span></div><div class="line">route<span class="attribute">-del</span><span class="attribute">-cmd</span> <span class="subst">=</span> <span class="string">"ip route delete 192.168.1.0 dev tun0"</span></div></pre></td></tr></table></figure>
+<h3 id="配置">配置</h3>
+<p>这里只记录需要修改的重点配置，其他配置请参照样例配置文件的注释按需修改。</p>
+<p>文件 <code>/opt/ocserv/etc/config</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="variable">auth =</span> <span class="string">"plain[/opt/ocserv/etc/passwd]"</span></div><div class="line"><span class="variable">listen-host =</span> connect.your.domain</div><div class="line"><span class="variable">max-clients =</span> <span class="number">128</span></div><div class="line"><span class="variable">max-same-clients =</span> <span class="number">4</span></div><div class="line"><span class="variable">server-cert =</span> /opt/ocserv/etc/ssl/server-cert.pem</div><div class="line"><span class="variable">server-key =</span> /opt/ocserv/etc/ssl/server-key.pem</div><div class="line"><span class="variable">ca-cert =</span> /opt/ocserv/etc/ssl/ca.pem</div><div class="line"><span class="variable">mobile-idle-timeout =</span> <span class="number">2400</span></div><div class="line"><span class="variable">ipv4-network =</span> <span class="number">192.168</span>.<span class="number">1.0</span></div><div class="line"><span class="variable">ipv4-netmask =</span> <span class="number">255.255</span>.<span class="number">255.0</span></div><div class="line"><span class="variable">dns =</span> <span class="number">8.8</span>.<span class="number">8.8</span></div><div class="line"><span class="variable">dns =</span> <span class="number">8.8</span>.<span class="number">4.4</span></div><div class="line"><span class="variable">route =</span> <span class="number">192.168</span>.<span class="number">1.0</span>/<span class="number">255.255</span>.<span class="number">255.0</span></div><div class="line"><span class="variable">route-add-cmd =</span> <span class="string">"ip route add 192.168.1.0 dev tun0"</span></div><div class="line"><span class="variable">route-del-cmd =</span> <span class="string">"ip route delete 192.168.1.0 dev tun0"</span></div></pre></td></tr></table></figure>
 
-<p> 创建用户，命令 </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/opt/ocserv/bin/ocpasswd <span class="attribute">-c</span> /opt/ocserv/etc/passwd username</div></pre></td></tr></table></figure>
+<p>创建用户，命令</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="regexp">/opt/</span>ocserv<span class="regexp">/bin/</span>ocpasswd -c <span class="regexp">/opt/</span>ocserv<span class="regexp">/etc/</span>passwd username</div></pre></td></tr></table></figure>
 
-<p> 按提示输入两次密码。</p>
-<p>iptables 规则 </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables <span class="attribute">-t</span> nat <span class="attribute">-A</span> POSTROUTING <span class="attribute">-j</span> SNAT <span class="subst">--</span><span class="keyword">to</span><span class="attribute">-source</span> <span class="subst">&lt;</span>server ip<span class="subst">&gt;</span> <span class="attribute">-o</span> <span class="subst">&lt;</span>nic<span class="subst">&gt;</span></div></pre></td></tr></table></figure>
+<p>按提示输入两次密码。</p>
+<p>iptables 规则</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">iptables -t nat -A POSTROUTING -j SNAT --to-source &lt;server ip&gt;</span> -o &lt;nic&gt;</span></div></pre></td></tr></table></figure>
 
-<p> 记得把 <code>&lt;server ip&gt;</code> 和 <code>&lt;nic&gt;</code> 改为服务器公网 IP 和对应网卡的名称。</p>
-<h3 id="搞定"> 搞定 </h3>
-<p> 折腾完毕，AnyConnect 客户端可以成功使用了。</p>
-<p><del> 不过呢折腾完之后发现这货其实被干扰得很厉害啊…</del></p>
+<p>记得把 <code>&lt;server ip&gt;</code> 和 <code>&lt;nic&gt;</code> 改为服务器公网 IP 和对应网卡的名称。</p>
+<h3 id="搞定">搞定</h3>
+<p>折腾完毕，AnyConnect 客户端可以成功使用了。</p>
+<p><del>不过呢折腾完之后发现这货其实被干扰得很厉害啊…</del></p>
 
       
     </div>
@@ -210,7 +212,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-05-17T15:59:48.000Z"><a href="/2014/05/17/repo-arm-disk-rescue-and-resize/">2014-05-17</a></time>
+        <time datetime="2014-05-17T07:59:48.000Z"><a href="/2014/05/17/repo-arm-disk-rescue-and-resize/">2014-05-17</a></time>
       
       
   
@@ -221,13 +223,13 @@
     <div class="entry">
       
         <p>最近发现 downgrade 失效了，降级啥包都是直接错误退出。然后排查的时候发现是 Arch Rollback Machine 挂了，原因是——磁盘不足。</p>
-<p>检查后发现 pm2 的日志有 7G，850 天前的包有 5000 多个，365 天内的包有 10 万余，磁盘已经被吃得满满当当。</p>
+<p>检查后发现 pm2 的日志有 7G，850天前的包有5000多个，365天内的包有10万余，磁盘已经被吃得满满当当。</p>
 <p>日志好说，因为没啥特别有用的东西也不用拿来做分析，直接删掉就好。Felix 也把 850 天前的包全部删干净了。不过再次检查的时候 <code>df -h</code> 显示依旧是磁盘被吃满的，而 <code>df -ih</code> 显示 inode 占用没有问题。猫怀疑是有文件句柄还开着，但是把所有可能的进程杀掉之后依旧没有变化，排除。另外一个现象是文件删除进程完成后过了一段时间磁盘开始有少量空闲空间了，可能是磁盘缓存…? </p>
 <p>于是靠着这空出来的 900M 多点的空间执行了几个操作：把有 HTTP flood 漏洞的 Node.js 0.10.16 升级到最新版 0.10.28，将包同步的 cronjob 降低到每天执行一次，压缩旧的 NGINX 日志。</p>
-<p>以及用户一直要求的包归档功能，实际上是已经有了的，但是并没通过 NGINX 配置来实现 (Pia!&lt;(=ｏ ‵-′) ノ☆猫) 所以准备把归档功能写到 API 服务端里。因为之前很有预见性的同步的时候把每天的包数据库按照 <code>/year/month/day/repo</code> 的结构保存起来(然后这部分的数据库文件就有 30G！)，所以用户按照这个路径来请求包数据库的时候直接把对应的数据库文件丢给客户端，请求包文件的时候则直接从包目录里丢过去。这样的话其实从一个较早的时间结构最后请求一个较新的包文件也能拿到…. 不过这个不是问题，因为包归档给 pacman 用的话，有哪些包还是 pacman 要读数据库的。</p>
-<p>包归档的 index 确实花了不少时间，目前的实现貌似也不很好，虽然貌似还挺快的，但是也挺吃硬盘的…而且一连好几次手残敲错了东西、少加了分隔符、加了冗余的配置变量…. 总之就是爆肝熬夜的效率超级差，4 点多基本上没问题的时候已经能感觉到身体很不舒服了…</p>
+<p>以及用户一直要求的包归档功能，实际上是已经有了的，但是并没通过 NGINX 配置来实现(Pia!&lt;(=ｏ ‵-′)ノ☆猫) 所以准备把归档功能写到 API 服务端里。因为之前很有预见性的同步的时候把每天的包数据库按照 <code>/year/month/day/repo</code> 的结构保存起来(然后这部分的数据库文件就有 30G！)，所以用户按照这个路径来请求包数据库的时候直接把对应的数据库文件丢给客户端，请求包文件的时候则直接从包目录里丢过去。这样的话其实从一个较早的时间结构最后请求一个较新的包文件也能拿到….不过这个不是问题，因为包归档给 pacman 用的话，有哪些包还是 pacman 要读数据库的。</p>
+<p>包归档的 index 确实花了不少时间，目前的实现貌似也不很好，虽然貌似还挺快的，但是也挺吃硬盘的…而且一连好几次手残敲错了东西、少加了分隔符、加了冗余的配置变量…. 总之就是爆肝熬夜的效率超级差，4点多基本上没问题的时候已经能感觉到身体很不舒服了…</p>
 <p>然后是一觉睡到第二天中午。觅食归来给 A.R.M 的 KVM 虚拟机硬盘增加了 100G。执行 <code>resize2fs</code> 的时候报错说已经达到最大空间，删掉 swap 之后依旧。接下来干了一件很作死的事情——把所有分区删掉了，然后按照原来的分区方案重建了新的分区。Reboot 之后 lsblk 是对了，但是 df -h 依旧是原来的分区。一叶说是 resize 没成功，要进 LiveCD 里面 resize2fs。不过我没镜像… 按照一叶的建议挂上 VNC 进 recovery 然后 fsck，再正常进系统执行 <code>resize2fs</code>，成功。</p>
-<p>回过神来的时候发现这种作死的行为我居然手都没抖一下 = = 几百 G 的数据呐…</p>
+<p>回过神来的时候发现这种作死的行为我居然手都没抖一下 = = 几百G的数据呐…</p>
 <p>晚上还要做字幕，再去休息下好了…</p>
 
       
@@ -262,23 +264,23 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-03-11T19:24:56.000Z"><a href="/2014/03/12/setup-custom-dns-with-dnsmasq/">2014-03-12</a></time>
+        <time datetime="2014-03-11T11:24:56.000Z"><a href="/2014/03/11/setup-custom-dns-with-dnsmasq/">2014-03-11</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/03/12/setup-custom-dns-with-dnsmasq/">DNSMasq 建立自定义 DNS</a></h1>
+    <h1 class="title"><a href="/2014/03/11/setup-custom-dns-with-dnsmasq/">DNSMasq 建立自定义 DNS</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>一直想写的 <a href="https://github.com/phoenixlzx/micromoedns" target="_blank" rel="external"> 微萌 DNS</a> 在今天上午准备好基本架构后却在下午遇到各种各样的坑而弃掉了… 心情有够不爽。所以把自己维护的缓存 DNS 解决方案写出来，想要折腾类似的东西的童鞋可以试试看。</p>
-<p>所谓自定义 DNS，这里有这么几个功能：</p>
+        <p>一直想写的<a href="https://github.com/phoenixlzx/micromoedns" target="_blank" rel="external">微萌DNS</a> 在今天上午准备好基本架构后却在下午遇到各种各样的坑而弃掉了… 心情有够不爽。所以把自己维护的缓存DNS解决方案写出来，想要折腾类似的东西的童鞋可以试试看。</p>
+<p>所谓自定义DNS，这里有这么几个功能：</p>
 <ul>
-<li>反 DNS 污染</li>
+<li>反DNS污染</li>
 <li>可以直接访问部分网站</li>
 <li>一些特定的服务加速</li>
-<li>解决一些国外 DNS 被 X 的问题</li>
+<li>解决一些国外DNS被X的问题</li>
 </ul>
 <p>接下来是搭建步骤。</p>
 <h3 id="安装基本包">安装基本包</h3>
@@ -287,34 +289,34 @@
 <h3 id="DNSCrypt_配置">DNSCrypt 配置</h3>
 <p>默认的话安装的 dnscrypt-proxy 是侦听于 <code>127.0.0.2</code> 的 <code>53</code> 端口，这里需要让 DNSMasq 来作为上游服务器所以需要修改配置。文件：<code>/etc/default/dnscrypt-proxy</code></p>
 <p>修改 </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">local</span><span class="attribute">-address</span><span class="subst">=</span><span class="number">127.0</span><span class="number">.0</span><span class="number">.2</span>:<span class="number">53</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">local-address</span>=<span class="string">127.0.0.2:53</span></div></pre></td></tr></table></figure>
 
 <p>为</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">local</span><span class="attribute">-address</span><span class="subst">=</span><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5301</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">local-address</span>=<span class="string">127.0.0.1:5301</span></div></pre></td></tr></table></figure>
 
-<p>以及默认的 DNS 服务器是 OpenDNS —— 和其他欧美服务一样，节点遍布欧美亚洲就那么可怜的一两个节点，甚至一个节点都没就敢叫遍布全球了呢。所以这里最好能改一下，比如选择日本的 OpenNIC 节点。配置文件里添加(原本是有 OpenDNS 注释的，无视即可)</p>
+<p>以及默认的DNS服务器是 OpenDNS —— 和其他欧美服务一样，节点遍布欧美亚洲就那么可怜的一两个节点，甚至一个节点都没就敢叫遍布全球了呢。所以这里最好能改一下，比如选择日本的OpenNIC节点。配置文件里添加(原本是有 OpenDNS 注释的，无视即可)</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">resolver-address=<span class="number">106.186</span>.<span class="number">17.181</span><span class="symbol">:</span><span class="number">2053</span></div><div class="line">provider-name=<span class="number">2</span>.dnscrypt-cert.ns2.jp.dns.opennic.glue</div><div class="line">provider-key=<span class="number">8768</span><span class="symbol">:C3DB</span><span class="symbol">:F70A</span><span class="symbol">:FBC6</span><span class="symbol">:</span><span class="number">3</span><span class="constant">B64:</span><span class="number">8630</span><span class="symbol">:</span><span class="number">8167</span><span class="symbol">:</span><span class="number">2</span><span class="constant">FD4:</span><span class="constant">EE6F</span><span class="symbol">:E175</span><span class="symbol">:ECFD</span><span class="symbol">:</span><span class="number">46</span><span class="constant">C9:</span><span class="number">22</span><span class="constant">FC:</span><span class="number">7674</span><span class="symbol">:A1AC</span><span class="symbol">:</span><span class="number">2</span>E2A</div></pre></td></tr></table></figure>
 
-<p>更多可用的 DNSCrypt 服务器在 <a href="http://dnscrypt.org/" target="_blank" rel="external">DNSCrypt 主页</a> 可以找到。</p>
+<p>更多可用的 DNSCrypt 服务器在 <a href="http://dnscrypt.org/" target="_blank" rel="external">DNSCrypt主页</a> 可以找到。</p>
 <p>修改好配置文件后保存，重启 dnscrypt 服务。</p>
 <h3 id="两个好用的配置文件">两个好用的配置文件</h3>
-<p>要感谢喵菊苣的功劳，我们有两个很方便好用的配置文件来阻止一些国内 ISP 的 DNS 污染，以及部分国内站点的加速。</p>
-<p>配置文件地址在 <a href="https://github.com/felixonmars/dnsmasq-china-list" target="_blank" rel="external"> 这里</a></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor"># 为了方便日后更新，把这个仓库 clone 到本地而不是直接下载。</span></div><div class="line">git clone https://github<span class="preprocessor">.com</span>/felixonmars/dnsmasq-china-list<span class="preprocessor">.git</span></div><div class="line">cd dnsmasq-china-list</div><div class="line"><span class="preprocessor"># 创建到 DNSMasq 配置目录的软链接，当前该目录在 /root/dnsmasq-china-list 下。</span></div><div class="line">ln -s /root/dnsmasq-china-list/accelerated-domains<span class="preprocessor">.china</span><span class="preprocessor">.conf</span> /etc/dnsmasq<span class="preprocessor">.d</span>/</div><div class="line">ln -s /root/dnsmasq-china-list/bogus-nxdomain<span class="preprocessor">.china</span><span class="preprocessor">.conf</span> /etc/dnsmasq<span class="preprocessor">.d</span>/</div></pre></td></tr></table></figure>
+<p>要感谢喵菊苣的功劳，我们有两个很方便好用的配置文件来阻止一些国内ISP的DNS污染，以及部分国内站点的加速。</p>
+<p>配置文件地址在<a href="https://github.com/felixonmars/dnsmasq-china-list" target="_blank" rel="external">这里</a></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># 为了方便日后更新，把这个仓库 clone 到本地而不是直接下载。</div><div class="line">git clone http<span class="variable">s:</span>//github.<span class="keyword">com</span>/felixonmars/dnsmasq-china-<span class="keyword">list</span>.git</div><div class="line"><span class="keyword">cd</span> dnsmasq-china-<span class="keyword">list</span></div><div class="line"># 创建到 DNSMasq 配置目录的软链接，当前该目录在 /root/dnsmasq-china-<span class="keyword">list</span> 下。</div><div class="line"><span class="keyword">ln</span> -<span class="keyword">s</span> /root/dnsmasq-china-<span class="keyword">list</span>/accelerated-domains.china.<span class="keyword">conf</span> /etc/dnsmasq.<span class="keyword">d</span>/</div><div class="line"><span class="keyword">ln</span> -<span class="keyword">s</span> /root/dnsmasq-china-<span class="keyword">list</span>/bogus-nxdomain.china.<span class="keyword">conf</span> /etc/dnsmasq.<span class="keyword">d</span>/</div></pre></td></tr></table></figure>
 
-<h3 id="一份你懂的 hosts 和拿来主义">一份你懂的 hosts 和拿来主义</h3>
+<h3 id="一份你懂的hosts和拿来主义">一份你懂的hosts和拿来主义</h3>
 <p>hosts 神马的最喜欢了。自从有了它，妈妈再也不用担心我上不了 Google+ ~~</p>
-<p>于是这玩意到处都有，找一份你觉得靠谱的，然后保存在一个方便找的目录下。~~ 注意：不要放在 <code>/etc/dnsmasq.d</code> 下，这里文件位置在 <code>/etc/dns/hosts</code></p>
-<p>实在受不了渣渣 Android 的坑爹于是换了 iPhone 之后，Apple 软件的下载速度其实不比 Android 浪费我的时间少多少。一直以来我自己写 Apple 服务加速配置，通过各种查询 Apple 在 Chinacache 的 CDN IP，然后写个简单的脚本保证 2000 个地址能平均分配到各种线路的 IP。不过后来发现这种办法开始行不通了… 于是直接拿别人的来用好了。新建文件： <code>/etc/dnsmasq.d/apple.conf</code> 内容只有一行：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">server=/<span class="preprocessor">.apple</span><span class="preprocessor">.com</span>/<span class="number">199.91</span><span class="number">.73</span><span class="number">.222</span></div></pre></td></tr></table></figure>
+<p>于是这玩意到处都有，找一份你觉得靠谱的，然后保存在一个方便找的目录下。~~注意：不要放在 <code>/etc/dnsmasq.d</code> 下，这里文件位置在 <code>/etc/dns/hosts</code></p>
+<p>实在受不了渣渣 Android 的坑爹于是换了 iPhone 之后，Apple 软件的下载速度其实不比 Android 浪费我的时间少多少。一直以来我自己写 Apple 服务加速配置，通过各种查询 Apple 在 Chinacache 的CDN IP，然后写个简单的脚本保证2000个地址能平均分配到各种线路的IP。不过后来发现这种办法开始行不通了… 于是直接拿别人的来用好了。新建文件： <code>/etc/dnsmasq.d/apple.conf</code> 内容只有一行：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">server</span>=<span class="string">/.apple.com/199.91.73.222</span></div></pre></td></tr></table></figure>
 
 <p>在这里要感谢 V2EX 的 DNS 啦～</p>
 <h3 id="调教_DNSMasq">调教 DNSMasq</h3>
 <p>一切准备就绪，现在来看 DNSMasq 的配置文件—— <code>/etc/dnsmasq.conf</code></p>
 <p>这里只写修改了的配置，其他的保持默认即可。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 不读取 /etc/resolv.conf ，取消注释即可</span></div><div class="line"><span class="keyword">no</span>-resolv</div><div class="line"><span class="keyword">no</span>-poll</div><div class="line"><span class="comment"># 添加上游服务器为 DNSCrypt，如果还有其他的 server= 记得取消注释。</span></div><div class="line">server=<span class="number">127.0</span>.<span class="number">0</span>.<span class="number">1</span><span class="comment">#5301</span></div><div class="line"><span class="comment"># 在所有网卡上关闭 DHCP，用不着这个功能。如果有多个网卡那么一行一个。</span></div><div class="line"><span class="keyword">no</span>-dhcp-interface=eth<span class="number">0</span></div><div class="line"><span class="comment"># 添加自定义 hosts 文件</span></div><div class="line">addn-hosts=<span class="regexp">/etc/dns</span><span class="regexp">/hosts</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 不读取 /etc/resolv.conf ，取消注释即可</span></div><div class="line">no-resolv</div><div class="line">no-poll</div><div class="line"><span class="comment"># 添加上游服务器为 DNSCrypt，如果还有其他的 server= 记得取消注释。</span></div><div class="line"><span class="variable">server=</span><span class="number">127.0</span>.<span class="number">0.1</span><span class="comment">#5301</span></div><div class="line"><span class="comment"># 在所有网卡上关闭 DHCP，用不着这个功能。如果有多个网卡那么一行一个。</span></div><div class="line"><span class="variable">no-dhcp-interface=</span>eth0</div><div class="line"><span class="comment"># 添加自定义 hosts 文件</span></div><div class="line"><span class="variable">addn-hosts=</span>/etc/dns/hosts</div></pre></td></tr></table></figure>
 
-<p>一共就是这些。保存配置文件并重启 dnsmasq，这样就有了一台可以给所有设备使用的、具备防污染 / 服务加速以及自定义地址等功能的 DNS 服务器啦～</p>
+<p>一共就是这些。保存配置文件并重启 dnsmasq，这样就有了一台可以给所有设备使用的、具备防污染/服务加速以及自定义地址等功能的 DNS 服务器啦～</p>
 
       
     </div>
@@ -348,27 +350,27 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-02-11T20:08:56.000Z"><a href="/2014/02/12/a-simple-wordpress-backup-script/">2014-02-12</a></time>
+        <time datetime="2014-02-11T12:08:56.000Z"><a href="/2014/02/11/a-simple-wordpress-backup-script/">2014-02-11</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/02/12/a-simple-wordpress-backup-script/">一个简单的 WordPress 备份脚本</a></h1>
+    <h1 class="title"><a href="/2014/02/11/a-simple-wordpress-backup-script/">一个简单的 WordPress 备份脚本</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p> 居然会有人问我要这个东西… 我最不会写脚本了好吧呀！</p>
-<p><del> 真心觉得这货 Google 一下粗来一大坨 </del></p>
-<p> 嘛不多说了.. 既然写了就发粗来让大家吐槽一下好了… 不光是 WordPress.. 只要是静态文件 +MySQL 的站都可以用。</p>
+        <p>居然会有人问我要这个东西… 我最不会写脚本了好吧呀！</p>
+<p><del>真心觉得这货 Google 一下粗来一大坨</del></p>
+<p>嘛不多说了.. 既然写了就发粗来让大家吐槽一下好了… 不光是 WordPress.. 只要是静态文件+MySQL的站都可以用。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="shebang">#!/bin/bash</span></div><div class="line"><span class="comment"># settings</span></div><div class="line">mysqldbuser=<span class="string">"wordpress"</span></div><div class="line">mysqldbpass=<span class="string">"YourMySQLPassword"</span></div><div class="line">mysqldb=<span class="string">"wordpress"</span></div><div class="line">webroot=<span class="string">"/var/www/wordpress"</span></div><div class="line">backuproot=<span class="string">"/root/backup/backups"</span></div><div class="line">temproot=<span class="string">"/root/backup/temp/`date +%y-%m-%d`"</span></div><div class="line">temp=<span class="string">"/root/backup/temp"</span></div><div class="line">logfile=<span class="string">"/root/backup/backup.log"</span></div><div class="line"></div><div class="line">mkdir -p <span class="variable">$backuproot</span> <span class="variable">$temproot</span>/files</div><div class="line"></div><div class="line"><span class="comment"># backup start</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Backup start"</span> &gt;&gt; <span class="variable">$logfile</span></div><div class="line"><span class="built_in">echo</span> $(date +<span class="string">"%y-%m-%d %H:%M:%S"</span>) &gt;&gt; <span class="variable">$logfile</span> </div><div class="line"><span class="built_in">echo</span> <span class="string">"------------"</span> &gt;&gt; <span class="variable">$logfile</span></div><div class="line"></div><div class="line"><span class="comment"># database backup</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Dumping MySQL database..."</span> &gt;&gt; <span class="variable">$logfile</span></div><div class="line">mysqldump --user=<span class="variable">$mysqldbuser</span> --password=<span class="variable">$mysqldbpass</span> --databases <span class="variable">$mysqldb</span> &gt; <span class="variable">$temproot</span>/db.$(date +<span class="string">"%y-%m-%d"</span>).sql</div><div class="line"><span class="built_in">echo</span> <span class="string">"Done exporting database."</span> &gt;&gt; <span class="variable">$logfile</span></div><div class="line"></div><div class="line"><span class="comment"># copy wordpress files</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Copying website files..."</span> &gt;&gt; <span class="variable">$logfile</span></div><div class="line">cp -r <span class="variable">$webroot</span> <span class="variable">$temproot</span>/files/</div><div class="line"><span class="built_in">echo</span> <span class="string">"Done copying website files."</span> &gt;&gt; <span class="variable">$logfile</span></div><div class="line"></div><div class="line"><span class="comment"># Compress backup files</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Compressing backup files..."</span> &gt;&gt; <span class="variable">$logfile</span></div><div class="line"><span class="built_in">cd</span> <span class="variable">$temp</span></div><div class="line">tar zcf <span class="variable">$backuproot</span>/backup-$(date +<span class="string">"%y-%m-%d"</span>).tar.gz $(date +<span class="string">"%y-%m-%d"</span>) &gt;&gt; <span class="variable">$logfile</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Backup complete."</span> &gt;&gt; <span class="variable">$logfile</span></div><div class="line"></div><div class="line"><span class="comment"># Cleanup</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Cleaning up..."</span> &gt;&gt; <span class="variable">$logfile</span></div><div class="line">rm -rf <span class="variable">$temp</span>/* &gt;&gt; <span class="variable">$logfile</span></div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"------------"</span> &gt;&gt; <span class="variable">$logfile</span></div><div class="line"><span class="built_in">echo</span> &gt;&gt; <span class="variable">$logfile</span></div></pre></td></tr></table></figure>
 
-<p> 真心的没有用到任何… 高级的东西。</p>
-<p> 保存为文件 <code>/root/backup.sh</code> 然后修改下前面几个变量，以 root 用户新建 cronjob</p>
-<p><code>crontab -e</code> 然后敲 </p>
+<p>真心的没有用到任何… 高级的东西。</p>
+<p>保存为文件 <code>/root/backup.sh</code> 然后修改下前面几个变量，以 root 用户新建 cronjob</p>
+<p><code>crontab -e</code> 然后敲</p>
 <p><code>00    01    *    *    1    /root/backup.sh</code></p>
-<p> 保存。这样每周一的凌晨 1 点 (当然是你的服务器时间..) 就会自动备份到 <code>/root/backup/backups</code> 下。懒得写自动删除… 于是手动删好了。</p>
-<p><del> 我要是被猫菊苣笑话了某人你可死定了 </del></p>
+<p>保存。这样每周一的凌晨1点(当然是你的服务器时间..) 就会自动备份到 <code>/root/backup/backups</code> 下。懒得写自动删除… 于是手动删好了。</p>
+<p><del>我要是被猫菊苣笑话了某人你可死定了</del></p>
 
       
     </div>
@@ -402,7 +404,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-02-01T00:37:34.000Z"><a href="/2014/02/01/simple-steps-with-ubuntu-server/">2014-02-01</a></time>
+        <time datetime="2014-01-31T16:37:34.000Z"><a href="/2014/02/01/simple-steps-with-ubuntu-server/">2014-02-01</a></time>
       
       
   
@@ -421,17 +423,17 @@
 
 <p>这个过程中会需要你填写一些基本信息，照样例填写即可。完成后会在 <code>~/.ssh</code> 目录下生成 <code>id_rsa</code> 文件和 <code>id_rsa.pub</code> 文件(生成文件时用默认文件路径和文件名的话)。前者是私钥，也就是无论如何都不能让第二个人知道的东西；后者是公钥，一般来讲，只要你不让 Jeff Dean 看到，你可以把它满大街扔。</p>
 <p>得到服务器 root 或带有管理员权限(sudo) 帐号的密码后，使用 <code>ssh-copy-id</code> 来传输公钥。</p>
-<p>根据 ssh-copy-id 的 <a href="http://linux.die.net/man/1/ssh-copy-id" target="_blank" rel="external"> 手册</a>，命令格式如下。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor"># 发送公钥到服务器，这里服务器 IP 为 192.168.1.102</span></div><div class="line"><span class="preprocessor"># 格式： ssh-copy-id [-i [identity_file]] [user@]machine </span></div><div class="line">ssh-copy-id -i ~/<span class="preprocessor">.ssh</span>/id_rsa<span class="preprocessor">.pub</span> root<span class="localvars">@192</span><span class="number">.168</span><span class="number">.1</span><span class="number">.102</span></div></pre></td></tr></table></figure>
+<p>根据 ssh-copy-id 的<a href="http://linux.die.net/man/1/ssh-copy-id" target="_blank" rel="external">手册</a>，命令格式如下。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 发送公钥到服务器，这里服务器IP为 192.168.1.102</span></div><div class="line"><span class="comment"># 格式： ssh-copy-id [-i [identity_file]] [user@]machine </span></div><div class="line">ssh-copy-id -i ~<span class="regexp">/.ssh/id</span>_rsa.pub root<span class="variable">@192</span>.<span class="number">168.1</span>.<span class="number">102</span></div></pre></td></tr></table></figure>
 
-<p>如果是第一次连接该服务器(大部分情况是这样)，ssh 会询问是否接受服务器指纹。一般来说如果服务器指纹改变则有可能你遇到了中间人攻击(比如你连接的服务器不是你的而是一个蜜罐等，使用 IP 而不是域名可以一定程度上避免该问题，但是如果有路由级劫持的话，那就不好说了。但是一般来讲，在私人网络里遇到路由级劫持的情况也只有天朝的 ISP 才干的出来。)，此时应停止继续连接，检查网络后再尝试。不过还有另一种情况：重装系统后指纹也会变掉。</p>
-<p>确定没问题后敲 <code>yes</code> 来继续连接，接下来会询问帐号的密码。输入正确密码即可将公钥保存到服务器的正确位置。抑或你可以用更笨一点的方法，首先尝试 ssh 连接服务器并用密码登录，然后手动执行命令：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 保存公钥</span></div><div class="line">mkdir -p ~/.ssh</div><div class="line"><span class="built_in">echo</span> <span class="string">'your_public_key_here'</span> &gt; ~/.ssh/authorized_keys</div><div class="line">chmod <span class="number">0700</span> ~/.ssh && chmod <span class="number">0600</span> ~/.ssh/authorized_keys</div></pre></td></tr></table></figure>
+<p>如果是第一次连接该服务器(大部分情况是这样)，ssh 会询问是否接受服务器指纹。一般来说如果服务器指纹改变则有可能你遇到了中间人攻击(比如你连接的服务器不是你的而是一个蜜罐等，使用IP而不是域名可以一定程度上避免该问题，但是如果有路由级劫持的话，那就不好说了。但是一般来讲，在私人网络里遇到路由级劫持的情况也只有天朝的ISP才干的出来。)，此时应停止继续连接，检查网络后再尝试。不过还有另一种情况：重装系统后指纹也会变掉。</p>
+<p>确定没问题后敲 <code>yes</code> 来继续连接，接下来会询问帐号的密码。输入正确密码即可将公钥保存到服务器的正确位置。抑或你可以用更笨一点的方法，首先尝试ssh连接服务器并用密码登录，然后手动执行命令：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt"># 保存公钥</span></span></div><div class="line">mkdir -p ~/.ssh</div><div class="line">echo 'your_public_key_here' &gt; ~<span class="regexp">/.ssh/authorized</span>_keys</div><div class="line">chmod <span class="number">0700</span> ~<span class="regexp">/.ssh && chmod 0600 ~/</span>.ssh/authorized_keys</div></pre></td></tr></table></figure>
 
 <p><code>authorized_keys</code> 文件权限不正确的话是不会生效的哦。公钥保存到服务器上之后可以新开一个 ssh session 尝试连接服务器，如果密钥没有密码保护的话，应该直接就进去了。确保配置正确，再退出服务器， <strong>尤其是禁用密码登录后应在结束最后一个 session 前检查是否可以正确登录服务器</strong> ，不然退出来之后很可能别想再连上去了…</p>
-<p>在进行接下来的任何操作之前，都要保证这些操作不能被中断。在天朝这种奇葩的网络中，ssh 不被中断除非你是用内网，而且就算你内网也说不定，因为没准哪个装了数字公司家产品的内网机器就会给你来个 ARP 攻击啊什么的把你的 ssh 断掉。<del>甚至把你整个网络搞瘫痪</del></p>
+<p>在进行接下来的任何操作之前，都要保证这些操作不能被中断。在天朝这种奇葩的网络中，ssh 不被中断除非你是用内网，而且就算你内网也说不定，因为没准哪个装了数字公司家产品的内网机器就会给你来个ARP攻击啊什么的把你的ssh断掉。<del>甚至把你整个网络搞瘫痪</del></p>
 <p>于是—— <a href="http://tmux.sourceforge.net/" target="_blank" rel="external">Tmux</a> 登场！</p>
-<p>可以首先看一下 Tmux 的 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=tmux&amp;sektion=1" target="_blank" rel="external"> 手册</a> 或者简单使用的话掌握如下几个操作：</p>
+<p>可以首先看一下 Tmux 的<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=tmux&amp;sektion=1" target="_blank" rel="external">手册</a> 或者简单使用的话掌握如下几个操作：</p>
 <ul>
 <li><code>tmux</code> # 启动新的 Tmux session</li>
 <li><code>tmux attach</code> # 连接到已存在的 Tmux session</li>
@@ -440,7 +442,7 @@
 <ul>
 <li><code>^B+D</code> # 断开当前 session，session 中的程序将会继续运行</li>
 <li><code>^B+C</code> # 创建新的 console，在一个 console 正在执行任务时可以创建一个新的来执行其他任务。</li>
-<li><code>^B+[Number]</code> # 切换到对应的 console，比如 <code>^B+1</code> 切换到 ID 为 1 的 console</li>
+<li><code>^B+[Number]</code> # 切换到对应的 console，比如 <code>^B+1</code> 切换到ID为1的 console</li>
 </ul>
 <p>有了 tmux 之后，即使 ssh 断掉，也可以重新连接并使用 <code>tmux attach</code> 来恢复工作(也有很多其他类似的替代，比如 screen/byobu 等)。于是现在新建一个 tmux session 并开始后续配置步骤。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor"># 新建 tmux session</span></div><div class="line">tmux</div><div class="line"><span class="preprocessor"># 安装 sshguard 防止 ssh 暴力破解</span></div><div class="line">apt-<span class="keyword">get</span> install sshguard</div></pre></td></tr></table></figure>
@@ -448,9 +450,9 @@
 <p>类似 sshguard 的还有 fail2ban 等。</p>
 <p>如果使用的是 VPS 的话，最重要的——不要忘记更改密码。命令：<code>passwd</code></p>
 <h3 id="Step_2-_LNMP">Step 2. LNMP</h3>
-<p>很多童鞋买了 VPS 什么的就为了跑一个 WordPress，然后听信传言说什么 LAMP 啊之类的… 我的亲身体会是，在你有足够大的内存之前，Apache 这个东西真的不要碰… 就算我开一台 4GB 内存的 VPS 一样会因为各种原因(包括内存不足) Apache 莫名挂掉。</p>
+<p>很多童鞋买了 VPS 什么的就为了跑一个 WordPress，然后听信传言说什么 LAMP 啊之类的… 我的亲身体会是，在你有足够大的内存之前，Apache 这个东西真的不要碰… 就算我开一台4GB内存的VPS 一样会因为各种原因(包括内存不足) Apache 莫名挂掉。</p>
 <p>安装 LNMP 命令：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt<span class="attribute">-get</span> install php5<span class="attribute">-cgi</span> php5<span class="attribute">-mysql</span> php5<span class="attribute">-fpm</span> php5<span class="attribute">-curl</span> php5<span class="attribute">-gd</span> php5<span class="attribute">-idn</span> php<span class="attribute">-pear</span> php5<span class="attribute">-imap</span> php5<span class="attribute">-mcrypt</span> php5<span class="attribute">-mhash</span> php5<span class="attribute">-pspell</span> php5<span class="attribute">-recode</span> php5<span class="attribute">-snmp</span> php5<span class="attribute">-sqlite</span> php5<span class="attribute">-tidy</span> php5<span class="attribute">-xmlrpc</span> php5<span class="attribute">-xsl</span> nginx mysql<span class="attribute">-server</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-<span class="built_in">get</span> install php5-cgi php5-mysql php5-fpm php5-curl php5-gd php5-idn php-pear php5-<span class="keyword">imap</span> php5-mcrypt php5-mhash php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl nginx mysql-server</div></pre></td></tr></table></figure>
 
 <p>看起来很长… 其实这一条就基本啥都搞定了的说(</p>
 <p>另外推荐安装 PHP 字节码加速器 XCache，之前折腾 memcached 的时候被猫菊苣吐槽说这货速度不够快于是果断受诱导换了 XCache… 然后确实比 memcached 快多了。</p>
@@ -458,57 +460,57 @@
 
 <h4 id="配置_PHP">配置 PHP</h4>
 <p>文件 <code>/etc/php5/fpm/php.ini</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 修改最大上传大小为 10M，两个位置，一个 upload_max_filesize 一个 post_max_size</span></div><div class="line"><span class="constant">upload_max_filesize</span> = 10M</div><div class="line"><span class="constant">post_max_size</span> = 10M</div><div class="line"><span class="comment"># 修改最大内存使用，默认是 128M，如果你内存较多又是专门跑 PHP 的可以适当加大，具体数值建议做压力测试。</span></div><div class="line"><span class="constant">memory_limit</span> = 128M</div><div class="line"><span class="comment"># 修改最大执行时间，默认 30，同样如果是跑 PHP 的服务器可以适当加大。</span></div><div class="line"><span class="constant">max_execution_time</span> = 30</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 修改最大上传大小为 10M，两个位置，一个 upload_max_filesize 一个 post_max_size</span></div><div class="line"><span class="variable">upload_max_filesize =</span> <span class="number">10</span>M</div><div class="line"><span class="variable">post_max_size =</span> <span class="number">10</span>M</div><div class="line"><span class="comment"># 修改最大内存使用，默认是128M，如果你内存较多又是专门跑PHP的可以适当加大，具体数值建议做压力测试。</span></div><div class="line"><span class="variable">memory_limit =</span> <span class="number">128</span>M</div><div class="line"><span class="comment"># 修改最大执行时间，默认30，同样如果是跑PHP的服务器可以适当加大。</span></div><div class="line"><span class="variable">max_execution_time =</span> <span class="number">30</span></div></pre></td></tr></table></figure>
 
 <p>文件 <code>/etc/php5/fpm/pool.d/www.conf</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor"># 修改侦听路径为 UNIX socket</span></div><div class="line">listen = /<span class="keyword">var</span>/run/php5-fpm.sock</div><div class="line"><span class="preprocessor"># 修改 process manager 最大请求数量限制以防服务器挂掉，默认该语句被注释掉(应该是不限制？) 一般 VPS 直接取消注释即可。</span></div><div class="line">pm.max_requests = <span class="number">500</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor"># 修改侦听路径为 UNIX socket</span></div><div class="line">listen = /<span class="keyword">var</span>/run/php5-fpm.sock</div><div class="line"><span class="preprocessor"># 修改 process manager 最大请求数量限制以防服务器挂掉，默认该语句被注释掉(应该是不限制？) 一般VPS直接取消注释即可。</span></div><div class="line">pm.max_requests = <span class="number">500</span></div></pre></td></tr></table></figure>
 
 <h4 id="配置_NGINX">配置 NGINX</h4>
 <p>文件 <code>/etc/nginx/nginx.conf</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 修改 NGINX 进程数量，根据 CPU 核心数而定</span></div><div class="line">worker_processes <span class="number">4</span>;</div><div class="line"><span class="comment"># events 部分，修改 NGINX 进程连接数，同时打开多线程(默认被注释，取消注释即可)</span></div><div class="line">worker_connections <span class="number">1024</span>;</div><div class="line">multi_accept <span class="function_start"><span class="keyword">on</span></span>;</div><div class="line"><span class="comment"># http 部分，关闭服务器版本号(默认被注释，取消注释即可)</span></div><div class="line">server_tokens off;</div><div class="line"><span class="comment"># 打开 GZIP 减少数据量，会稍微增加 CPU 负担。这些语句直接取消注释即可。</span></div><div class="line">gzip <span class="function_start"><span class="keyword">on</span></span>;</div><div class="line">gzip_disable <span class="string">"msie6"</span>;</div><div class="line">gzip_vary <span class="function_start"><span class="keyword">on</span></span>;</div><div class="line">gzip_proxied any;</div><div class="line">gzip_comp_level <span class="number">6</span>;</div><div class="line">gzip_buffers <span class="number">16</span> <span class="number">8</span>k;</div><div class="line">gzip_http_version <span class="number">1.1</span>;</div><div class="line">gzip_types <span class="type">text</span>/plain <span class="type">text</span>/css <span class="type">application</span>/json <span class="type">application</span>/x-javascript <span class="type">text</span>/xml <span class="type">application</span>/xml <span class="type">application</span>/xml+rss <span class="type">text</span>/javascript;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 修改 NGINX 进程数量，根据CPU核心数而定</span></div><div class="line"><span class="title">worker_processes</span> <span class="number">4</span>;</div><div class="line"><span class="comment"># events 部分，修改 NGINX 进程连接数，同时打开多线程(默认被注释，取消注释即可)</span></div><div class="line"><span class="title">worker_connections</span> <span class="number">1024</span>;</div><div class="line"><span class="title">multi_accept</span> <span class="built_in">on</span>;</div><div class="line"><span class="comment"># http 部分，关闭服务器版本号(默认被注释，取消注释即可)</span></div><div class="line"><span class="title">server_tokens</span> <span class="built_in">off</span>;</div><div class="line"><span class="comment"># 打开 GZIP 减少数据量，会稍微增加CPU负担。这些语句直接取消注释即可。</span></div><div class="line"><span class="title">gzip</span> <span class="built_in">on</span>;</div><div class="line"><span class="title">gzip_disable</span> <span class="string">"msie6"</span>;</div><div class="line"><span class="title">gzip_vary</span> <span class="built_in">on</span>;</div><div class="line"><span class="title">gzip_proxied</span> any;</div><div class="line"><span class="title">gzip_comp_level</span> <span class="number">6</span>;</div><div class="line"><span class="title">gzip_buffers</span> <span class="number">16</span> <span class="number">8k</span>;</div><div class="line"><span class="title">gzip_http_version</span> <span class="number">1</span>.<span class="number">1</span>;</div><div class="line"><span class="title">gzip_types</span> text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;</div></pre></td></tr></table></figure>
 
 <h4 id="安装_Postfix">安装 Postfix</h4>
-<p>如果你需要让该服务器上任何程序发邮件的话，除非使用外部 SMTP 服务器，否则需要一个程序来提供 Sendmail</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-<span class="keyword">get</span> install postfix</div></pre></td></tr></table></figure>
+<p>如果你需要让该服务器上任何程序发邮件的话，除非使用外部SMTP服务器，否则需要一个程序来提供 Sendmail</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-<span class="keyword">get</span> install <span class="keyword">postfix</span></div></pre></td></tr></table></figure>
 
 <p>安装过程中会询问 Postfix 的工作环境，这里选择「Internet site」，然后填写自己的域名地址。</p>
 <h3 id="Step_3-_安装_WordPress">Step 3. 安装 WordPress</h3>
-<p><strong>这里用 WordPress 作为一个样例，其他基于 PHP+MySQL 的网站程序同理。</strong></p>
+<p><strong>这里用 WordPress 作为一个样例，其他基于PHP+MySQL的网站程序同理。</strong></p>
 <p>下载最新的简体中文版 WordPress 程序到服务器网站路径(当前版本 3.8.1，网站目录为 /var/www，也可以使用其他较为安全的目录)，并为站点文件设置正确的权限。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="title">cd</span> /var/www</div><div class="line"><span class="title">wget</span> -c http://cn.wordpress.org/wordpress-<span class="number">3.8</span><span class="number">.1</span>-zh_CN.tar.gz</div><div class="line"><span class="title">tar</span> zxfv wordpress-<span class="number">3.8</span><span class="number">.1</span>-zh_CN.tar.gz</div><div class="line"><span class="preprocessor"># 解包后网站目录即是 /var/www/wordpress</span></div><div class="line"><span class="title">rm</span> wordpress-<span class="number">3.8</span><span class="number">.1</span>-zh_CN.tar.gz</div><div class="line"><span class="title">chown</span> -<span class="type">R</span> www-<span class="typedef"><span class="keyword">data</span>:www-<span class="keyword">data</span> .</span></div><div class="line"><span class="title">find</span> . -<span class="typedef"><span class="keyword">type</span> f -exec chmod 644 <span class="container">{}</span> \;</span></div><div class="line"><span class="title">find</span> . -<span class="typedef"><span class="keyword">type</span> d -exec chmod 755 <span class="container">{}</span> \;</span></div></pre></td></tr></table></figure>
 
 <p>新建站点配置文件 <code>/etc/nginx/sites-available/wordpress.conf</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">server {</div><div class="line">	<span class="preprocessor"># 默认侦听所有 IPv4 地址，如果需要同时侦听 IPv4+IPv6 则添加：</span></div><div class="line">	<span class="preprocessor"># listen [::]:80;</span></div><div class="line">        server_name example<span class="preprocessor">.com</span> www<span class="preprocessor">.example</span><span class="preprocessor">.com</span><span class="comment">;</span></div><div class="line">        <span class="preprocessor"># 如果是二级域名则是</span></div><div class="line">        <span class="preprocessor"># server_name suddomain.example.com</span></div><div class="line"></div><div class="line">	access_log   /var/log/nginx/example<span class="preprocessor">.com</span><span class="preprocessor">.access</span><span class="preprocessor">.log</span><span class="comment">;</span></div><div class="line">	error_log    /var/log/nginx/example<span class="preprocessor">.com</span><span class="preprocessor">.error</span><span class="preprocessor">.log</span><span class="comment">;</span></div><div class="line"></div><div class="line">        root /var/www/wordpress<span class="comment">;</span></div><div class="line">        index index<span class="preprocessor">.php</span><span class="comment">;</span></div><div class="line"></div><div class="line">        location / {</div><div class="line">                try_files $uri $uri/ /index<span class="preprocessor">.php</span>?$args<span class="comment">; </span></div><div class="line">        }</div><div class="line"></div><div class="line">        location ~ \<span class="preprocessor">.php</span>$ {</div><div class="line">                try_files $uri =<span class="number">404</span><span class="comment">;</span></div><div class="line">                include fastcgi_params<span class="comment">;</span></div><div class="line">                fastcgi_pass unix:/var/run/php5-fpm<span class="preprocessor">.sock</span><span class="comment">;</span></div><div class="line">        }</div><div class="line">}</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="title">server</span> {</div><div class="line">	<span class="comment"># 默认侦听所有IPv4地址，如果需要同时侦听 IPv4+IPv6 则添加：</span></div><div class="line">	<span class="comment"># listen [::]:80;</span></div><div class="line">        <span class="title">server_name</span> example.com www.example.com;</div><div class="line">        <span class="comment"># 如果是二级域名则是</span></div><div class="line">        <span class="comment"># server_name suddomain.example.com</span></div><div class="line"></div><div class="line">	<span class="title">access_log</span>   /var/log/nginx/example.com.access.log;</div><div class="line">	<span class="title">error_log</span>    /var/log/nginx/example.com.<span class="built_in">error</span>.log;</div><div class="line"></div><div class="line">        <span class="title">root</span> /var/www/wordpress;</div><div class="line">        <span class="title">index</span> index.php;</div><div class="line"></div><div class="line">        <span class="title">location</span> / {</div><div class="line">                <span class="title">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.php?<span class="variable">$args</span>; </div><div class="line">        }</div><div class="line"></div><div class="line">        <span class="title">location</span> <span class="regexp">~ \.php$</span> {</div><div class="line">                <span class="title">try_files</span> <span class="variable">$uri</span> =<span class="number">404</span>;</div><div class="line">                <span class="title">include</span> fastcgi_params;</div><div class="line">                <span class="title">fastcgi_pass</span> <span class="url">unix:/var/run/php5-fpm.sock</span>;</div><div class="line">        }</div><div class="line">}</div></pre></td></tr></table></figure>
 
 <p>保存，把配置文件链接到 NGINX 的网站配置目录</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ln <span class="attribute">-s</span> /etc/nginx/sites<span class="attribute">-available</span>/wordpress<span class="built_in">.</span>conf /etc/nginx/sites<span class="attribute">-enabled</span><span class="subst">/</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ln -s <span class="regexp">/etc/</span>nginx<span class="regexp">/sites-available/</span>wordpress.conf <span class="regexp">/etc/</span>nginx<span class="regexp">/sites-enabled/</span></div></pre></td></tr></table></figure>
 
 <p>重启 NGINX</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service nginx restart</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">service</span> <span class="title">nginx</span> restart</span></div></pre></td></tr></table></figure>
 
 <p><strong>注意</strong> 如果是较新的 NGINX 版本，要同时侦听 IPv4 和 IPv6，需要在默认服务器配置，一般来说是在 <code>/etc/nginx/sites-enabled/default</code> 这个文件中定义的(其实就是 listen 后面带有 default_server 的站点配置文件)，<code>listen</code> 部分改为</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">listen <span class="attr_selector">[::]</span><span class="value">:<span class="number">80</span> default_server ipv6only=off;</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">listen</span> [::]:<span class="number">80</span> default_server ipv6only=<span class="built_in">off</span>;</div></pre></td></tr></table></figure>
 
 <p>其他站点配置的 <code>listen</code> 部分仍为</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">listen</span> <span class="attr_selector">[::]</span><span class="pseudo">:80</span>;</div></pre></td></tr></table></figure>
 
 <p>即可。</p>
 <p>连接数据库，为网站程序新建数据库和用户。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql <span class="attribute">-u</span> root <span class="attribute">-p</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">mysql</span> -u root -p</div></pre></td></tr></table></figure>
 
 <p>这会向你索要 root 密码。在安装过程中， MySQL 的 root 密码应该已经被正确设置。接下来新建用户和数据库。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"># 新建数据库</div><div class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">database</span> <span class="string">`wordpress`</span>;</span></div><div class="line"># 新建用户</div><div class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">`wordpress`</span> identified <span class="keyword">by</span> <span class="string">'YourStrongPassWordHereLoL'</span>;</span></div><div class="line"># 赋予权限</div><div class="line"><span class="operator"><span class="keyword">grant</span> <span class="keyword">all</span> <span class="keyword">privileges</span> <span class="keyword">on</span> wordpress.* <span class="keyword">to</span> wordpress@localhost identified <span class="keyword">by</span> <span class="string">'YourStrongPassWordHereLoL'</span>;</span></div><div class="line"># 刷新权限表</div><div class="line">flush privileges;</div><div class="line"># 退出</div><div class="line">exit</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"># 新建数据库</div><div class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">database</span> <span class="string">`wordpress`</span>;</span></div><div class="line"># 新建用户</div><div class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">`wordpress`</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">'YourStrongPassWordHereLoL'</span>;</span></div><div class="line"># 赋予权限</div><div class="line"><span class="operator"><span class="keyword">grant</span> <span class="keyword">all</span> <span class="keyword">privileges</span> <span class="keyword">on</span> wordpress.* <span class="keyword">to</span> wordpress@localhost <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">'YourStrongPassWordHereLoL'</span>;</span></div><div class="line"># 刷新权限表</div><div class="line"><span class="operator"><span class="keyword">flush</span> <span class="keyword">privileges</span>;</span></div><div class="line"># 退出</div><div class="line">exit</div></pre></td></tr></table></figure>
 
 <p>这样我们就得到了一个数据库名为 <code>wordpress</code>，以及一个拥有权限的用户 <code>wordpress</code> 及其密码 <code>YourStrongPassWordHereLoL</code>。</p>
 <p>此时如果你的域名已经正确配置并解析，访问你的域名将看到 WordPress 的安装向导。使用上面的数据库连接信息即可完成安装。</p>
 <h3 id="Step_4-_配置_Node-js">Step 4. 配置 Node.js</h3>
-<p>Node.js 越来越火爆了。咱也是 Node.js developer (作死自大一回..) 不过对于更多用户来讲，Node.js 的吸引力在于大量方便的 Web 应用。<del>比如末影袜</del></p>
+<p>Node.js 越来越火爆了。咱也是 Node.js developer (作死自大一回..) 不过对于更多用户来讲，Node.js 的吸引力在于大量方便的Web应用。<del>比如末影袜</del></p>
 <p>Ubuntu 12.04 的 Node 版本还是 0.6.x 真是不能忍。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor"># 安装 Git 以及其他必须的组件</span></div><div class="line">apt-<span class="keyword">get</span> install git build-essential zlib1g-dev</div><div class="line"><span class="preprocessor"># 安装 n</span></div><div class="line">git clone https:<span class="comment">//github.com/visionmedia/n.git</span></div><div class="line">cd n && make</div><div class="line"><span class="preprocessor"># 安装最新版 Node.js，当前为 0.10.25</span></div><div class="line">n <span class="number">0.10</span><span class="number">.25</span></div></pre></td></tr></table></figure>
 
 <p>然后 Node.js 环境就部署完毕啦。简单吧？</p>
 <p>安装一个 Node 应用</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm <span class="keyword">install</span> -g shadowsocks</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm <span class="operator"><span class="keyword">install</span> -g shadowsocks</span></div></pre></td></tr></table></figure>
 
 <p>干啥的我就不多说了。嗯。 <code>-g</code> 表示全局安装，会安装到 <code>/usr/lib/node_modules</code> 下作为可执行程序。</p>
 <h3 id="完">完</h3>
@@ -584,9 +586,9 @@
   
     <li><a href="/categories/Network/">Network</a><small>3</small></li>
   
-    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+    <li><a href="/categories/Node-js/">Node.js</a><small>5</small></li>
   
-    <li><a href="/categories/Notes/">Notes</a><small>9</small></li>
+    <li><a href="/categories/Notes/">Notes</a><small>10</small></li>
   
     <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
   
@@ -598,7 +600,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Node-js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/OS-X/" style="font-size: 10.00px;">OS X</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
   </div>
 </div>
 
@@ -609,11 +611,15 @@
   <ul class="entry">
     
       <li>
+        <a href="/2014/11/11/set-language-for-individual-app-in-os-x-the-elegant-way/">用优雅的方式在 OS X 中为单个应用设置语言</a>
+      </li>
+    
+      <li>
         <a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">关于 SSL 和 IPKVM/VNC Applet 的笔记两则</a>
       </li>
     
       <li>
-        <a href="/2014/09/03/2014-natsu/">2014·夏</a>
+        <a href="/2014/09/02/2014-natsu/">2014·夏</a>
       </li>
     
       <li>
@@ -621,11 +627,7 @@
       </li>
     
       <li>
-        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
-      </li>
-    
-      <li>
-        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+        <a href="/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
       </li>
     
   </ul>

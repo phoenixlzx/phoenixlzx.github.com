@@ -68,7 +68,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-03-25T11:11:46.000Z"><a href="/2014/03/25/yet-anothor-better-gif-method/">2014-03-25</a></time>
+        <time datetime="2014-03-25T03:11:46.000Z"><a href="/2014/03/25/yet-anothor-better-gif-method/">2014-03-25</a></time>
       
       
   
@@ -80,18 +80,18 @@
       
         <p>之前使用 <a href="http://blog.phoenixlzx.com/2014/02/19/make-gif-with-ffmpeg/" target="_blank" rel="external">FFmpeg 制作 GIF</a> 被 zyo 吐槽 <a href="https://plus.google.com/107142103119739092775/posts/asBTCqCnP9A" target="_blank" rel="external">明显的网纹</a>，于是找到了更好的办法。</p>
 <p>需要：FFmpeg 以及 ImageMagick。</p>
-<p>依旧不讨论如何截取 / 剪裁视频文件的问题。例如我们这里要转换的视频文件为 <code>clip.mp4</code>，首先使用 ffmpeg 转换成一个个的 PNG 文件，保持纵横比，宽为 320 像素，帧率为 20。为防止文件名混乱，先建立一个 <code>png</code> 目录。</p>
+<p>依旧不讨论如何截取/剪裁视频文件的问题。例如我们这里要转换的视频文件为 <code>clip.mp4</code>，首先使用 ffmpeg 转换成一个个的 PNG 文件，保持纵横比，宽为320像素，帧率为20。为防止文件名混乱，先建立一个 <code>png</code> 目录。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p png</div><div class="line">ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="number">1</span> -r <span class="number">20</span> png/output%<span class="number">05</span>d.png</div></pre></td></tr></table></figure>
 
 <p>接下来使用 ImageMagick 的 <code>convert</code> 工具来把 png 连接成 gif。顺便做优化来缩小文件体积。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">convert -layers Optimize png/output*.png clip.gif</div></pre></td></tr></table></figure>
 
-<p>这样就得到了图象效果更好的 <code>clip.gif</code> 文件了。不过还有一个问题，不管是本地图象查看器还是浏览器里，这 gif 都像幻灯片似的。本来觉得是帧率的问题，但是就算是尝试了原帧率一样不行。<a href="http://superuser.com/questions/569924/why-is-the-gif-i-created-so-slow" target="_blank" rel="external">Google 之发现了问题…</a></p>
-<p>解决方案在 <a href="http://humpy77.deviantart.com/journal/Frame-Delay-Times-for-Animated-GIFs-214150546" target="_blank" rel="external"> 这里</a>。不使用 <code>-delay 0</code> 或者是大于 <code>6/100</code> 的值。</p>
+<p>这样就得到了图象效果更好的 <code>clip.gif</code> 文件了。不过还有一个问题，不管是本地图象查看器还是浏览器里，这gif都像幻灯片似的。本来觉得是帧率的问题，但是就算是尝试了原帧率一样不行。<a href="http://superuser.com/questions/569924/why-is-the-gif-i-created-so-slow" target="_blank" rel="external">Google 之发现了问题…</a></p>
+<p>解决方案在<a href="http://humpy77.deviantart.com/journal/Frame-Delay-Times-for-Animated-GIFs-214150546" target="_blank" rel="external">这里</a>。不使用 <code>-delay 0</code> 或者是大于 <code>6/100</code> 的值。</p>
 <p>所以刚才的命令可以稍微修改下。几次测试后发现对于我的原视频(23fps)，<code>4/100</code> 最合适。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">convert -layers Optimize -delay <span class="number">4</span>/<span class="number">100</span> png/output*.png clip.gif</div></pre></td></tr></table></figure>
 
-<p>这样制作出来的 gif 效果就非常赞啦。虽然比之前多了一个步骤，但是确实是制作了更好的 gif，是更好的方法。</p>
+<p>这样制作出来的 gif 效果就非常赞啦。虽然比之前多了一个步骤，但是确实是制作了更好的gif，是更好的方法。</p>
 
       
     </div>
@@ -172,9 +172,9 @@
   
     <li><a href="/categories/Network/">Network</a><small>3</small></li>
   
-    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+    <li><a href="/categories/Node-js/">Node.js</a><small>5</small></li>
   
-    <li><a href="/categories/Notes/">Notes</a><small>9</small></li>
+    <li><a href="/categories/Notes/">Notes</a><small>10</small></li>
   
     <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
   
@@ -186,7 +186,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Node-js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/OS-X/" style="font-size: 10.00px;">OS X</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
   </div>
 </div>
 
@@ -197,11 +197,15 @@
   <ul class="entry">
     
       <li>
+        <a href="/2014/11/11/set-language-for-individual-app-in-os-x-the-elegant-way/">用优雅的方式在 OS X 中为单个应用设置语言</a>
+      </li>
+    
+      <li>
         <a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">关于 SSL 和 IPKVM/VNC Applet 的笔记两则</a>
       </li>
     
       <li>
-        <a href="/2014/09/03/2014-natsu/">2014·夏</a>
+        <a href="/2014/09/02/2014-natsu/">2014·夏</a>
       </li>
     
       <li>
@@ -209,11 +213,7 @@
       </li>
     
       <li>
-        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
-      </li>
-    
-      <li>
-        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+        <a href="/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
       </li>
     
   </ul>

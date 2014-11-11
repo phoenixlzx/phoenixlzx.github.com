@@ -73,7 +73,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-03-25T11:11:46.000Z"><a href="/2014/03/25/yet-anothor-better-gif-method/">2014-03-25</a></time>
+        <time datetime="2014-03-25T03:11:46.000Z"><a href="/2014/03/25/yet-anothor-better-gif-method/">2014-03-25</a></time>
       
       
   
@@ -85,18 +85,18 @@
       
         <p>之前使用 <a href="http://blog.phoenixlzx.com/2014/02/19/make-gif-with-ffmpeg/" target="_blank" rel="external">FFmpeg 制作 GIF</a> 被 zyo 吐槽 <a href="https://plus.google.com/107142103119739092775/posts/asBTCqCnP9A" target="_blank" rel="external">明显的网纹</a>，于是找到了更好的办法。</p>
 <p>需要：FFmpeg 以及 ImageMagick。</p>
-<p>依旧不讨论如何截取 / 剪裁视频文件的问题。例如我们这里要转换的视频文件为 <code>clip.mp4</code>，首先使用 ffmpeg 转换成一个个的 PNG 文件，保持纵横比，宽为 320 像素，帧率为 20。为防止文件名混乱，先建立一个 <code>png</code> 目录。</p>
+<p>依旧不讨论如何截取/剪裁视频文件的问题。例如我们这里要转换的视频文件为 <code>clip.mp4</code>，首先使用 ffmpeg 转换成一个个的 PNG 文件，保持纵横比，宽为320像素，帧率为20。为防止文件名混乱，先建立一个 <code>png</code> 目录。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p png</div><div class="line">ffmpeg -i clip.mp4 -vf scale=<span class="number">320</span>:-<span class="number">1</span> -r <span class="number">20</span> png/output%<span class="number">05</span>d.png</div></pre></td></tr></table></figure>
 
 <p>接下来使用 ImageMagick 的 <code>convert</code> 工具来把 png 连接成 gif。顺便做优化来缩小文件体积。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">convert -layers Optimize png/output*.png clip.gif</div></pre></td></tr></table></figure>
 
-<p>这样就得到了图象效果更好的 <code>clip.gif</code> 文件了。不过还有一个问题，不管是本地图象查看器还是浏览器里，这 gif 都像幻灯片似的。本来觉得是帧率的问题，但是就算是尝试了原帧率一样不行。<a href="http://superuser.com/questions/569924/why-is-the-gif-i-created-so-slow" target="_blank" rel="external">Google 之发现了问题…</a></p>
-<p>解决方案在 <a href="http://humpy77.deviantart.com/journal/Frame-Delay-Times-for-Animated-GIFs-214150546" target="_blank" rel="external"> 这里</a>。不使用 <code>-delay 0</code> 或者是大于 <code>6/100</code> 的值。</p>
+<p>这样就得到了图象效果更好的 <code>clip.gif</code> 文件了。不过还有一个问题，不管是本地图象查看器还是浏览器里，这gif都像幻灯片似的。本来觉得是帧率的问题，但是就算是尝试了原帧率一样不行。<a href="http://superuser.com/questions/569924/why-is-the-gif-i-created-so-slow" target="_blank" rel="external">Google 之发现了问题…</a></p>
+<p>解决方案在<a href="http://humpy77.deviantart.com/journal/Frame-Delay-Times-for-Animated-GIFs-214150546" target="_blank" rel="external">这里</a>。不使用 <code>-delay 0</code> 或者是大于 <code>6/100</code> 的值。</p>
 <p>所以刚才的命令可以稍微修改下。几次测试后发现对于我的原视频(23fps)，<code>4/100</code> 最合适。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">convert -layers Optimize -delay <span class="number">4</span>/<span class="number">100</span> png/output*.png clip.gif</div></pre></td></tr></table></figure>
 
-<p>这样制作出来的 gif 效果就非常赞啦。虽然比之前多了一个步骤，但是确实是制作了更好的 gif，是更好的方法。</p>
+<p>这样制作出来的 gif 效果就非常赞啦。虽然比之前多了一个步骤，但是确实是制作了更好的gif，是更好的方法。</p>
 
       
     </div>
@@ -130,7 +130,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-03-22T13:05:43.000Z"><a href="/2014/03/22/chinese-word-split-search-with-mongodb/">2014-03-22</a></time>
+        <time datetime="2014-03-22T05:05:43.000Z"><a href="/2014/03/22/chinese-word-split-search-with-mongodb/">2014-03-22</a></time>
       
       
   
@@ -140,11 +140,11 @@
     </header>
     <div class="entry">
       
-        <p>为工作室开发的 <a href="http://idoc.nuister.org" target="_blank" rel="external">iDocument</a> 文档分享平台，因为后端数据库是 MongoDB 所以没有做站内搜索，只是放了个百度站内搜索的工具。不过后来发现 BAKA 百度根本不收录站内链接，所以主席强烈要求做站内搜索<em>(:з」∠)</em></p>
+        <p>为工作室开发的 <a href="http://idoc.nuister.org" target="_blank" rel="external">iDocument</a> 文档分享平台，因为后端数据库是 MongoDB 所以没有做站内搜索，只是放了个百度站内搜索的工具。不过后来发现BAKA百度根本不收录站内链接，所以主席强烈要求做站内搜索<em>(:з」∠)</em></p>
 <p>MongoDB 的分词搜索不支持中文，而精确匹配的话基本上就没啥意义了。所以考虑一下几种方法。</p>
 <ul>
-<li>同义词匹配，高端的玩不转，初步想法是为每个文档对象添加一个 <code>tag</code> 来做搜索关键字，例如「高等数学」的文档可以有「高数」这个 tag，搜索「高等数学」和「高数」都能得到这个文档。</li>
-<li>分字匹配，可能会有少许误差，但是对于程序开发和网站运营人员来说都能减轻负担，因为不需要手动维护 tag 了。</li>
+<li>同义词匹配，高端的玩不转，初步想法是为每个文档对象添加一个 <code>tag</code> 来做搜索关键字，例如「高等数学」的文档可以有「高数」这个tag，搜索「高等数学」和「高数」都能得到这个文档。</li>
+<li>分字匹配，可能会有少许误差，但是对于程序开发和网站运营人员来说都能减轻负担，因为不需要手动维护tag了。</li>
 </ul>
 <p>考虑到数据库中已经有之前的一些数据 (以及主席表示上传文档实在太累了所以强烈要求我保留原数据) 所以这里选择了分字搜索方式。</p>
 <p>按照喵菊给的方法，基本的步骤如下</p>
@@ -155,21 +155,21 @@
 <li>搜索时把 <code>split(querytext)</code> 交给数据库来 <code>find()</code></li>
 </ol>
 <p>由于 Javascript 自带一个超级好用的 <code>String.prototype.split()</code> 方法，所以分字就是 <code>title.split(&#39;&#39;)</code>。</p>
-<p>以及，喵菊说如果用数组的话就不能用 <code>/variable/i</code> 这样的正则来忽略大小写了。所以存进去新 index 的时候要全部转换成小写，搜索的时候也要转换成小写来实现 Case-insensitive search.</p>
+<p>以及，喵菊说如果用数组的话就不能用 <code>/variable/i</code> 这样的正则来忽略大小写了。所以存进去新index的时候要全部转换成小写，搜索的时候也要转换成小写来实现 Case-insensitive search.</p>
 <p>修改路由函数，添加一个新的属性 <code>searchIndex</code>：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> newdoc = {</div><div class="line">    title: req.body.title,</div><div class="line">    updateTime: <span class="built_in">Math</span>.round((<span class="keyword">new</span> <span class="built_in">Date</span>()).getTime() / <span class="number">1000</span>),</div><div class="line">    fileType: req.body.fileType,</div><div class="line">    belongs: req.body.belongs,</div><div class="line">    course: req.body.courseId,</div><div class="line">    type: req.body.type,</div><div class="line">    link: req.body.link,</div><div class="line">    downloads: <span class="number">0</span>,</div><div class="line">    searchIndex: req.body.title.toLowerCase().split(<span class="string">''</span>).clean(<span class="string">" "</span>) <span class="comment">// Remove space element after split to single text.</span></div><div class="line">};</div><div class="line"></div><div class="line"><span class="built_in">Array</span>.prototype.clean = <span class="function"><span class="keyword">function</span> <span class="params">(deleteValue)</span> {</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.length; i++) {</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>[i] == deleteValue) {</div><div class="line">            <span class="keyword">this</span>.splice(i, <span class="number">1</span>);</div><div class="line">            i--;</div><div class="line">        }</div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">};</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> newdoc = {</div><div class="line">    title: req.body.title,</div><div class="line">    updateTime: <span class="built_in">Math</span>.round((<span class="keyword">new</span> <span class="built_in">Date</span>()).getTime() / <span class="number">1000</span>),</div><div class="line">    fileType: req.body.fileType,</div><div class="line">    belongs: req.body.belongs,</div><div class="line">    course: req.body.courseId,</div><div class="line">    type: req.body.type,</div><div class="line">    link: req.body.link,</div><div class="line">    downloads: <span class="number">0</span>,</div><div class="line">    searchIndex: req.body.title.toLowerCase().split(<span class="string">''</span>).clean(<span class="string">" "</span>) <span class="comment">// Remove space element after split to single text.</span></div><div class="line">};</div><div class="line"></div><div class="line"><span class="built_in">Array</span>.prototype.clean = <span class="function"><span class="keyword">function</span> <span class="params">(deleteValue)</span> </span>{</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.length; i++) {</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>[i] == deleteValue) {</div><div class="line">            <span class="keyword">this</span>.splice(i, <span class="number">1</span>);</div><div class="line">            i--;</div><div class="line">        }</div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">};</div></pre></td></tr></table></figure>
 
 <p>修改文档模型函数，添加时将 <code>searchIndex</code> 编入索引：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">exports.addnew = <span class="function"><span class="keyword">function</span><span class="params">(newdoc, callback)</span> {</span></div><div class="line">    collection.insert(newdoc, {safe: <span class="literal">true</span>}, <span class="function"><span class="keyword">function</span><span class="params">(err)</span> {</span></div><div class="line">        <span class="keyword">if</span> (err) {</div><div class="line">            <span class="keyword">return</span> callback(err);</div><div class="line">        }</div><div class="line">        collection.ensureIndex({</div><div class="line">            searchIndex: <span class="number">1</span></div><div class="line">        }, <span class="function"><span class="keyword">function</span><span class="params">(err)</span> {</span></div><div class="line">            <span class="keyword">if</span> (err) {</div><div class="line">                <span class="keyword">return</span> callback(err);</div><div class="line">            }</div><div class="line">            callback(<span class="literal">null</span>);</div><div class="line">        });</div><div class="line">    });</div><div class="line">}</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">exports.addnew = <span class="function"><span class="keyword">function</span><span class="params">(newdoc, callback)</span> </span>{</div><div class="line">    collection.insert(newdoc, {safe: <span class="literal">true</span>}, <span class="function"><span class="keyword">function</span><span class="params">(err)</span> </span>{</div><div class="line">        <span class="keyword">if</span> (err) {</div><div class="line">            <span class="keyword">return</span> callback(err);</div><div class="line">        }</div><div class="line">        collection.ensureIndex({</div><div class="line">            searchIndex: <span class="number">1</span></div><div class="line">        }, <span class="function"><span class="keyword">function</span><span class="params">(err)</span> </span>{</div><div class="line">            <span class="keyword">if</span> (err) {</div><div class="line">                <span class="keyword">return</span> callback(err);</div><div class="line">            }</div><div class="line">            callback(<span class="literal">null</span>);</div><div class="line">        });</div><div class="line">    });</div><div class="line">}</div></pre></td></tr></table></figure>
 
 <p>新建文档搜索函数。 <strong>坑：如果直接把分好字的数组交给数据库来 find 那么一样是精确匹配的效果。这里应该是我对 MongoDB 还不够熟悉才掉坑里…</strong></p>
-<p>正确的匹配方法是 <code>db.documents.find({searchIndex: {$all: splittedTextArray} })</code>。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">exports.searchdoc = <span class="function"><span class="keyword">function</span><span class="params">(splittedTextArray, callback)</span> {</span></div><div class="line">    collection.find({</div><div class="line">        searchIndex: {$all: splittedTextArray}</div><div class="line">    })</div><div class="line">        .sort({downloads: -<span class="number">1</span> })</div><div class="line">        .toArray(<span class="function"><span class="keyword">function</span><span class="params">(err, docs)</span> {</span></div><div class="line">            <span class="keyword">if</span> (err) {</div><div class="line">                <span class="keyword">return</span> callback(err, <span class="literal">null</span>);</div><div class="line">            }</div><div class="line">            callback(<span class="literal">null</span>, docs);</div><div class="line">        });</div><div class="line">}</div></pre></td></tr></table></figure>
+<p>正确的匹配方法是 <code>db.documents.find({ searchIndex: {$all: splittedTextArray} })</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">exports.searchdoc = <span class="function"><span class="keyword">function</span><span class="params">(splittedTextArray, callback)</span> </span>{</div><div class="line">    collection.find({</div><div class="line">        searchIndex: {$all: splittedTextArray}</div><div class="line">    })</div><div class="line">        .sort({ downloads: -<span class="number">1</span> })</div><div class="line">        .toArray(<span class="function"><span class="keyword">function</span><span class="params">(err, docs)</span> </span>{</div><div class="line">            <span class="keyword">if</span> (err) {</div><div class="line">                <span class="keyword">return</span> callback(err, <span class="literal">null</span>);</div><div class="line">            }</div><div class="line">            callback(<span class="literal">null</span>, docs);</div><div class="line">        });</div><div class="line">}</div></pre></td></tr></table></figure>
 
-<p>然后按照主席的要求，写了个脚本来更新之前的数据。方法是将原来的数据全部取出，然后遍历写回的同时添加 <code>searchIndex</code>。看了下原来有的数据大约就 100 多条，所以直接全部取了没考虑分段的问题嗯。</p>
+<p>然后按照主席的要求，写了个脚本来更新之前的数据。方法是将原来的数据全部取出，然后遍历写回的同时添加 <code>searchIndex</code>。看了下原来有的数据大约就100多条，所以直接全部取了没考虑分段的问题嗯。</p>
 <p>据喵菊说，数组处理是 MongoDB 的强项所以非常快～</p>
-<p>整个项目的源码在 <a href="https://github.com/DuoHuoStudio/iDocument" target="_blank" rel="external"> 这里</a></p>
-<p>修改完毕，测试效果非常赞 w 不过就是 BAKA 的 blueed 还没写搜索列表页的样式就是了… <del>据说前端苦逼</del></p>
+<p>整个项目的源码在<a href="https://github.com/DuoHuoStudio/iDocument" target="_blank" rel="external">这里</a></p>
+<p>修改完毕，测试效果非常赞w 不过就是BAKA的blueed还没写搜索列表页的样式就是了… <del>据说前端苦逼</del></p>
 
       
     </div>
@@ -203,23 +203,23 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-03-11T19:24:56.000Z"><a href="/2014/03/12/setup-custom-dns-with-dnsmasq/">2014-03-12</a></time>
+        <time datetime="2014-03-11T11:24:56.000Z"><a href="/2014/03/11/setup-custom-dns-with-dnsmasq/">2014-03-11</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/03/12/setup-custom-dns-with-dnsmasq/">DNSMasq 建立自定义 DNS</a></h1>
+    <h1 class="title"><a href="/2014/03/11/setup-custom-dns-with-dnsmasq/">DNSMasq 建立自定义 DNS</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>一直想写的 <a href="https://github.com/phoenixlzx/micromoedns" target="_blank" rel="external"> 微萌 DNS</a> 在今天上午准备好基本架构后却在下午遇到各种各样的坑而弃掉了… 心情有够不爽。所以把自己维护的缓存 DNS 解决方案写出来，想要折腾类似的东西的童鞋可以试试看。</p>
-<p>所谓自定义 DNS，这里有这么几个功能：</p>
+        <p>一直想写的<a href="https://github.com/phoenixlzx/micromoedns" target="_blank" rel="external">微萌DNS</a> 在今天上午准备好基本架构后却在下午遇到各种各样的坑而弃掉了… 心情有够不爽。所以把自己维护的缓存DNS解决方案写出来，想要折腾类似的东西的童鞋可以试试看。</p>
+<p>所谓自定义DNS，这里有这么几个功能：</p>
 <ul>
-<li>反 DNS 污染</li>
+<li>反DNS污染</li>
 <li>可以直接访问部分网站</li>
 <li>一些特定的服务加速</li>
-<li>解决一些国外 DNS 被 X 的问题</li>
+<li>解决一些国外DNS被X的问题</li>
 </ul>
 <p>接下来是搭建步骤。</p>
 <h3 id="安装基本包">安装基本包</h3>
@@ -228,34 +228,34 @@
 <h3 id="DNSCrypt_配置">DNSCrypt 配置</h3>
 <p>默认的话安装的 dnscrypt-proxy 是侦听于 <code>127.0.0.2</code> 的 <code>53</code> 端口，这里需要让 DNSMasq 来作为上游服务器所以需要修改配置。文件：<code>/etc/default/dnscrypt-proxy</code></p>
 <p>修改 </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">local</span><span class="attribute">-address</span><span class="subst">=</span><span class="number">127.0</span><span class="number">.0</span><span class="number">.2</span>:<span class="number">53</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">local-address</span>=<span class="string">127.0.0.2:53</span></div></pre></td></tr></table></figure>
 
 <p>为</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">local</span><span class="attribute">-address</span><span class="subst">=</span><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5301</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">local-address</span>=<span class="string">127.0.0.1:5301</span></div></pre></td></tr></table></figure>
 
-<p>以及默认的 DNS 服务器是 OpenDNS —— 和其他欧美服务一样，节点遍布欧美亚洲就那么可怜的一两个节点，甚至一个节点都没就敢叫遍布全球了呢。所以这里最好能改一下，比如选择日本的 OpenNIC 节点。配置文件里添加(原本是有 OpenDNS 注释的，无视即可)</p>
+<p>以及默认的DNS服务器是 OpenDNS —— 和其他欧美服务一样，节点遍布欧美亚洲就那么可怜的一两个节点，甚至一个节点都没就敢叫遍布全球了呢。所以这里最好能改一下，比如选择日本的OpenNIC节点。配置文件里添加(原本是有 OpenDNS 注释的，无视即可)</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">resolver-address=<span class="number">106.186</span>.<span class="number">17.181</span><span class="symbol">:</span><span class="number">2053</span></div><div class="line">provider-name=<span class="number">2</span>.dnscrypt-cert.ns2.jp.dns.opennic.glue</div><div class="line">provider-key=<span class="number">8768</span><span class="symbol">:C3DB</span><span class="symbol">:F70A</span><span class="symbol">:FBC6</span><span class="symbol">:</span><span class="number">3</span><span class="constant">B64:</span><span class="number">8630</span><span class="symbol">:</span><span class="number">8167</span><span class="symbol">:</span><span class="number">2</span><span class="constant">FD4:</span><span class="constant">EE6F</span><span class="symbol">:E175</span><span class="symbol">:ECFD</span><span class="symbol">:</span><span class="number">46</span><span class="constant">C9:</span><span class="number">22</span><span class="constant">FC:</span><span class="number">7674</span><span class="symbol">:A1AC</span><span class="symbol">:</span><span class="number">2</span>E2A</div></pre></td></tr></table></figure>
 
-<p>更多可用的 DNSCrypt 服务器在 <a href="http://dnscrypt.org/" target="_blank" rel="external">DNSCrypt 主页</a> 可以找到。</p>
+<p>更多可用的 DNSCrypt 服务器在 <a href="http://dnscrypt.org/" target="_blank" rel="external">DNSCrypt主页</a> 可以找到。</p>
 <p>修改好配置文件后保存，重启 dnscrypt 服务。</p>
 <h3 id="两个好用的配置文件">两个好用的配置文件</h3>
-<p>要感谢喵菊苣的功劳，我们有两个很方便好用的配置文件来阻止一些国内 ISP 的 DNS 污染，以及部分国内站点的加速。</p>
-<p>配置文件地址在 <a href="https://github.com/felixonmars/dnsmasq-china-list" target="_blank" rel="external"> 这里</a></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor"># 为了方便日后更新，把这个仓库 clone 到本地而不是直接下载。</span></div><div class="line">git clone https://github<span class="preprocessor">.com</span>/felixonmars/dnsmasq-china-list<span class="preprocessor">.git</span></div><div class="line">cd dnsmasq-china-list</div><div class="line"><span class="preprocessor"># 创建到 DNSMasq 配置目录的软链接，当前该目录在 /root/dnsmasq-china-list 下。</span></div><div class="line">ln -s /root/dnsmasq-china-list/accelerated-domains<span class="preprocessor">.china</span><span class="preprocessor">.conf</span> /etc/dnsmasq<span class="preprocessor">.d</span>/</div><div class="line">ln -s /root/dnsmasq-china-list/bogus-nxdomain<span class="preprocessor">.china</span><span class="preprocessor">.conf</span> /etc/dnsmasq<span class="preprocessor">.d</span>/</div></pre></td></tr></table></figure>
+<p>要感谢喵菊苣的功劳，我们有两个很方便好用的配置文件来阻止一些国内ISP的DNS污染，以及部分国内站点的加速。</p>
+<p>配置文件地址在<a href="https://github.com/felixonmars/dnsmasq-china-list" target="_blank" rel="external">这里</a></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># 为了方便日后更新，把这个仓库 clone 到本地而不是直接下载。</div><div class="line">git clone http<span class="variable">s:</span>//github.<span class="keyword">com</span>/felixonmars/dnsmasq-china-<span class="keyword">list</span>.git</div><div class="line"><span class="keyword">cd</span> dnsmasq-china-<span class="keyword">list</span></div><div class="line"># 创建到 DNSMasq 配置目录的软链接，当前该目录在 /root/dnsmasq-china-<span class="keyword">list</span> 下。</div><div class="line"><span class="keyword">ln</span> -<span class="keyword">s</span> /root/dnsmasq-china-<span class="keyword">list</span>/accelerated-domains.china.<span class="keyword">conf</span> /etc/dnsmasq.<span class="keyword">d</span>/</div><div class="line"><span class="keyword">ln</span> -<span class="keyword">s</span> /root/dnsmasq-china-<span class="keyword">list</span>/bogus-nxdomain.china.<span class="keyword">conf</span> /etc/dnsmasq.<span class="keyword">d</span>/</div></pre></td></tr></table></figure>
 
-<h3 id="一份你懂的 hosts 和拿来主义">一份你懂的 hosts 和拿来主义</h3>
+<h3 id="一份你懂的hosts和拿来主义">一份你懂的hosts和拿来主义</h3>
 <p>hosts 神马的最喜欢了。自从有了它，妈妈再也不用担心我上不了 Google+ ~~</p>
-<p>于是这玩意到处都有，找一份你觉得靠谱的，然后保存在一个方便找的目录下。~~ 注意：不要放在 <code>/etc/dnsmasq.d</code> 下，这里文件位置在 <code>/etc/dns/hosts</code></p>
-<p>实在受不了渣渣 Android 的坑爹于是换了 iPhone 之后，Apple 软件的下载速度其实不比 Android 浪费我的时间少多少。一直以来我自己写 Apple 服务加速配置，通过各种查询 Apple 在 Chinacache 的 CDN IP，然后写个简单的脚本保证 2000 个地址能平均分配到各种线路的 IP。不过后来发现这种办法开始行不通了… 于是直接拿别人的来用好了。新建文件： <code>/etc/dnsmasq.d/apple.conf</code> 内容只有一行：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">server=/<span class="preprocessor">.apple</span><span class="preprocessor">.com</span>/<span class="number">199.91</span><span class="number">.73</span><span class="number">.222</span></div></pre></td></tr></table></figure>
+<p>于是这玩意到处都有，找一份你觉得靠谱的，然后保存在一个方便找的目录下。~~注意：不要放在 <code>/etc/dnsmasq.d</code> 下，这里文件位置在 <code>/etc/dns/hosts</code></p>
+<p>实在受不了渣渣 Android 的坑爹于是换了 iPhone 之后，Apple 软件的下载速度其实不比 Android 浪费我的时间少多少。一直以来我自己写 Apple 服务加速配置，通过各种查询 Apple 在 Chinacache 的CDN IP，然后写个简单的脚本保证2000个地址能平均分配到各种线路的IP。不过后来发现这种办法开始行不通了… 于是直接拿别人的来用好了。新建文件： <code>/etc/dnsmasq.d/apple.conf</code> 内容只有一行：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">server</span>=<span class="string">/.apple.com/199.91.73.222</span></div></pre></td></tr></table></figure>
 
 <p>在这里要感谢 V2EX 的 DNS 啦～</p>
 <h3 id="调教_DNSMasq">调教 DNSMasq</h3>
 <p>一切准备就绪，现在来看 DNSMasq 的配置文件—— <code>/etc/dnsmasq.conf</code></p>
 <p>这里只写修改了的配置，其他的保持默认即可。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 不读取 /etc/resolv.conf ，取消注释即可</span></div><div class="line"><span class="keyword">no</span>-resolv</div><div class="line"><span class="keyword">no</span>-poll</div><div class="line"><span class="comment"># 添加上游服务器为 DNSCrypt，如果还有其他的 server= 记得取消注释。</span></div><div class="line">server=<span class="number">127.0</span>.<span class="number">0</span>.<span class="number">1</span><span class="comment">#5301</span></div><div class="line"><span class="comment"># 在所有网卡上关闭 DHCP，用不着这个功能。如果有多个网卡那么一行一个。</span></div><div class="line"><span class="keyword">no</span>-dhcp-interface=eth<span class="number">0</span></div><div class="line"><span class="comment"># 添加自定义 hosts 文件</span></div><div class="line">addn-hosts=<span class="regexp">/etc/dns</span><span class="regexp">/hosts</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 不读取 /etc/resolv.conf ，取消注释即可</span></div><div class="line">no-resolv</div><div class="line">no-poll</div><div class="line"><span class="comment"># 添加上游服务器为 DNSCrypt，如果还有其他的 server= 记得取消注释。</span></div><div class="line"><span class="variable">server=</span><span class="number">127.0</span>.<span class="number">0.1</span><span class="comment">#5301</span></div><div class="line"><span class="comment"># 在所有网卡上关闭 DHCP，用不着这个功能。如果有多个网卡那么一行一个。</span></div><div class="line"><span class="variable">no-dhcp-interface=</span>eth0</div><div class="line"><span class="comment"># 添加自定义 hosts 文件</span></div><div class="line"><span class="variable">addn-hosts=</span>/etc/dns/hosts</div></pre></td></tr></table></figure>
 
-<p>一共就是这些。保存配置文件并重启 dnsmasq，这样就有了一台可以给所有设备使用的、具备防污染 / 服务加速以及自定义地址等功能的 DNS 服务器啦～</p>
+<p>一共就是这些。保存配置文件并重启 dnsmasq，这样就有了一台可以给所有设备使用的、具备防污染/服务加速以及自定义地址等功能的 DNS 服务器啦～</p>
 
       
     </div>
@@ -289,17 +289,17 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-03-10T16:26:48.000Z"><a href="/2014/03/11/browser-from-a-to-z/">2014-03-11</a></time>
+        <time datetime="2014-03-10T08:26:48.000Z"><a href="/2014/03/10/browser-from-a-to-z/">2014-03-10</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/03/11/browser-from-a-to-z/">浏览器A到Z</a></h1>
+    <h1 class="title"><a href="/2014/03/10/browser-from-a-to-z/">浏览器A到Z</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p> 貌似很好玩的样子？</p>
+        <p>貌似很好玩的样子？</p>
 <ul>
 <li><strong>A</strong> amazon.cn</li>
 <li><strong>B</strong> bbs.archlinuxcn.org</li>
@@ -328,7 +328,7 @@
 <li><strong>Y</strong> yande.re</li>
 <li><strong>Z</strong> zh.minecraftwiki.net</li>
 </ul>
-<p> 发现各种不科学 = =… 而且这也只是我最近的记录而已吧 →_→</p>
+<p>发现各种不科学 = =… 而且这也只是我最近的记录而已吧 →_→</p>
 
       
     </div>
@@ -396,9 +396,9 @@
   
     <li><a href="/categories/Network/">Network</a><small>3</small></li>
   
-    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+    <li><a href="/categories/Node-js/">Node.js</a><small>5</small></li>
   
-    <li><a href="/categories/Notes/">Notes</a><small>9</small></li>
+    <li><a href="/categories/Notes/">Notes</a><small>10</small></li>
   
     <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
   
@@ -410,7 +410,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Node-js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/OS-X/" style="font-size: 10.00px;">OS X</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
   </div>
 </div>
 
@@ -421,11 +421,15 @@
   <ul class="entry">
     
       <li>
+        <a href="/2014/11/11/set-language-for-individual-app-in-os-x-the-elegant-way/">用优雅的方式在 OS X 中为单个应用设置语言</a>
+      </li>
+    
+      <li>
         <a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">关于 SSL 和 IPKVM/VNC Applet 的笔记两则</a>
       </li>
     
       <li>
-        <a href="/2014/09/03/2014-natsu/">2014·夏</a>
+        <a href="/2014/09/02/2014-natsu/">2014·夏</a>
       </li>
     
       <li>
@@ -433,11 +437,7 @@
       </li>
     
       <li>
-        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
-      </li>
-    
-      <li>
-        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+        <a href="/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
       </li>
     
   </ul>

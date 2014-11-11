@@ -68,7 +68,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-04-28T12:53:55.000Z"><a href="/2014/04/28/sublive-live-subtitle-for-local-players/">2014-04-28</a></time>
+        <time datetime="2014-04-28T04:53:55.000Z"><a href="/2014/04/28/sublive-live-subtitle-for-local-players/">2014-04-28</a></time>
       
       
   
@@ -78,7 +78,7 @@
     </header>
     <div class="entry">
       
-        <p>昨晚 KNA 群里在讨论给本地播放器加弹幕功能。之前虽然听说过但是并未接触过所谓「弹幕池」的概念，但是星光菊苣说只要生成 SSA 字幕直接交给播放器挂上就成。并且，(虽然很想顺带吐槽 Zht 和我们争了半天最后槽点根本不在一个点子上 orz) 少将也表示时效并不重要，不需要考虑播放器的字幕自动重载问题。</p>
+        <p>昨晚 KNA 群里在讨论给本地播放器加弹幕功能。之前虽然听说过但是并未接触过所谓「弹幕池」的概念，但是星光菊苣说只要生成 SSA 字幕直接交给播放器挂上就成。并且，(虽然很想顺带吐槽 Zht 和我们争了半天最后槽点根本不在一个点子上orz) 少将也表示时效并不重要，不需要考虑播放器的字幕自动重载问题。</p>
 <p>所以躺在床上的时候就考虑了下整体的架构。还是最拿手的 HTTP RESTful API，基本功能的话就是获取字幕和发送弹幕。大致的思路如下。</p>
 <ul>
 <li>客户端打开媒体文件后首先获得文件的 hash。有些播放器自动寻找字幕似乎是通过文件名.. 这样的话我改个名字岂不是彻底失效。不过用 hash 来做检索文件的唯一信息的话，不同压制组放出的同一部片源都会有不同的弹幕… 不过似乎也好，如果压制了字幕进去的话，有些针对字幕君的吐槽啊什么的.. 嘛于是就这样。</li>
@@ -87,13 +87,13 @@
 <li>服务端接收到新的弹幕后将其存进数据库，并追加到已有字幕文件。这样下次其他客户端再次请求该文件的时候就会看到弹幕。</li>
 </ul>
 <p>…</p>
-<p>剩下的就不知道了，因为上面几条出来之后我就睡着了 zzzzZ</p>
+<p>剩下的就不知道了，因为上面几条出来之后我就睡着了zzzzZ</p>
 <p>…</p>
-<p>早上翘课写代码这种事情早就习以为常了… 更何况是 (我已经不知道该如何吐槽) 的老师的上机课….</p>
+<p>早上翘课写代码这种事情早就习以为常了… 更何况是(我已经不知道该如何吐槽)的老师的上机课….</p>
 <p>基本架构和功能大概 3 小时搞定，之前大概花了将近 1 个小时看 <a href="http://matroska.org/technical/specs/subtitles/ssa.html" target="_blank" rel="external">SSA/ASS Subtitles</a> 以及 Express 4.x 的文档。因为 <a href="https://github.com/visionmedia/express#quick-start" target="_blank" rel="external">Express 4.x 开始命令行工具被单独分开</a>，害我半天没找到生成模板的命令… (你丫瞎改啥啊啊啊啊</p>
 <p>编码过程里倒是没遇到啥坑，就是数据处理有点烦。因为没找到啥比较好的 SSA 字幕处理库，生成的时候都是手动处理，各种 <code>+ &#39;\n&#39;</code> 什么的..</p>
 <p>以及，SSA/ASS 字幕的格式特性让 <code>Array.prototype.join</code> 得以利用，省掉不少麻烦。</p>
-<p>于是源码在 <a href="https://github.com/phoenixlzx/sublive" target="_blank" rel="external"> 这里</a>。在基础架构之上还可以很方便的添加大量其他功能，验证啊什么的.. 顺便我还木有做 POST 数据的检查。这个大概晚些时候会加上。</p>
+<p>于是源码在<a href="https://github.com/phoenixlzx/sublive" target="_blank" rel="external">这里</a>。在基础架构之上还可以很方便的添加大量其他功能，验证啊什么的.. 顺便我还木有做 POST 数据的检查。这个大概晚些时候会加上。</p>
 <p>四月的荒废状态持续了 27 天宣告结束。嘛，挣脱五月病要感谢星光菊苣、Zht、少将以及 KNA 字幕组的所有小伙伴们 &gt;///&lt; 感谢你们～</p>
 <p>以后要继续加油喵！～</p>
 
@@ -104,13 +104,13 @@
         
   
   <div class="categories">
-    <a href="/categories/Nodejs/">Node.js</a>
+    <a href="/categories/Node-js/">Node.js</a>
   </div>
 
         
   
   <div class="tags">
-    <a href="/tags/Nodejs/">Node.js</a>, <a href="/tags/Anime/">Anime</a>
+    <a href="/tags/Node-js/">Node.js</a>, <a href="/tags/Anime/">Anime</a>
   </div>
 
         
@@ -176,9 +176,9 @@
   
     <li><a href="/categories/Network/">Network</a><small>3</small></li>
   
-    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+    <li><a href="/categories/Node-js/">Node.js</a><small>5</small></li>
   
-    <li><a href="/categories/Notes/">Notes</a><small>9</small></li>
+    <li><a href="/categories/Notes/">Notes</a><small>10</small></li>
   
     <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
   
@@ -190,7 +190,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Node-js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/OS-X/" style="font-size: 10.00px;">OS X</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
   </div>
 </div>
 
@@ -201,11 +201,15 @@
   <ul class="entry">
     
       <li>
+        <a href="/2014/11/11/set-language-for-individual-app-in-os-x-the-elegant-way/">用优雅的方式在 OS X 中为单个应用设置语言</a>
+      </li>
+    
+      <li>
         <a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">关于 SSL 和 IPKVM/VNC Applet 的笔记两则</a>
       </li>
     
       <li>
-        <a href="/2014/09/03/2014-natsu/">2014·夏</a>
+        <a href="/2014/09/02/2014-natsu/">2014·夏</a>
       </li>
     
       <li>
@@ -213,11 +217,7 @@
       </li>
     
       <li>
-        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
-      </li>
-    
-      <li>
-        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+        <a href="/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
       </li>
     
   </ul>

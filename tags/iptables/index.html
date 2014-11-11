@@ -73,7 +73,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-07-21T13:21:57.000Z"><a href="/2014/07/21/setup-openconnect-server-on-ubuntu/">2014-07-21</a></time>
+        <time datetime="2014-07-21T05:21:57.000Z"><a href="/2014/07/21/setup-openconnect-server-on-ubuntu/">2014-07-21</a></time>
       
       
   
@@ -83,36 +83,36 @@
     </header>
     <div class="entry">
       
-        <p> 最近猫给推荐的 Cisco AnyConnect，面基的时候也看到 Aveline 菊苣在用 AnyConnect(插嘴：正太菊苣果然好可爱！！！) 于是自己折腾了下。作为少有的能让我折腾起来的 VPN，暂且把搭建步骤简单记录下。</p>
-<p>AnyConnect 的好处是基于 HTTPS，证书可以申请 StartSSL 的，而且配置也不很复杂。另外配置文件里发现了很多专门为商业化 / 企业服务定制的选项，例如最大同时在线客户端数量，同账户最大在线设备数量等等。</p>
+        <p>最近猫给推荐的 Cisco AnyConnect，面基的时候也看到 Aveline 菊苣在用 AnyConnect(插嘴：正太菊苣果然好可爱！！！) 于是自己折腾了下。作为少有的能让我折腾起来的 VPN，暂且把搭建步骤简单记录下。</p>
+<p>AnyConnect 的好处是基于 HTTPS，证书可以申请 StartSSL 的，而且配置也不很复杂。另外配置文件里发现了很多专门为商业化/企业服务定制的选项，例如最大同时在线客户端数量，同账户最大在线设备数量等等。</p>
 <p>OpenConnect 是 AnyConnect 的开源实现。目前 0.8.0 版本需要 GnuTLS 3.1 以上版本，所以我们就直接在 Ubuntu 14.04 中搭建。另外 就算是基于 HTTPS，这货也是要用 TUN 设备的，所以 OpenVZ 用户们请注意。</p>
-<h3 id="准备"> 准备 </h3>
-<p> 命令 </p>
+<h3 id="准备">准备</h3>
+<p>命令</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">apt-get install build-essential libwrap0-dev libpam0g-dev libdbus-<span class="number">1</span>-dev \</div><div class="line">  libreadline-dev libnl-route-<span class="number">3</span>-dev libprotobuf-c0-dev libpcl1-dev libopts25-dev \</div><div class="line">  autogen libgnutls28 libgnutls28-dev libseccomp-dev libhttp-parser-dev</div></pre></td></tr></table></figure>
 
-<h3 id="安装"> 安装 </h3>
-<p> 下载源码 </p>
+<h3 id="安装">安装</h3>
+<p>下载源码</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">wget -c ftp://ftp.infradead.org/pub/ocserv/ocserv-<span class="number">0.8</span>.<span class="number">0</span>.tar.xz</div><div class="line">tar xvf ocserv-<span class="number">0.8</span>.<span class="number">0</span>.tar.xz</div><div class="line"><span class="built_in">cd</span> ocserv-<span class="number">0.8</span>.<span class="number">0</span></div></pre></td></tr></table></figure>
 
-<p> 编译安装 </p>
+<p>编译安装</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">./configure --prefix=/opt/ocserv </div><div class="line">make</div><div class="line">make install</div><div class="line">mkdir /opt/ocserv/etc/</div><div class="line">cp doc/sample.config /opt/ocserv/etc/config</div></pre></td></tr></table></figure>
 
-<h3 id="配置"> 配置 </h3>
-<p> 这里只记录需要修改的重点配置，其他配置请参照样例配置文件的注释按需修改。</p>
-<p> 文件 <code>/opt/ocserv/etc/config</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">auth <span class="subst">=</span> <span class="string">"plain[/opt/ocserv/etc/passwd]"</span></div><div class="line">listen<span class="attribute">-host</span> <span class="subst">=</span> connect<span class="built_in">.</span>your<span class="built_in">.</span>domain</div><div class="line"><span class="keyword">max</span><span class="attribute">-clients</span> <span class="subst">=</span> <span class="number">128</span></div><div class="line"><span class="keyword">max</span><span class="attribute">-same</span><span class="attribute">-clients</span> <span class="subst">=</span> <span class="number">4</span></div><div class="line">server<span class="attribute">-cert</span> <span class="subst">=</span> /opt/ocserv/etc/ssl/server<span class="attribute">-cert</span><span class="built_in">.</span>pem</div><div class="line">server<span class="attribute">-key</span> <span class="subst">=</span> /opt/ocserv/etc/ssl/server<span class="attribute">-key</span><span class="built_in">.</span>pem</div><div class="line">ca<span class="attribute">-cert</span> <span class="subst">=</span> /opt/ocserv/etc/ssl/ca<span class="built_in">.</span>pem</div><div class="line">mobile<span class="attribute">-idle</span><span class="attribute">-timeout</span> <span class="subst">=</span> <span class="number">2400</span></div><div class="line">ipv4<span class="attribute">-network</span> <span class="subst">=</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.0</span></div><div class="line">ipv4<span class="attribute">-netmask</span> <span class="subst">=</span> <span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span></div><div class="line">dns <span class="subst">=</span> <span class="number">8.8</span><span class="number">.8</span><span class="number">.8</span></div><div class="line">dns <span class="subst">=</span> <span class="number">8.8</span><span class="number">.4</span><span class="number">.4</span></div><div class="line">route <span class="subst">=</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.0</span>/<span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span></div><div class="line">route<span class="attribute">-add</span><span class="attribute">-cmd</span> <span class="subst">=</span> <span class="string">"ip route add 192.168.1.0 dev tun0"</span></div><div class="line">route<span class="attribute">-del</span><span class="attribute">-cmd</span> <span class="subst">=</span> <span class="string">"ip route delete 192.168.1.0 dev tun0"</span></div></pre></td></tr></table></figure>
+<h3 id="配置">配置</h3>
+<p>这里只记录需要修改的重点配置，其他配置请参照样例配置文件的注释按需修改。</p>
+<p>文件 <code>/opt/ocserv/etc/config</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="variable">auth =</span> <span class="string">"plain[/opt/ocserv/etc/passwd]"</span></div><div class="line"><span class="variable">listen-host =</span> connect.your.domain</div><div class="line"><span class="variable">max-clients =</span> <span class="number">128</span></div><div class="line"><span class="variable">max-same-clients =</span> <span class="number">4</span></div><div class="line"><span class="variable">server-cert =</span> /opt/ocserv/etc/ssl/server-cert.pem</div><div class="line"><span class="variable">server-key =</span> /opt/ocserv/etc/ssl/server-key.pem</div><div class="line"><span class="variable">ca-cert =</span> /opt/ocserv/etc/ssl/ca.pem</div><div class="line"><span class="variable">mobile-idle-timeout =</span> <span class="number">2400</span></div><div class="line"><span class="variable">ipv4-network =</span> <span class="number">192.168</span>.<span class="number">1.0</span></div><div class="line"><span class="variable">ipv4-netmask =</span> <span class="number">255.255</span>.<span class="number">255.0</span></div><div class="line"><span class="variable">dns =</span> <span class="number">8.8</span>.<span class="number">8.8</span></div><div class="line"><span class="variable">dns =</span> <span class="number">8.8</span>.<span class="number">4.4</span></div><div class="line"><span class="variable">route =</span> <span class="number">192.168</span>.<span class="number">1.0</span>/<span class="number">255.255</span>.<span class="number">255.0</span></div><div class="line"><span class="variable">route-add-cmd =</span> <span class="string">"ip route add 192.168.1.0 dev tun0"</span></div><div class="line"><span class="variable">route-del-cmd =</span> <span class="string">"ip route delete 192.168.1.0 dev tun0"</span></div></pre></td></tr></table></figure>
 
-<p> 创建用户，命令 </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/opt/ocserv/bin/ocpasswd <span class="attribute">-c</span> /opt/ocserv/etc/passwd username</div></pre></td></tr></table></figure>
+<p>创建用户，命令</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="regexp">/opt/</span>ocserv<span class="regexp">/bin/</span>ocpasswd -c <span class="regexp">/opt/</span>ocserv<span class="regexp">/etc/</span>passwd username</div></pre></td></tr></table></figure>
 
-<p> 按提示输入两次密码。</p>
-<p>iptables 规则 </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables <span class="attribute">-t</span> nat <span class="attribute">-A</span> POSTROUTING <span class="attribute">-j</span> SNAT <span class="subst">--</span><span class="keyword">to</span><span class="attribute">-source</span> <span class="subst">&lt;</span>server ip<span class="subst">&gt;</span> <span class="attribute">-o</span> <span class="subst">&lt;</span>nic<span class="subst">&gt;</span></div></pre></td></tr></table></figure>
+<p>按提示输入两次密码。</p>
+<p>iptables 规则</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">iptables -t nat -A POSTROUTING -j SNAT --to-source &lt;server ip&gt;</span> -o &lt;nic&gt;</span></div></pre></td></tr></table></figure>
 
-<p> 记得把 <code>&lt;server ip&gt;</code> 和 <code>&lt;nic&gt;</code> 改为服务器公网 IP 和对应网卡的名称。</p>
-<h3 id="搞定"> 搞定 </h3>
-<p> 折腾完毕，AnyConnect 客户端可以成功使用了。</p>
-<p><del> 不过呢折腾完之后发现这货其实被干扰得很厉害啊…</del></p>
+<p>记得把 <code>&lt;server ip&gt;</code> 和 <code>&lt;nic&gt;</code> 改为服务器公网 IP 和对应网卡的名称。</p>
+<h3 id="搞定">搞定</h3>
+<p>折腾完毕，AnyConnect 客户端可以成功使用了。</p>
+<p><del>不过呢折腾完之后发现这货其实被干扰得很厉害啊…</del></p>
 
       
     </div>
@@ -146,27 +146,27 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-05-23T20:52:59.000Z"><a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">2014-05-24</a></time>
+        <time datetime="2014-05-23T12:52:59.000Z"><a href="/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">2014-05-23</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a></h1>
+    <h1 class="title"><a href="/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>昨晚开始我们的 DNS 日志中出现大量的针对 <code>wradish.com</code> 的<code>ANY</code>记录请求，导致大量正常解析请求超时。今天上午到中午时分再次出现流量更大、针对 <code>ping.zong.co.ua</code> 的<code>ANY</code>记录请求，导致整个 DNS 服务瘫痪，完全无法响应正常解析请求。</p>
+        <p>昨晚开始我们的 DNS 日志中出现大量的针对<code>wradish.com</code>的<code>ANY</code>记录请求，导致大量正常解析请求超时。今天上午到中午时分再次出现流量更大、针对<code>ping.zong.co.ua</code>的<code>ANY</code>记录请求，导致整个 DNS 服务瘫痪，完全无法响应正常解析请求。</p>
 <p>检查后发现 <code>wradish.com</code> 早已因多次 DNS 放大攻击而被列入开放 DNS 服务器黑名单，网络上也有大量的针对该域名攻击请求包的过滤方法。<code>ping.zong.co.ua</code> 却完全没有任何搜索记录。</p>
 <p>DNS 放大攻击 (DNS Amplification Attack) 即通过向多台 DNS 开放服务器发送无意义的 recursive 解析请求，从而使得根域名服务器遭到超大流量的解析请求包，无暇顾及正常的解析请求，由此实现分布式拒绝服务攻击 (Distributed Denial of Service)。我们的 DNS 服务器在这里既是攻击者，也是受害者。</p>
-<p>DNSMasq 默认允许 recursive 请求，且似乎本身就没有设计为开放 DNS 服务，所以貌似也没有办法禁用掉 recursive 请求。因此我们使用 <a href="http://blog.dataforce.org.uk/2013/08/limiting-the-effectiveness-of-dns-amplification/" target="_blank" rel="external">iptables 规则 </a> 来过滤掉这些请求。</p>
+<p>DNSMasq 默认允许 recursive 请求，且似乎本身就没有设计为开放 DNS 服务，所以貌似也没有办法禁用掉 recursive 请求。因此我们使用 <a href="http://blog.dataforce.org.uk/2013/08/limiting-the-effectiveness-of-dns-amplification/" target="_blank" rel="external">iptables 规则</a>来过滤掉这些请求。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Create a chain to store block rules in</span></div><div class="line">iptables -N BADDNS </div><div class="line"></div><div class="line"><span class="comment"># Match all "IN ANY" DNS Queries, and run them past the BADDNS chain.</span></div><div class="line">iptables -A INPUT -p udp --dport <span class="number">53</span> -m string --hex-string <span class="string">"|00 00 ff 00 01|"</span> --to <span class="number">255</span> --algo bm -m comment --comment <span class="string">"IN ANY?"</span> -j BADDNS</div><div class="line">iptables -A FORWARD -p udp --dport <span class="number">53</span> -m string --hex-string <span class="string">"|00 00 ff 00 01|"</span> --to <span class="number">255</span> --algo bm -m comment --comment <span class="string">"IN ANY?"</span> -j BADDNS</div><div class="line"></div><div class="line"><span class="comment"># Block domains that are being used for DNS Amplification...</span></div><div class="line">iptables -A BADDNS -m string --hex-string <span class="string">"|04 72 69 70 65 03 6e 65 74 00|"</span> --algo bm -j DROP --to <span class="number">255</span> -m comment --comment <span class="string">"ripe.net"</span></div><div class="line">iptables -A BADDNS -m string --hex-string <span class="string">"|03 69 73 63 03 6f 72 67 00|"</span> --algo bm -j DROP --to <span class="number">255</span> -m comment --comment <span class="string">"isc.org"</span></div><div class="line">iptables -A BADDNS -m string --hex-string <span class="string">"|04 73 65 6d 61 02 63 7a 00|"</span> --algo bm -j DROP --to <span class="number">255</span> -m comment --comment <span class="string">"sema.cz"</span></div><div class="line">iptables -A BADDNS -m string --hex-string <span class="string">"|09 68 69 7a 62 75 6c 6c 61 68 02 6d 65 00|"</span> --algo bm -j DROP --to <span class="number">255</span> -m comment --comment <span class="string">"hizbullah.me"</span></div><div class="line"></div><div class="line"><span class="comment"># Rate limit the rest.</span></div><div class="line">iptables -A BADDNS -m recent --set --name DNSQF --rsource</div><div class="line">iptables -A BADDNS -m recent --update --seconds <span class="number">10</span> --hitcount <span class="number">1</span> --name DNSQF --rsource -j DROP</div></pre></td></tr></table></figure>
 
 <p>添加以上规则后执行 <code>iptables-save</code> 来使更改生效。</p>
 <p>目前为止似乎没有报告出现了明显规模的 DNS 放大攻击征兆，攻击者针对我们防火墙封锁的反应速度、攻击所用的记录以及从日志中发现的大量不同请求源也暗示着我们的服务器可能是最终攻击目标，用攻击流量消耗尽服务器带宽而导致服务瘫痪。至于原因，我也没有想明白为何会有攻击者对一个小型私用服务器感兴趣。</p>
 <p>PS. 到本文发表时，攻击依旧在继续，且流量越来越大。目前阿里云的云盾设置可以说无力，只能依靠 iptables 暂时缓解。后续的应对计划仍在制定中。</p>
 <p>=== 2014-05-24 更新 ===</p>
-<p>Aveline 菊苣给出了一个<a href="https://github.com/smurfmonitor/dns-iptables-rules" target="_blank" rel="external">DNS Amplification IPTABLES block lists</a> 给点 128 个赞！</p>
+<p>Aveline 菊苣给出了一个<a href="https://github.com/smurfmonitor/dns-iptables-rules" target="_blank" rel="external">DNS Amplification IPTABLES block lists</a> 给点128个赞！</p>
 
       
     </div>
@@ -234,9 +234,9 @@
   
     <li><a href="/categories/Network/">Network</a><small>3</small></li>
   
-    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+    <li><a href="/categories/Node-js/">Node.js</a><small>5</small></li>
   
-    <li><a href="/categories/Notes/">Notes</a><small>9</small></li>
+    <li><a href="/categories/Notes/">Notes</a><small>10</small></li>
   
     <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
   
@@ -248,7 +248,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Node-js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/OS-X/" style="font-size: 10.00px;">OS X</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
   </div>
 </div>
 
@@ -259,11 +259,15 @@
   <ul class="entry">
     
       <li>
+        <a href="/2014/11/11/set-language-for-individual-app-in-os-x-the-elegant-way/">用优雅的方式在 OS X 中为单个应用设置语言</a>
+      </li>
+    
+      <li>
         <a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">关于 SSL 和 IPKVM/VNC Applet 的笔记两则</a>
       </li>
     
       <li>
-        <a href="/2014/09/03/2014-natsu/">2014·夏</a>
+        <a href="/2014/09/02/2014-natsu/">2014·夏</a>
       </li>
     
       <li>
@@ -271,11 +275,7 @@
       </li>
     
       <li>
-        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
-      </li>
-    
-      <li>
-        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+        <a href="/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
       </li>
     
   </ul>

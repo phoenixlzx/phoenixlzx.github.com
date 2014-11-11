@@ -73,7 +73,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-10-14T05:03:07.000Z"><a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">2014-10-14</a></time>
+        <time datetime="2014-10-13T21:03:07.000Z"><a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">2014-10-14</a></time>
       
       
   
@@ -88,7 +88,7 @@
 <p>有客户买了 COMODO Positive SSL 之后问我证书链变了要怎么串联。嘛确实文件变多了不过不至于这就不会了吧…</p>
 <p>SSL 证书串联用 <code>cat</code> 命令的话顺序是自下而上，也就是 自己的证书 -&gt; 二级 Intermediate CA -&gt; 一级 Intermediate CA -&gt; Root CA</p>
 <p>所以不管文件有多少这个顺序总是有的。以 COMODO Positive SSL 为例，假设域名为 <code>example.com</code>，<code>cat</code> 的串联命令：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat example_com<span class="preprocessor">.crt</span> COMODORSADomainValidationSecureServerCA<span class="preprocessor">.crt</span> COMODORSAAddTrustCA<span class="preprocessor">.crt</span> AddTrustExternalCARoot<span class="preprocessor">.crt</span> &gt; example_com<span class="preprocessor">.signed</span><span class="preprocessor">.crt</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">cat example_com.crt COMODORSADomainValidationSecureServerCA.crt COMODORSAAddTrustCA.crt AddTrustExternalCARoot.crt &gt;</span> example_com.signed.crt</span></div></pre></td></tr></table></figure>
 
 <p>于是就可以拿着 <code>example_com.signed.crt</code> 和生成 CSR 时一并生成的 <code>example_com.key</code> 去给 NGINX 咯。</p>
 <p>附一份 NGINX 配置样例。</p>
@@ -100,11 +100,13 @@
 <p>解决方案：下载一个旧版的 Java，比如 jdk6。</p>
 <p>但是直接安装也是不能运行的，因为实际上调用的 java executable 是最新版 Java 的，所以一样报错。</p>
 <p>如果是在 Linux 下，jre6 的目录在 <code>$HOME/jre6/jre1.6.0_38</code>，那么下载到 Applet 之后用下面的命令启动：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">applet_path<span class="subst">=</span>/path/<span class="keyword">to</span>/your/applet<span class="built_in">.</span>jnlp</div><div class="line">~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/bin/java <span class="attribute">-verbose</span> <span class="attribute">-Xbootclasspath</span>/a:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/javaws<span class="built_in">.</span>jar:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/deploy<span class="built_in">.</span>jar:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/plugin<span class="built_in">.</span>jar <span class="attribute">-classpath</span> ~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/deploy<span class="built_in">.</span>jar <span class="attribute">-Djava</span><span class="built_in">.</span>security<span class="built_in">.</span>policy<span class="subst">=</span>file:~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/lib/security/javaws<span class="built_in">.</span>policy <span class="attribute">-DtrustProxy</span><span class="subst">=</span><span class="literal">true</span> <span class="attribute">-Xverify</span>:remote <span class="attribute">-Djnlpx</span><span class="built_in">.</span>home<span class="subst">=</span>~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/bin <span class="attribute">-Dsun</span><span class="built_in">.</span>awt<span class="built_in">.</span>warmup<span class="subst">=</span><span class="literal">true</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>origFilenameArg<span class="subst">=</span><span class="variable">$applet_path</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>remove<span class="subst">=</span><span class="literal">false</span> <span class="attribute">-esa</span> <span class="attribute">-Xnoclassgc</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>splashport<span class="subst">=</span><span class="number">59999</span> <span class="attribute">-Djnlpx</span><span class="built_in">.</span>jvm<span class="subst">=</span>~/jre6/jre1<span class="number">.6</span><span class="number">.0</span>_38/bin/java <span class="attribute">-Djnlpx</span><span class="built_in">.</span>vmargs<span class="subst">=</span><span class="string">"-esa -Xnoclassgc"</span> com<span class="built_in">.</span>sun<span class="built_in">.</span>javaws<span class="built_in">.</span>Main <span class="variable">$applet_path</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">applet_path=<span class="regexp">/path/</span>to<span class="regexp">/your/</span>applet.jnlp</div><div class="line">~<span class="regexp">/jre6/</span>jre1.<span class="number">6.0</span>_38<span class="regexp">/bin/</span>java -verbose -Xbootclasspath<span class="regexp">/a:~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/javaws.jar:~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/deploy.jar:~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/plugin.jar -classpath ~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/deploy.jar -Djava.security.policy=file:~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>lib<span class="regexp">/security/</span>javaws.policy -DtrustProxy=<span class="keyword">true</span> -Xverify:remote -Djnlpx.home=~<span class="regexp">/jre6/</span>jre1.<span class="number">6.0</span>_38<span class="regexp">/bin -Dsun.awt.warmup=true -Djnlpx.origFilenameArg=$applet_path -Djnlpx.remove=false -esa -Xnoclassgc -Djnlpx.splashport=59999 -Djnlpx.jvm=~/</span>jre6<span class="regexp">/jre1.6.0_38/</span>bin<span class="regexp">/java -Djnlpx.vmargs="-esa -Xnoclassgc" com.sun.javaws.Main $applet_path</span></div></pre></td></tr></table></figure>
 
 <h3 id="===_2014-10-15_更新_===">=== 2014-10-15 更新 ===</h3>
-<p>SSLv3 <a href="http://googleonlinesecurity.blogspot.com/2014/10/this-poodle-bites-exploiting-ssl-30.html" target="_blank" rel="external">再次爆出漏洞 </a>，在 Google 的新草案 <a href="https://tools.ietf.org/html/draft-ietf-tls-downgrade-scsv-00" target="_blank" rel="external">TLS_FALLBACK_SCSV</a> 还未明朗的情况下，目前禁用 SSLv3 是一个 <strong> 不考虑 IE6</strong> 的 workaround。</p>
+<p>SSLv3 <a href="http://googleonlinesecurity.blogspot.com/2014/10/this-poodle-bites-exploiting-ssl-30.html" target="_blank" rel="external">再次爆出漏洞</a>，在 Google 的新草案 <a href="https://tools.ietf.org/html/draft-ietf-tls-downgrade-scsv-00" target="_blank" rel="external">TLS_FALLBACK_SCSV</a> 还未明朗的情况下，目前禁用 SSLv3 是一个 <strong>不考虑 IE6</strong> 的 workaround。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function_or_atom">ssl_protocols</span> <span class="variable">TLSv1</span> <span class="variable">TLSv1</span>.<span class="number">1</span> <span class="variable">TLSv1</span>.<span class="number">2</span>;</div><div class="line"><span class="function_or_atom">ssl_ciphers</span> <span class="variable">ECDHE</span>-<span class="variable">RSA</span>-<span class="variable">AES256</span>-<span class="variable">SHA384</span>:<span class="variable">AES256</span>-<span class="variable">SHA256</span>:<span class="variable">RC4</span>:<span class="variable">HIGH</span>:<span class="exclamation_mark">!</span><span class="variable">MD5</span>:<span class="exclamation_mark">!</span><span class="function_or_atom">aNULL</span>:<span class="exclamation_mark">!</span><span class="function_or_atom">eNULL</span>:<span class="exclamation_mark">!</span><span class="variable">NULL</span>:<span class="exclamation_mark">!</span><span class="variable">DH</span>:<span class="exclamation_mark">!</span><span class="variable">EDH</span>:<span class="exclamation_mark">!</span><span class="variable">AESGCM</span>;</div><div class="line"><span class="function_or_atom">ssl_prefer_server_ciphers</span> <span class="function_or_atom">on</span>;</div><div class="line"><span class="function_or_atom">ssl_session_cache</span> <span class="function_or_atom">shared</span>:<span class="variable">SSL</span>:<span class="number">10</span>m;</div><div class="line"><span class="function_or_atom">ssl_session_timeout</span> <span class="number">10</span>m;</div></pre></td></tr></table></figure>
+
+
       
     </div>
     <footer>
@@ -171,9 +173,9 @@
   
     <li><a href="/categories/Network/">Network</a><small>3</small></li>
   
-    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+    <li><a href="/categories/Node-js/">Node.js</a><small>5</small></li>
   
-    <li><a href="/categories/Notes/">Notes</a><small>9</small></li>
+    <li><a href="/categories/Notes/">Notes</a><small>10</small></li>
   
     <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
   
@@ -185,7 +187,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Node-js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/OS-X/" style="font-size: 10.00px;">OS X</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
   </div>
 </div>
 
@@ -196,11 +198,15 @@
   <ul class="entry">
     
       <li>
+        <a href="/2014/11/11/set-language-for-individual-app-in-os-x-the-elegant-way/">用优雅的方式在 OS X 中为单个应用设置语言</a>
+      </li>
+    
+      <li>
         <a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">关于 SSL 和 IPKVM/VNC Applet 的笔记两则</a>
       </li>
     
       <li>
-        <a href="/2014/09/03/2014-natsu/">2014·夏</a>
+        <a href="/2014/09/02/2014-natsu/">2014·夏</a>
       </li>
     
       <li>
@@ -208,11 +214,7 @@
       </li>
     
       <li>
-        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
-      </li>
-    
-      <li>
-        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+        <a href="/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
       </li>
     
   </ul>

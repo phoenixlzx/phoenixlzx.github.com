@@ -68,7 +68,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-02-23T10:39:58.000Z"><a href="/2014/02/23/kernel-hook-auto-build-dkms-modules/">2014-02-23</a></time>
+        <time datetime="2014-02-23T02:39:58.000Z"><a href="/2014/02/23/kernel-hook-auto-build-dkms-modules/">2014-02-23</a></time>
       
       
   
@@ -81,19 +81,21 @@
         <p><a href="http://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support" target="_blank" rel="external">DKMS</a> 是个好东西，像我们这些喜欢自定义内核的家伙有了 DKMS 之后就不用为各种第三方的内核模组发愁了～</p>
 <p>于是也没看是不是有人做过了(基本上是有人做了吧…) 于是参照 <a href="https://aur.archlinux.org/packages/nvidia-hook/" target="_blank" rel="external">nvidia-hook</a> 做了一个 <a href="https://aur.archlinux.org/packages/autodkms/" target="_blank" rel="external">autodkms</a>。</p>
 <p>按照 <a href="https://wiki.archlinux.org/index.php/Dynamic_Kernel_Module_Support" target="_blank" rel="external">ArchWiki</a>，自动编译所有模组的命令是：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dkms autoinstall <span class="attribute">-k</span> NEW_KERNEL_VERSION</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">dkms</span> autoinstall -k NEW_KERNEL_VERSION</div></pre></td></tr></table></figure>
 
 <p>于是照葫芦画瓢写的 hook 文件 <code>/usr/lib/initcpio/install/autodkms</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">build</span></span> ()</div><div class="line">{</div><div class="line">  <span class="built_in">echo</span> <span class="string">"Building dkms modules for <span class="variable">${KERNELVERSION}</span> kernel..."</span></div><div class="line">  dkms autoinstall -k <span class="variable">${KERNELVERSION}</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"Build complete."</span></div><div class="line">}</div><div class="line"></div><div class="line"><span class="function"><span class="title">help</span></span> ()</div><div class="line">{</div><div class="line">cat&lt;&lt;HELPEOF</div><div class="line">    This hook rebuilds all dkms modules <span class="keyword">for</span> new kernel.</div><div class="line">HELPEOF</div><div class="line">}</div></pre></td></tr></table></figure>
 
-<p>全部源码在 <a href="https://github.com/phoenixlzx/autodkms" target="_blank" rel="external"> 这里 </a> <del> 其实一共就几行…</del></p>
+<p>全部源码在<a href="https://github.com/phoenixlzx/autodkms" target="_blank" rel="external">这里</a> <del>其实一共就几行…</del></p>
 <p>打包好之后在 <code>/etc/mkinitcpio.conf</code> 的 <code>HOOKS</code> 最后加上 <code>autodkms</code> 就可以在更新内核的时候重新编译所有模组啦。</p>
 <p>=== 2014-03-10 更新 ===</p>
 <p>在没有装对应内核的 headers 之前脚本执行会出错——</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Building dkms modules <span class="keyword">for</span> <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts kernel...</div><div class="line"><span class="keyword">Error</span>! echo</div><div class="line">Your kernel headers <span class="keyword">for</span> kernel <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts cannot be found at</div><div class="line">/usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/build <span class="keyword">or</span> /usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/source.</div><div class="line"><span class="keyword">Error</span>! echo</div><div class="line">Your kernel headers <span class="keyword">for</span> kernel <span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts cannot be found at</div><div class="line">/usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/build <span class="keyword">or</span> /usr/<span class="keyword">lib</span>/modules/<span class="number">3.10</span><span class="number">.33</span>-<span class="number">1</span>-lts/source.</div><div class="line">Build complete.</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Building dkms modules <span class="keyword">for</span> <span class="number">3.10</span>.<span class="number">33</span>-<span class="number">1</span>-lts kernel...</div><div class="line">Error! echo</div><div class="line">Your kernel headers <span class="keyword">for</span> kernel <span class="number">3.10</span>.<span class="number">33</span>-<span class="number">1</span>-lts cannot be found at</div><div class="line"><span class="regexp">/usr/</span>lib<span class="regexp">/modules/</span><span class="number">3.10</span>.<span class="number">33</span>-<span class="number">1</span>-lts<span class="regexp">/build or /</span>usr<span class="regexp">/lib/m</span>odules<span class="regexp">/3.10.33-1-lts/</span><span class="keyword">source</span>.</div><div class="line">Error! echo</div><div class="line">Your kernel headers <span class="keyword">for</span> kernel <span class="number">3.10</span>.<span class="number">33</span>-<span class="number">1</span>-lts cannot be found at</div><div class="line"><span class="regexp">/usr/</span>lib<span class="regexp">/modules/</span><span class="number">3.10</span>.<span class="number">33</span>-<span class="number">1</span>-lts<span class="regexp">/build or /</span>usr<span class="regexp">/lib/m</span>odules<span class="regexp">/3.10.33-1-lts/</span><span class="keyword">source</span>.</div><div class="line">Build complete.</div></pre></td></tr></table></figure>
 
 <p>但是一般升级的时候都是先装内核再装 headers 所以脚本可以完善下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">build</span></span> ()</div><div class="line">{</div><div class="line">  <span class="keyword">if</span> [! <span class="operator">-d</span> <span class="string">"/usr/lib/modules/<span class="variable">${KERNELVERSION}</span>/build"</span> ]; <span class="keyword">then</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"You need to install or update <span class="variable">${KERNELVERSION}</span> headers before build kernel image."</span></div><div class="line">    <span class="keyword">exit</span> <span class="number">1</span></div><div class="line">  <span class="keyword">fi</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"Building dkms modules for <span class="variable">${KERNELVERSION}</span> kernel..."</span></div><div class="line">  dkms autoinstall -k <span class="variable">${KERNELVERSION}</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"Build complete."</span></div><div class="line">}</div><div class="line"></div><div class="line"><span class="function"><span class="title">help</span></span> ()</div><div class="line">{</div><div class="line">cat&lt;&lt;HELPEOF</div><div class="line">    This hook rebuilds all dkms modules <span class="keyword">for</span> new kernel.</div><div class="line">HELPEOF</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">build</span></span> ()</div><div class="line">{</div><div class="line">  <span class="keyword">if</span> [ ! <span class="operator">-d</span> <span class="string">"/usr/lib/modules/<span class="variable">${KERNELVERSION}</span>/build"</span> ]; <span class="keyword">then</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"You need to install or update <span class="variable">${KERNELVERSION}</span> headers before build kernel image."</span></div><div class="line">    <span class="keyword">exit</span> <span class="number">1</span></div><div class="line">  <span class="keyword">fi</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"Building dkms modules for <span class="variable">${KERNELVERSION}</span> kernel..."</span></div><div class="line">  dkms autoinstall -k <span class="variable">${KERNELVERSION}</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"Build complete."</span></div><div class="line">}</div><div class="line"></div><div class="line"><span class="function"><span class="title">help</span></span> ()</div><div class="line">{</div><div class="line">cat&lt;&lt;HELPEOF</div><div class="line">    This hook rebuilds all dkms modules <span class="keyword">for</span> new kernel.</div><div class="line">HELPEOF</div></pre></td></tr></table></figure>
+
+
       
     </div>
     <footer>
@@ -173,9 +175,9 @@
   
     <li><a href="/categories/Network/">Network</a><small>3</small></li>
   
-    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+    <li><a href="/categories/Node-js/">Node.js</a><small>5</small></li>
   
-    <li><a href="/categories/Notes/">Notes</a><small>9</small></li>
+    <li><a href="/categories/Notes/">Notes</a><small>10</small></li>
   
     <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
   
@@ -187,7 +189,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Node-js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/OS-X/" style="font-size: 10.00px;">OS X</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
   </div>
 </div>
 
@@ -198,11 +200,15 @@
   <ul class="entry">
     
       <li>
+        <a href="/2014/11/11/set-language-for-individual-app-in-os-x-the-elegant-way/">用优雅的方式在 OS X 中为单个应用设置语言</a>
+      </li>
+    
+      <li>
         <a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">关于 SSL 和 IPKVM/VNC Applet 的笔记两则</a>
       </li>
     
       <li>
-        <a href="/2014/09/03/2014-natsu/">2014·夏</a>
+        <a href="/2014/09/02/2014-natsu/">2014·夏</a>
       </li>
     
       <li>
@@ -210,11 +216,7 @@
       </li>
     
       <li>
-        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
-      </li>
-    
-      <li>
-        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+        <a href="/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
       </li>
     
   </ul>

@@ -73,7 +73,7 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-04-28T12:53:55.000Z"><a href="/2014/04/28/sublive-live-subtitle-for-local-players/">2014-04-28</a></time>
+        <time datetime="2014-04-28T04:53:55.000Z"><a href="/2014/04/28/sublive-live-subtitle-for-local-players/">2014-04-28</a></time>
       
       
   
@@ -83,7 +83,7 @@
     </header>
     <div class="entry">
       
-        <p>昨晚 KNA 群里在讨论给本地播放器加弹幕功能。之前虽然听说过但是并未接触过所谓「弹幕池」的概念，但是星光菊苣说只要生成 SSA 字幕直接交给播放器挂上就成。并且，(虽然很想顺带吐槽 Zht 和我们争了半天最后槽点根本不在一个点子上 orz) 少将也表示时效并不重要，不需要考虑播放器的字幕自动重载问题。</p>
+        <p>昨晚 KNA 群里在讨论给本地播放器加弹幕功能。之前虽然听说过但是并未接触过所谓「弹幕池」的概念，但是星光菊苣说只要生成 SSA 字幕直接交给播放器挂上就成。并且，(虽然很想顺带吐槽 Zht 和我们争了半天最后槽点根本不在一个点子上orz) 少将也表示时效并不重要，不需要考虑播放器的字幕自动重载问题。</p>
 <p>所以躺在床上的时候就考虑了下整体的架构。还是最拿手的 HTTP RESTful API，基本功能的话就是获取字幕和发送弹幕。大致的思路如下。</p>
 <ul>
 <li>客户端打开媒体文件后首先获得文件的 hash。有些播放器自动寻找字幕似乎是通过文件名.. 这样的话我改个名字岂不是彻底失效。不过用 hash 来做检索文件的唯一信息的话，不同压制组放出的同一部片源都会有不同的弹幕… 不过似乎也好，如果压制了字幕进去的话，有些针对字幕君的吐槽啊什么的.. 嘛于是就这样。</li>
@@ -92,13 +92,13 @@
 <li>服务端接收到新的弹幕后将其存进数据库，并追加到已有字幕文件。这样下次其他客户端再次请求该文件的时候就会看到弹幕。</li>
 </ul>
 <p>…</p>
-<p>剩下的就不知道了，因为上面几条出来之后我就睡着了 zzzzZ</p>
+<p>剩下的就不知道了，因为上面几条出来之后我就睡着了zzzzZ</p>
 <p>…</p>
-<p>早上翘课写代码这种事情早就习以为常了… 更何况是 (我已经不知道该如何吐槽) 的老师的上机课….</p>
+<p>早上翘课写代码这种事情早就习以为常了… 更何况是(我已经不知道该如何吐槽)的老师的上机课….</p>
 <p>基本架构和功能大概 3 小时搞定，之前大概花了将近 1 个小时看 <a href="http://matroska.org/technical/specs/subtitles/ssa.html" target="_blank" rel="external">SSA/ASS Subtitles</a> 以及 Express 4.x 的文档。因为 <a href="https://github.com/visionmedia/express#quick-start" target="_blank" rel="external">Express 4.x 开始命令行工具被单独分开</a>，害我半天没找到生成模板的命令… (你丫瞎改啥啊啊啊啊</p>
 <p>编码过程里倒是没遇到啥坑，就是数据处理有点烦。因为没找到啥比较好的 SSA 字幕处理库，生成的时候都是手动处理，各种 <code>+ &#39;\n&#39;</code> 什么的..</p>
 <p>以及，SSA/ASS 字幕的格式特性让 <code>Array.prototype.join</code> 得以利用，省掉不少麻烦。</p>
-<p>于是源码在 <a href="https://github.com/phoenixlzx/sublive" target="_blank" rel="external"> 这里</a>。在基础架构之上还可以很方便的添加大量其他功能，验证啊什么的.. 顺便我还木有做 POST 数据的检查。这个大概晚些时候会加上。</p>
+<p>于是源码在<a href="https://github.com/phoenixlzx/sublive" target="_blank" rel="external">这里</a>。在基础架构之上还可以很方便的添加大量其他功能，验证啊什么的.. 顺便我还木有做 POST 数据的检查。这个大概晚些时候会加上。</p>
 <p>四月的荒废状态持续了 27 天宣告结束。嘛，挣脱五月病要感谢星光菊苣、Zht、少将以及 KNA 字幕组的所有小伙伴们 &gt;///&lt; 感谢你们～</p>
 <p>以后要继续加油喵！～</p>
 
@@ -134,39 +134,39 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-04-07T20:54:18.000Z"><a href="/2014/04/08/bdrip-script-for-linux-server/">2014-04-08</a></time>
+        <time datetime="2014-04-07T12:54:18.000Z"><a href="/2014/04/07/bdrip-script-for-linux-server/">2014-04-07</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/04/08/bdrip-script-for-linux-server/">为 Linux 服务器编写的 BDRip 脚本</a></h1>
+    <h1 class="title"><a href="/2014/04/07/bdrip-script-for-linux-server/">为 Linux 服务器编写的 BDRip 脚本</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p> 最近状态比较不好… 所以准备拿学校的服务器撒撒气 <em>(:з」∠)</em></p>
-<p> 吐槽：学校个大土豪，居然用双路 E5-2620 + 16G 内存的服务器，强烈怀疑这服务器上的站加起来不如这俩 CPU 贵… 另外机器上只有一块 300G 的硬盘 (SAS?) 是什么情况… 以及盗版的 RHEL5 是什么情况… 以及 /opt 分了 236G，rootfs 只有 19G 是要闹哪样…</p>
-<p> 于是进入正题。Linux 服务器一般都不安装图形界面，更加节省资源。同时现在也能以每月数十美元的价格租到足够性能和带宽的独立服务器，更何况把任务丢给服务器自动化操作，人的时间便可以节省下来做更重要的事情。</p>
-<p> 脚本需要如下软件包：</p>
+        <p>最近状态比较不好… 所以准备拿学校的服务器撒撒气<em>(:з」∠)</em></p>
+<p>吐槽：学校个大土豪，居然用双路 E5-2620 + 16G 内存的服务器，强烈怀疑这服务器上的站加起来不如这俩CPU贵… 另外机器上只有一块 300G 的硬盘 (SAS?) 是什么情况… 以及盗版的 RHEL5 是什么情况… 以及 /opt 分了 236G，rootfs 只有 19G 是要闹哪样…</p>
+<p>于是进入正题。Linux 服务器一般都不安装图形界面，更加节省资源。同时现在也能以每月数十美元的价格租到足够性能和带宽的独立服务器，更何况把任务丢给服务器自动化操作，人的时间便可以节省下来做更重要的事情。</p>
+<p>脚本需要如下软件包：</p>
 <ul>
 <li>ffmpeg</li>
 <li>mencoder</li>
 <li>x264</li>
 <li>mkvtoolnix</li>
 </ul>
-<p> 学校的服务器是 RHEL5 还没给激活，没办法换了 CentOS 的源，上面的一些软件包需要从 repoforge 获得。Ubuntu/Debian 的话，一般启用专有软件仓库就可以了。</p>
-<p> 下面贴脚本。</p>
+<p>学校的服务器是 RHEL5 还没给激活，没办法换了 CentOS 的源，上面的一些软件包需要从 repoforge 获得。Ubuntu/Debian 的话，一般启用专有软件仓库就可以了。</p>
+<p>下面贴脚本。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="shebang">#!/bin/bash</span></div><div class="line"><span class="comment"># $1 = origin file</span></div><div class="line"><span class="comment"># $2 = output file</span></div><div class="line"><span class="comment"># $3 = quality</span></div><div class="line"><span class="comment"># $4 = threads</span></div><div class="line"></div><div class="line"><span class="comment"># The crf option controls encoding quality, and indirectly the final</span></div><div class="line"><span class="comment"># filesize. The higher the value, the more compression and thus smaller</span></div><div class="line"><span class="comment"># file size. Reduce the value and file size will go up. A value of 21</span></div><div class="line"><span class="comment"># should produce a file of approximately 4GB in size for a typical movie.</span></div><div class="line"></div><div class="line"><span class="comment"># Encode the video using x264, ignore the audio for now.</span></div><div class="line">mencoder <span class="variable">$1</span>.m2ts \</div><div class="line">-ovc x264 -x264encopts \</div><div class="line">crf=<span class="variable">$3</span>:frameref=<span class="number">3</span>:bframes=<span class="number">3</span>:direct_pred=auto:weight_b:partitions=all:<span class="number">8</span>x8dct:me=umh:mixed_refs:trellis=<span class="number">1</span>:nopsnr:nossim:subq=<span class="number">6</span>:level_idc=<span class="number">41</span>:threads=<span class="variable">$4</span> \</div><div class="line">-nosound \</div><div class="line">-of rawvideo \</div><div class="line">-o <span class="variable">$2</span>.x264</div><div class="line"></div><div class="line"><span class="comment"># Extract first sound track, normally stream 0:1 in BDs.</span></div><div class="line">ffmpeg -i <span class="variable">$1</span>.m2ts -map <span class="number">0</span>:<span class="number">1</span> -acodec flac <span class="variable">$2</span>.flac</div><div class="line"></div><div class="line"><span class="comment"># Convert raw x264 video to MP4</span></div><div class="line">ffmpeg -i <span class="variable">$2</span>.x264 -vcodec copy <span class="variable">$2</span>.mp4</div><div class="line"></div><div class="line"><span class="comment"># Finally, merge everything into a single MKV file</span></div><div class="line">mkvmerge -o <span class="variable">$2</span>.mkv <span class="variable">$2</span>.mp4 --track-name <span class="number">0</span>:Jpn <span class="variable">$2</span>.flac</div><div class="line"></div><div class="line"><span class="comment"># Uncomment if you want to clean up your working environment.</span></div><div class="line"><span class="comment"># rm $2.x264 $2.flac $2.mp4</span></div><div class="line"></div><div class="line"><span class="comment"># Tell the user we're done.</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Rip complete. Output file is <span class="variable">$2</span>.mkv"</span></div></pre></td></tr></table></figure>
 
-<p> 保存为 <code>transcode.sh</code> 并赋予可执行权限：</p>
+<p>保存为 <code>transcode.sh</code> 并赋予可执行权限：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ chmod +x transcode.sh</div></pre></td></tr></table></figure>
 
-<p> 脚本基本上是从下面的参考链接里抄来的，但是做了一些更改以适合我目前的需求。脚本接受 4 个参数，分别为输入文件 (不含扩展名)、输出文件 (不含扩展名)、质量、线程数。我在服务器上 Rip 的文件是 zyo 买的「未確認で進行形」第一卷 OVA，命令如下：</p>
+<p>脚本基本上是从下面的参考链接里抄来的，但是做了一些更改以适合我目前的需求。脚本接受 4 个参数，分别为输入文件(不含扩展名)、输出文件(不含扩展名)、质量、线程数。我在服务器上 Rip 的文件是 zyo 买的「未確認で進行形」第一卷OVA，命令如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ./transcode.sh <span class="number">00004</span> <span class="number">4</span> <span class="number">18</span> <span class="number">20</span></div></pre></td></tr></table></figure>
 
-<p><code>transcode.sh</code> 是当前目录下的脚本文件，<code>00004</code> 代表当前目录下的 <code>00004.m2ts</code> 片源，输出文件将是 <code>4.mkv</code>，压缩质量为 <code>18</code>，编码过程使用 20 个线程 (服务器一共 12 个核心 24 个线程么我就不客气啦。</p>
-<p>OVA 压缩大约使用了不到 20 分钟的时间，最终文件大小不到 500M。看起来效果还可以嗯…</p>
-<p> 参考：</p>
+<p><code>transcode.sh</code> 是当前目录下的脚本文件，<code>00004</code> 代表当前目录下的 <code>00004.m2ts</code> 片源，输出文件将是 <code>4.mkv</code>，压缩质量为 <code>18</code>，编码过程使用 20 个线程(服务器一共 12 个核心 24 个线程么我就不客气啦。</p>
+<p>OVA压缩大约使用了不到 20 分钟的时间，最终文件大小不到 500M。看起来效果还可以嗯…</p>
+<p>参考：</p>
 <ul>
 <li><a href="http://wiki.gentoo.org/wiki/FFmpeg_-_Extract_Blu-Ray_Audio" target="_blank" rel="external">FFmpeg - Extract Blu-Ray Audio - Gentoo Wiki</a></li>
 <li><a href="http://www.rcomputer.eu/21-zoznam/operacne-systemy/linux/157-howto-encode-a-blu-ray-rip-into-a-smaller-format-without-losing-quality" target="_blank" rel="external">HowTo: Encode a Blu-ray rip into a smaller format without losing quality</a></li>
@@ -238,9 +238,9 @@
   
     <li><a href="/categories/Network/">Network</a><small>3</small></li>
   
-    <li><a href="/categories/Nodejs/">Node.js</a><small>5</small></li>
+    <li><a href="/categories/Node-js/">Node.js</a><small>5</small></li>
   
-    <li><a href="/categories/Notes/">Notes</a><small>9</small></li>
+    <li><a href="/categories/Notes/">Notes</a><small>10</small></li>
   
     <li><a href="/categories/Practise/">Practise</a><small>1</small></li>
   
@@ -252,7 +252,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Nodejs/" style="font-size: 20.00px;">Node.js</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
+    <a href="/tags/Algorithm/" style="font-size: 10.00px;">Algorithm</a><a href="/tags/Anime/" style="font-size: 16.00px;">Anime</a><a href="/tags/Artwork/" style="font-size: 10.00px;">Artwork</a><a href="/tags/Configuration/" style="font-size: 14.00px;">Configuration</a><a href="/tags/DKMS/" style="font-size: 10.00px;">DKMS</a><a href="/tags/DNS/" style="font-size: 14.00px;">DNS</a><a href="/tags/FFmpeg/" style="font-size: 14.00px;">FFmpeg</a><a href="/tags/Fibonacci/" style="font-size: 10.00px;">Fibonacci</a><a href="/tags/Filesystem/" style="font-size: 10.00px;">Filesystem</a><a href="/tags/IPKVM/" style="font-size: 10.00px;">IPKVM</a><a href="/tags/ImageMagick/" style="font-size: 10.00px;">ImageMagick</a><a href="/tags/KDE/" style="font-size: 10.00px;">KDE</a><a href="/tags/Kernel/" style="font-size: 10.00px;">Kernel</a><a href="/tags/Linux/" style="font-size: 14.00px;">Linux</a><a href="/tags/Minecraft/" style="font-size: 12.00px;">Minecraft</a><a href="/tags/MongoDB/" style="font-size: 10.00px;">MongoDB</a><a href="/tags/Multimedia/" style="font-size: 14.00px;">Multimedia</a><a href="/tags/MyPet/" style="font-size: 10.00px;">MyPet</a><a href="/tags/NGINX/" style="font-size: 10.00px;">NGINX</a><a href="/tags/Network/" style="font-size: 14.00px;">Network</a><a href="/tags/Node-js/" style="font-size: 20.00px;">Node.js</a><a href="/tags/OS-X/" style="font-size: 10.00px;">OS X</a><a href="/tags/Practise/" style="font-size: 10.00px;">Practise</a><a href="/tags/SSL/" style="font-size: 10.00px;">SSL</a><a href="/tags/Script/" style="font-size: 10.00px;">Script</a><a href="/tags/Server/" style="font-size: 18.00px;">Server</a><a href="/tags/Ubuntu/" style="font-size: 14.00px;">Ubuntu</a><a href="/tags/VNC/" style="font-size: 10.00px;">VNC</a><a href="/tags/VPN/" style="font-size: 10.00px;">VPN</a><a href="/tags/WordPress/" style="font-size: 10.00px;">WordPress</a><a href="/tags/iptables/" style="font-size: 12.00px;">iptables</a>
   </div>
 </div>
 
@@ -263,11 +263,15 @@
   <ul class="entry">
     
       <li>
+        <a href="/2014/11/11/set-language-for-individual-app-in-os-x-the-elegant-way/">用优雅的方式在 OS X 中为单个应用设置语言</a>
+      </li>
+    
+      <li>
         <a href="/2014/10/14/2-notes-for-ssl-and-ipkvm/">关于 SSL 和 IPKVM/VNC Applet 的笔记两则</a>
       </li>
     
       <li>
-        <a href="/2014/09/03/2014-natsu/">2014·夏</a>
+        <a href="/2014/09/02/2014-natsu/">2014·夏</a>
       </li>
     
       <li>
@@ -275,11 +279,7 @@
       </li>
     
       <li>
-        <a href="/2014/05/24/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
-      </li>
-    
-      <li>
-        <a href="/2014/05/19/for-loop-in-async-function-with-async-in-it/">在异步方法中使用 for 循环，以及循环中包含异步方法的几点坑</a>
+        <a href="/2014/05/23/iptables-rate-limiting-rules-to-block-dns-amplification-attack/">使用 iptables 过滤 DNS 放大攻击</a>
       </li>
     
   </ul>
