@@ -85,7 +85,7 @@
 <p>…</p>
 <p>睡了一觉起来继续 Google。找到了可以单独为应用设置语言并且 launch 的 app <a href="http://www.tj-hd.co.uk/en-gb/languageswitcher/" target="_blank" rel="external">Language Switcher</a>，看起来不错，但是每次启动 CLIP STUDIO PAINT 都要先打开这货，这不是我想要的效果。</p>
 <p>于是最终找到一个合适的解决方案：用 <code>defaults</code> 命令。</p>
-<p>原帖在<a href="http://hints.macworld.com/article.php?story=20061001065101830" target="_blank" rel="external">这里</a></p>
+<p>原帖在<a href="http://hints.macworld.com/article.php?story=20061001065101830" target="_blank" rel="external">这里</a>。</p>
 <p>设置 CLIP STUDIO PAINT Pro 语言环境命令：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">defaults <span class="keyword">write</span> jp.<span class="keyword">co</span>.celsys.CLIPSTUDIOPAINT.lip AppleLanguages <span class="string">'("en-US")'</span></div></pre></td></tr></table></figure>
 
